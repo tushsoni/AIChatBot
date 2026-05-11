@@ -1,0 +1,3167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-color: #f6f7ff;
+            --nav-navy: #001d3d;
+            --accent-blue: #1e62ff;
+            --settings-blue: #5ea3f5;
+            --sidebar-collapsed: 60px;
+            --sidebar-expanded: 240px;
+            --text-dim: #b0b8c1;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        /* --- Header Section --- */
+        header {
+            height: 50px;
+            background: linear-gradient(135deg, #001d3d 0%, #003366 100%);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 18px; }
+        .app-logo { width: 28px; height: 28px; }
+        .nav-link { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #d1d5db; cursor: pointer; transition: color 0.2s; }
+        .nav-link:hover { color: #ffffff; }
+        
+        .header-center { display: flex; align-items: center; gap: 12px; }
+        .weather { display: flex; align-items: center; gap: 5px; font-size: 14px; }
+        .weather i { font-size: 22px; }
+        .v-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.3); }
+        .time-box { display: flex; align-items: baseline; gap: 4px; font-size: 14px; }
+        .time-box b { font-size: 16px; font-weight: 500; }
+        .time-box sup { font-size: 10px; font-weight: bold; }
+
+        .header-right { display: flex; align-items: center; justify-content: flex-end; gap: 15px; }
+        .store-tag { background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.1)); padding: 5px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* --- Sidebar Section --- */
+        .sidebar {
+            width: var(--sidebar-collapsed);
+            background: linear-gradient(180deg, #001d3d 0%, #0a2540 100%);
+            height: calc(100vh - 50px);
+            position: fixed;
+            top: 50px;
+            left: 0;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+        }
+
+        .sidebar:hover { width: var(--sidebar-expanded); }
+
+        .menu-list { list-style: none; flex-grow: 1; padding-top: 5px; }
+        .menu-item { display: flex; align-items: center; height: 44px; padding: 0 18px; color: var(--text-dim); text-decoration: none; white-space: nowrap; transition: all 0.2s; }
+        .menu-item i { min-width: 24px; font-size: 18px; }
+        .menu-label { margin-left: 15px; font-size: 13px; opacity: 0; transition: opacity 0.2s; }
+        
+        .sidebar:hover .menu-label { opacity: 1; }
+        .menu-item:hover { background: linear-gradient(90deg, rgba(255,255,255,0.15), transparent); color: #ffffff; transform: translateX(4px); }
+        .menu-item.active { border-left: 4px solid #3b82f6; background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), transparent); color: #ffffff; }
+
+        /* --- Sidebar Footer Fix --- */
+        .sidebar-footer {
+            width: 100%;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 14px;
+            gap: 15px;
+        }
+
+        .settings-circle {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #5ea3f5 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(94, 163, 245, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .settings-circle:hover {
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 6px 16px rgba(94, 163, 245, 0.5);
+        }
+
+        .help-main {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1e62ff 0%, #0d47a1 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30, 98, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .help-main:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 16px rgba(30, 98, 255, 0.5);
+        }
+
+        /* --- Content Spacer --- */
+        .main-content {
+            margin-left: var(--sidebar-collapsed);
+            padding: 70px 30px;
+        }
+
+        /* --- AI Chatbot Widget --- */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 998;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .chatbot-container {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .chatbot-container:hover {
+            transform: translateY(-4px);
+        }
+
+        .chatbot-bubble {
+            background: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899, #8b5cf6);
+            border-radius: 40px;
+            padding: 2.5px;
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.2), 0 2px 8px rgba(139, 92, 246, 0.15);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            overflow: visible;
+        }
+
+        .chatbot-bubble:hover {
+            box-shadow: 0 6px 28px rgba(236, 72, 153, 0.3), 0 2px 10px rgba(139, 92, 246, 0.25);
+        }
+
+        .chatbot-bubble-inner {
+            background: #ffffff;
+            border-radius: 38px;
+            padding: 10px 22px 10px 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            overflow: visible;
+        }
+
+        .chatbot-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+        }
+
+        .chatbot-question {
+            font-size: 14px;
+            color: #22c55e;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .chatbot-cta {
+            font-size: 15px;
+            color: #1a1a1a;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1.3;
+        }
+
+        .chatbot-avatar {
+            width: 62px;
+            min-width: 62px;
+            height: 62px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: visible;
+            margin-top: -20px;
+            margin-bottom: -4px;
+            margin-left: 2px;
+        }
+
+        .chatbot-avatar img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transition: opacity 0.3s ease;
+        }
+
+        .chatbot-avatar .avatar-default {
+            position: relative;
+            z-index: 1;
+        }
+
+        .chatbot-avatar .avatar-hover {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .chatbot-container:hover .chatbot-avatar .avatar-default {
+            opacity: 0;
+        }
+
+        .chatbot-container:hover .chatbot-avatar .avatar-hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .chatbot-widget {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .chatbot-avatar {
+                width: 45px;
+                height: 45px;
+            }
+
+            .chatbot-question {
+                font-size: 13px;
+            }
+
+            .chatbot-cta {
+                font-size: 14px;
+            }
+        }
+
+        /* --- Chatbox Panel --- */
+        .chatbox-overlay {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1001;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .chatbox-overlay.open {
+            display: flex;
+            flex-direction: column;
+            animation: chatboxSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes chatboxSlideUp {
+            0%   { opacity: 0; transform: translateY(28px) scale(0.93); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes chatboxExpand {
+            0%   { opacity: 0.5; transform: scale(0.9); }
+            100% { opacity: 1;   transform: scale(1); }
+        }
+
+        @keyframes chatboxContract {
+            0%   { opacity: 0.6; transform: scale(1.06); }
+            100% { opacity: 1;   transform: scale(1); }
+        }
+
+        .chatbox-panel {
+            width: 420px;
+            height: 700px;
+            background: #ffffff;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-radius: 22px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2), 0 8px 24px rgba(0,0,0,0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            transition: width 0.4s cubic-bezier(0.16,1,0.3,1), height 0.4s cubic-bezier(0.16,1,0.3,1), border-radius 0.4s ease;
+            border: none;
+            will-change: transform, opacity;
+        }
+
+        .chatbox-overlay.maximized {
+            bottom: 0;
+            right: 0;
+            top: 0;
+            left: 0;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbox-overlay.maximized .chatbox-panel {
+            width: 1400px;
+            height: 750px;
+            border-radius: 16px;
+            max-width: 90vw;
+            max-height: 85vh;
+            background: #ffffff;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        .chatbox-overlay.maximized .chatbox-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px 40px;
+            width: 100%;
+        }
+
+        .chatbox-overlay.maximized .modules-grid {
+            width: 100%;
+            max-width: none;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 12px;
+        }
+
+        .chatbox-overlay.maximized .module-box {
+            padding: 18px 10px;
+            font-size: 13px;
+        }
+
+        .chatbox-overlay.maximized .module-icon {
+            width: 48px;
+            height: 48px;
+        }
+
+        /* Chatbox Header */
+        .chatbox-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 10px 12px;
+            gap: 10px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #3a7010 0%, #5a9a20 100%);
+            border-bottom: none;
+        }
+
+        .chatbox-header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.6);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .chatbox-header-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chatbox-header-text {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 1px;
+        }
+
+        .chatbox-header-greeting {
+            font-size: 11px;
+            color: rgba(255,255,255,0.78);
+            font-weight: 400;
+            line-height: 1.2;
+        }
+
+        .chatbox-header-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .chatbox-header-badge { display: none; }
+
+        .chatbox-header-controls {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            flex-shrink: 0;
+        }
+
+        .chatbox-ctrl-btn {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .chatbox-ctrl-btn:hover {
+            background: rgba(255,255,255,0.28);
+            color: #ffffff;
+            transform: scale(1.07);
+        }
+
+        /* Chatbox Body */
+        .chatbox-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #ffffff;
+        }
+
+        .chatbox-body::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chatbox-body::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 10px;
+        }
+
+        /* Message styles */
+        .chat-msg {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .chat-msg-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .chat-msg-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-msg-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .user-msg-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .chat-msg-content {
+            font-size: 14px;
+            color: #1a1a1a;
+            line-height: 1.65;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .chat-msg-content ol {
+            margin: 10px 0 10px 6px;
+            padding-left: 18px;
+        }
+
+        .chat-msg-content ol li {
+            padding: 6px 0;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .chat-msg-content ol li:hover {
+            color: #90c945;
+        }
+
+        .chat-msg-content .clickable-option {
+            cursor: pointer;
+            padding: 8px 0;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .chat-msg-content .clickable-option:hover {
+            color: #90c945;
+        }
+
+        .chat-feedback {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .chat-feedback button {
+            background: #f3f4f6;
+            border: none;
+            cursor: pointer;
+            color: #6b7280;
+            font-size: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.18s, background 0.18s, color 0.18s;
+            flex-shrink: 0;
+        }
+
+        /* Thumbs Up — green */
+        .chat-feedback button.thumbs-up {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+        .chat-feedback button.thumbs-up:hover {
+            background: #dcfce7;
+            color: #15803d;
+            transform: scale(1.12);
+        }
+        .chat-feedback button.thumbs-up.active {
+            background: #10b981;
+            color: #fff;
+        }
+        .chat-feedback button.thumbs-up.active i {
+            color: #fff;
+        }
+        .chat-feedback button.thumbs-up.active:hover {
+            background: #059669;
+            color: #fff;
+            transform: scale(1.12);
+        }
+
+        /* Thumbs Down — red */
+        .chat-feedback button.thumbs-down {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .chat-feedback button.thumbs-down:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+            transform: scale(1.12);
+        }
+        .chat-feedback button.thumbs-down.active {
+            background: #ef4444;
+            color: #fff;
+        }
+        .chat-feedback button.thumbs-down.active i {
+            color: #fff;
+        }
+        .chat-feedback button.thumbs-down.active:hover {
+            background: #dc2626;
+            color: #fff;
+            transform: scale(1.12);
+        }
+
+        /* Export trigger — indigo */
+        .chat-feedback button.export-trigger {
+            background: #eef2ff;
+            color: #6366f1;
+        }
+        .chat-feedback button.export-trigger:hover {
+            background: #e0e7ff;
+            color: #4f46e5;
+            transform: scale(1.12);
+        }
+
+        /* Copy — blue */
+        .chat-feedback button.copy-btn {
+            background: #eff6ff;
+            color: #3b82f6;
+        }
+        .chat-feedback button.copy-btn:hover {
+            background: #dbeafe;
+            color: #2563eb;
+            transform: scale(1.12);
+        }
+
+        /* AI Response bubble */
+        .ai-response-bubble {
+            background: #f2f7eb;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-radius: 4px 16px 16px 16px;
+            padding: 12px 16px;
+            margin-top: 4px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #1a1a1a;
+            animation: fadeInMsg 0.4s ease;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes favShake {
+            0%, 100% { transform: translateX(0) rotate(0); }
+            20% { transform: translateX(-4px) rotate(-8deg); }
+            40% { transform: translateX(4px) rotate(8deg); }
+            60% { transform: translateX(-3px) rotate(-5deg); }
+            80% { transform: translateX(3px) rotate(5deg); }
+        }
+
+        .feedback-divider {
+            width: 1px;
+            height: 18px;
+            background: linear-gradient(to bottom, transparent, #d1d5db, transparent);
+            margin: 0 4px;
+            flex-shrink: 0;
+        }
+
+        .export-dropdown {
+            position: relative;
+        }
+
+        .export-menu {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+            min-width: 152px;
+            z-index: 200;
+            overflow: hidden;
+            animation: menuFadeIn 0.15s ease;
+        }
+
+        @keyframes menuFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .export-menu.open {
+            display: block;
+        }
+
+        .export-menu button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 9px;
+            width: 100%;
+            height: auto;
+            padding: 9px 14px;
+            background: none;
+            border: none;
+            border-radius: 0;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            text-align: left;
+            transform: none !important;
+            transition: background 0.15s;
+        }
+
+        .export-menu button:hover {
+            background: #f8fafc;
+        }
+
+        .export-menu button:not(:last-child) {
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .export-menu button .bi-file-pdf {
+            color: #ef4444;
+            font-size: 15px;
+        }
+
+        .export-menu button .bi-file-earmark-spreadsheet {
+            color: #10b981;
+            font-size: 15px;
+        }
+
+        .export-menu button .bi-file-earmark-image {
+            color: #f59e0b;
+            font-size: 15px;
+        }
+
+        .ai-typing {
+            display: flex;
+            gap: 5px;
+            padding: 8px 0;
+        }
+
+        .ai-typing span {
+            width: 7px;
+            height: 7px;
+            background: #90c945;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingDot {
+            0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+            30% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Chatbox Footer */
+        .chatbox-footer {
+            padding: 12px 16px;
+            border-top: 1px solid #e8e8e4;
+            flex-shrink: 0;
+            background: #ffffff;
+        }
+
+        .chatbox-input-wrap {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border: 1.5px solid #e5e5e5;
+            border-radius: 28px;
+            padding: 4px 6px 4px 18px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .chatbox-input-wrap:focus-within {
+            border-color: #90c945;
+            box-shadow: 0 0 0 3px rgba(144, 201, 69, 0.15);
+        }
+
+        .chatbox-input {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #1a1a1a;
+            background: transparent;
+            padding: 8px 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .chatbox-input::placeholder {
+            color: #aaa;
+        }
+
+        .chatbox-send-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #90c945;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            box-shadow: 0 3px 10px rgba(144,201,69,0.4);
+        }
+
+        .chatbox-send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 18px rgba(144,201,69,0.5);
+            background: #7ab330;
+        }
+
+        .chatbox-mic-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #555;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            margin-right: 4px;
+        }
+
+        .chatbox-mic-btn:hover {
+            background: #e0e0e0;
+            color: #222;
+            transform: scale(1.08);
+        }
+
+        .chatbox-mic-btn.listening {
+            background: #ef4444;
+            color: #ffffff;
+            animation: micPulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes micPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+            50%       { box-shadow: 0 0 0 9px rgba(239,68,68,0); }
+        }
+
+        .chatbox-disclaimer {
+            text-align: center;
+            font-size: 11px;
+            color: #a1a8b8;
+            margin-top: 8px;
+        }
+
+        /* Module Grid Styles */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+            margin: 6px 0;
+        }
+
+        .module-box {
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 7px 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .module-box:hover {
+            background: linear-gradient(135deg, #f4fbea, #edf7d6);
+            border-color: #90c945;
+            box-shadow: 0 4px 12px rgba(144, 201, 69, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .module-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .module-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .module-name {
+            font-size: 10px;
+            line-height: 1.2;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Back button */
+        .back-btn {
+            background: none;
+            border: none;
+            color: #90c945;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+
+        .back-btn:hover {
+            color: #7ab330;
+        }
+
+        /* Favourite button on question bubble */
+        .fav-question-btn {
+            background: #fff;
+            border: 1.5px solid #9ca3af;
+            cursor: pointer;
+            color: #9ca3af;
+            font-size: 15px;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.18s, color 0.18s, border-color 0.18s, background 0.18s;
+            flex-shrink: 0;
+            align-self: center;
+            padding: 0;
+        }
+        .fav-question-btn:hover {
+            color: #f59e0b;
+            border-color: #f59e0b;
+            background: #fffbeb;
+            transform: scale(1.15);
+        }
+        .fav-question-btn.active {
+            color: #f59e0b;
+            border-color: #f59e0b;
+            background: #fffbeb;
+        }
+        .fav-question-btn.active i { color: #f59e0b; }
+        .fav-question-btn.active:hover { transform: scale(1.15); }
+
+        /* Favourite count badge on header button */
+        .fav-count-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #f59e0b;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        /* Favourites overlay panel */
+        .favourites-panel {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(248,250,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            border-radius: 22px;
+            overflow: hidden;
+            animation: favPanelIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes favPanelIn {
+            from { opacity: 0; transform: translateY(14px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .favourites-panel-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            gap: 12px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(245,158,11,0.88) 0%, rgba(234,88,12,0.82) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .favourites-panel-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.12);
+        }
+
+        .favourites-panel-title i { color: rgba(255,255,255,0.9); font-size: 16px; }
+
+        .fav-search-wrap {
+            padding: 10px 14px;
+            flex-shrink: 0;
+            border-bottom: 1px solid rgba(59,130,246,0.1);
+            background: rgba(255,255,255,0.6);
+        }
+
+        .fav-search-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1.5px solid rgba(59,130,246,0.22);
+            border-radius: 20px;
+            padding: 7px 14px 7px 34px;
+            font-size: 13px;
+            color: #374151;
+            background: rgba(255,255,255,0.9);
+            outline: none;
+            font-family: 'Roboto', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: 12px center;
+        }
+
+        .fav-search-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+        }
+
+        .fav-search-input::placeholder { color: #b0b8c8; }
+
+        .favourites-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .favourites-body::-webkit-scrollbar { width: 4px; }
+        .favourites-body::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.2); border-radius: 10px; }
+
+        .favourites-empty {
+            text-align: center;
+            color: #9ca3af;
+            margin-top: 50px;
+            font-size: 14px;
+            line-height: 2;
+        }
+
+        .fav-item {
+            background: rgba(255,255,255,0.82);
+            border: 1px solid rgba(59,130,246,0.13);
+            border-radius: 12px;
+            padding: 11px 36px 11px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            box-shadow: 0 1px 6px rgba(59,130,246,0.06);
+        }
+
+        .fav-item:hover {
+            background: rgba(239,246,255,0.95);
+            border-color: #3b82f6;
+            box-shadow: 0 3px 12px rgba(59,130,246,0.14);
+            transform: translateY(-1px);
+        }
+
+        .fav-item-question {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e40af;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            margin-bottom: 3px;
+        }
+
+        .fav-item-question i { color: #f59e0b; font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+
+        .fav-item-meta { font-size: 11px; color: #9ca3af; }
+
+        .fav-item-remove {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: #f87171;
+            cursor: pointer;
+            font-size: 14px;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fav-item-remove:hover { color: #fff; background: #ef4444; border-color: #ef4444; transform: translateY(-50%) scale(1.1); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="https://agcdn.altametrics.com/hw_prod_others/common/images/app_icon/zipclock.svg" class="app-logo">
+            <div class="nav-link"><i class="bi bi-grid-3x3-gap-fill"></i> My App <i class="bi bi-caret-down-fill" style="font-size: 8px;"></i></div>
+            <div class="nav-link"><i class="bi bi-house-door"></i> Dashboard</div>
+            <div class="nav-link"><i class="bi bi-clock-history"></i> Site Clock</div>
+            <div class="nav-link"><i class="bi bi-geo-alt"></i> 99999 <i class="bi bi-caret-down-fill" style="font-size: 8px;"></i></div>
+        </div>
+        <div class="header-center">
+            <div class="weather"><i class="bi bi-cloud-snow"></i><span>-6°C</span></div>
+            <div class="v-divider"></div>
+            <div class="time-box"><b>10:25</b><sup>A</sup><span>America/Toronto</span></div>
+        </div>
+        <div class="header-right">
+            <div class="store-tag"><i class="bi bi-shop"></i> 99999</div>
+            <i class="bi bi-moon" style="margin-left: 10px; cursor: pointer;"></i>
+            <i class="bi bi-gear" style="margin-left: 10px; cursor: pointer;"></i>
+            <i class="bi bi-person-circle" style="margin-left: 10px; cursor: pointer;"></i>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul class="menu-list">
+            <li><a href="#" class="menu-item"><i class="bi bi-house-door"></i><span class="menu-label">Dashboard</span></a></li>
+            <li><a href="#" class="menu-item"><i class="bi bi-clock"></i><span class="menu-label">Site Clock</span></a></li>
+            <li><a href="#" class="menu-item"><i class="bi bi-calendar-check"></i><span class="menu-label">Punch Management</span></a></li>
+            <li><a href="#" class="menu-item active"><i class="bi bi-wallet2"></i><span class="menu-label">Payroll Management</span></a></li>
+            <li><a href="#" class="menu-item"><i class="bi bi-graph-down-arrow"></i><span class="menu-label">Time Loss Summary</span></a></li>
+            <li><a href="#" class="menu-item"><i class="bi bi-file-earmark-bar-graph"></i><span class="menu-label">Reports</span></a></li>
+            <li><a href="#" class="menu-item"><i class="bi bi-clock"></i><span class="menu-label">Time Clock Devices</span></a></li>
+            <li><a href="#" class="menu-item"><i class="bi bi-people"></i><span class="menu-label">Employees</span></a></li>
+
+        </ul>
+        <div class="sidebar-footer">
+            <div class="settings-circle"><i class="bi bi-gear"></i></div>
+            <div class="help-main">Help</div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        </main>
+
+    <!-- AI Chatbot Widget -->
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-container" id="chatbotContainer">
+            <div class="chatbot-bubble">
+                <div class="chatbot-bubble-inner">
+                    <div class="chatbot-avatar">
+                        <img src="chatbotgirl.png" alt="Arya AI Assistant" class="avatar-default">
+                        <img src="hoverchatbotgirl.png" alt="Arya AI Assistant" class="avatar-hover">
+                    </div>
+                    <div class="chatbot-text">
+                        <div class="chatbot-question">Need help?</div>
+                        <div class="chatbot-cta">Ask Metra</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chatbox Panel -->
+    <div class="chatbox-overlay" id="chatboxOverlay">
+        <div class="chatbox-panel" id="chatboxPanel">
+            <div class="chatbox-header">
+                <div class="chatbox-header-avatar">
+                    <img src="chatbotgirl.png" alt="Metra">
+                </div>
+                <div class="chatbox-header-text">
+                    <div class="chatbox-header-greeting">Hey there! I'm Metra</div>
+                    <div class="chatbox-header-title">How can I help?</div>
+                </div>
+                <div class="chatbox-header-controls">
+                    <button class="chatbox-ctrl-btn" id="chatboxFavourites" title="Saved Favourites" style="position:relative;" onclick="showFavouritesPanel()"><i class="bi bi-star"></i></button>
+                    <button class="chatbox-ctrl-btn" id="chatboxClearChat" title="Clear Chat" onclick="clearChat()"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <button class="chatbox-ctrl-btn" id="chatboxMinimize" title="Minimize"><i class="bi bi-dash-lg"></i></button>
+                    <button class="chatbox-ctrl-btn" id="chatboxMaximize" title="Maximize"><i class="bi bi-arrows-angle-expand"></i></button>
+                    <button class="chatbox-ctrl-btn" id="chatboxClose" title="Close"><i class="bi bi-x-lg"></i></button>
+                </div>
+            </div>
+            <div class="chatbox-body" id="chatboxBody">
+                <!-- Welcome message -->
+                <div class="chat-msg">
+                    <div class="chat-msg-avatar">
+                        <img src="hoverchatbotgirl.png" alt="Metra">
+                    </div>
+                    <div class="chat-msg-content">
+                        <div style="margin-bottom: 8px; font-size:13px; color:#555;">Choose a module to get started:</div>
+                        <div class="modules-grid" id="modulesGrid">
+                            <div class="module-box" data-module="forecast"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipForecast.svg" alt="Forecast"></span><span class="module-name">Forecast</span></div>
+                            <div class="module-box" data-module="employee"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/pimages/surveillance/svg/psuvi_plum.svg" alt="Employee"></span><span class="module-name">Employee</span></div>
+                            <div class="module-box" data-module="inventory"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/zipInventory/svg/zipInventory.svg" alt="Inventory"></span><span class="module-name">Inventory</span></div>
+                            <div class="module-box" data-module="ordering"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipOrdering_color.svg" alt="Ordering"></span><span class="module-name">Ordering</span></div>
+                            <div class="module-box" data-module="tunes"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/ptune/svg/ptune_appsetting.svg" alt="Tunes"></span><span class="module-name">Tunes</span></div>
+                            <div class="module-box" data-module="schedule"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipSchedules.svg" alt="Schedule"></span><span class="module-name">Schedule</span></div>
+                            <div class="module-box" data-module="clock"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/zipclock-setting.svg" alt="Clock"></span><span class="module-name">Clock</span></div>
+                            <div class="module-box" data-module="checklist"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/Checklist.svg" alt="Checklist"></span><span class="module-name">Checklist</span></div>
+                            <div class="module-box" data-module="prep"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/zipPrepnPull/svg/prepPull_logo_purple.svg" alt="Prep & Pull"></span><span class="module-name">Prep & Pull</span></div>
+                            <div class="module-box" data-module="shiftbook"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipShiftbook.svg" alt="ShiftBook"></span><span class="module-name">ShiftBook</span></div>
+                            <div class="module-box" data-module="sales"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipForecast.svg" alt="Sales"></span><span class="module-name">Sales</span></div>
+                        </div>
+                        <div class="chat-feedback">
+                            <button class="thumbs-up" title="Helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-up"></i></button>
+                            <button class="thumbs-down" title="Not helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-down"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbox-footer">
+                <div class="chatbox-input-wrap">
+                    <input type="text" class="chatbox-input" id="chatboxInput" placeholder="Type your message here...">
+                    <button class="chatbox-mic-btn" id="chatboxMicBtn" title="Speak your question"><i class="bi bi-mic-fill"></i></button>
+                    <button class="chatbox-send-btn" id="chatboxSendBtn"><i class="bi bi-send-fill"></i></button>
+                </div>
+                <div class="chatbox-disclaimer">Metra can make mistakes - review information carefully.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sidebar menu
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // --- Chatbox Logic ---
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const chatboxOverlay = document.getElementById('chatboxOverlay');
+        const chatboxBody = document.getElementById('chatboxBody');
+        const chatboxInput = document.getElementById('chatboxInput');
+        const chatboxSendBtn = document.getElementById('chatboxSendBtn');
+        const chatboxClose = document.getElementById('chatboxClose');
+        const chatboxMinimize = document.getElementById('chatboxMinimize');
+        const chatboxMaximize = document.getElementById('chatboxMaximize');
+        const chatbotWidget = document.getElementById('chatbotWidget');
+
+        // AI Responses for the 3 main questions
+        const aiResponses = {
+            1: {
+                title: 'Scheduled Hours for Current Week',
+                content: `<b style="color:#3b82f6;">📅 Schedule Hours for Store #{STORE}</b><br><br>Here's your schedule summary for this week (May 5 – May 11):<br><br>
+                    <b>Total Scheduled Hours:</b> 312.5 hrs<br>
+                    <b>Forecasted Hours:</b> 320 hrs<br>
+                    <b>Variance:</b> -7.5 hrs (under-scheduled)<br>
+                    <b>Employees Scheduled:</b> 18 of 22 active<br><br>
+                    <span style="color:#dc2626;">⚠ You're under-scheduled by 7.5 hrs. Consider adding shifts to meet forecasted demand.</span><br><br>
+                    <span style="color:#7c3aed; font-size:12px;">💡 <b>Want to see hours for another store?</b> Type the store number! (e.g., 10001)</span>`
+            },
+            2: {
+                title: 'Unassigned Shifts for Current Week',
+                content: `<b style="color:#3b82f6;">📍 Unassigned Shifts for Store #{STORE}</b><br><br>Here are the <b>unassigned shifts</b> for this week:<br><br>
+                    <b>Total Unassigned Shifts:</b> 5<br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:4px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:6px 8px; border-bottom:1px solid #e5e7eb;">Day</td><td style="padding:6px 8px; border-bottom:1px solid #e5e7eb;">Time</td><td style="padding:6px 8px; border-bottom:1px solid #e5e7eb;">Role</td></tr>
+                        <tr><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">2:00 PM – 10:00 PM</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Cashier</td></tr>
+                        <tr><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">6:00 AM – 2:00 PM</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Cook</td></tr>
+                        <tr><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">10:00 AM – 6:00 PM</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Shift Lead</td></tr>
+                        <tr><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">4:00 PM – 12:00 AM</td><td style="padding:6px 8px; border-bottom:1px solid #f0f0f0;">Cashier</td></tr>
+                        <tr><td style="padding:6px 8px;">Sat, May 10</td><td style="padding:6px 8px;">8:00 AM – 4:00 PM</td><td style="padding:6px 8px;">Cook</td></tr>
+                    </table><br>
+                    <span style="color:#2563eb;">💡 Tip: Use the "Auto-Fill Shifts" feature to quickly assign qualified employees to open shifts.</span><br><br>
+                    <span style="color:#7c3aed; font-size:12px;">💡 <b>Want to see shifts for another store?</b> Type the store number!</span>`
+            },
+            3: {
+                title: 'Overtime Alerts & Labor Compliance',
+                content: `<b style="color:#3b82f6;">⚠️ Overtime & Compliance for Store #{STORE}</b><br><br>Here's the overtime and compliance status for this week:<br><br>
+                    <b style="color:#dc2626;">🔴 3 Employees Approaching Overtime:</b><br>
+                    <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
+                        • <b>James Parker</b> — 38.5 hrs scheduled (limit: 40 hrs)<br>
+                        • <b>Maria Gonzalez</b> — 39.0 hrs scheduled (limit: 40 hrs)<br>
+                        • <b>Kevin Lee</b> — 41.5 hrs scheduled <span style="color:#dc2626; font-weight:600;">⚠ OVERTIME</span>
+                    </div>
+                    <b style="color:#f59e0b;">⚡ Compliance Alerts:</b><br>
+                    <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                        • 2 minors scheduled past 9:00 PM — review state labor laws<br>
+                        • 1 employee missing mandatory rest period between shifts
+                    </div><br>
+                    <span style="color:#2563eb;">💡 Tip: Adjust Kevin Lee's Thursday shift to stay within the 40-hour limit and avoid overtime costs.</span><br><br>
+                    <span style="color:#7c3aed; font-size:12px;">💡 <b>Want data for another store?</b> Type the store number!</span>`
+            },
+            4: {
+                title: 'Employee Performance',
+                content: `<b style="color:#3b82f6;">⭐ Employee Performance for Store #{STORE}</b><br><br><b>Top Performers:</b><br><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:2;">
+                        🌟 <b>Sarah Mitchell</b> — 4.9/5 rating | 156 shifts completed | 0 no-shows<br>
+                        🌟 <b>David Chen</b> — 4.8/5 rating | 142 shifts completed | 1 no-show<br>
+                        🌟 <b>Rachel Green</b> — 4.7/5 rating | 138 shifts completed | 0 no-shows
+                    </div><br>
+                    <b style="color:#f59e0b;">⚡ Attention Needed:</b><br>
+                    <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                        • Mark Johnson — 3 no-shows in last month<br>
+                        • Lisa Brown — Frequent late arrivals (8 times this month)
+                    </div><br>
+                    <span style="color:#7c3aed; font-size:12px;">💡 <b>Want to see performance for another store?</b> Type the store number!</span>`
+            },
+            5: {
+                title: 'Payroll Summary',
+                content: `<b style="color:#3b82f6;">💰 Payroll Summary for Store #{STORE}</b><br><br>Payroll Report — Week of May 5, 2026<br><br>
+                    <b>Total Hours:</b> 312.5 hrs<br>
+                    <b>Total Payroll Cost:</b> $4,687.50<br>
+                    <b>Overtime Hours:</b> 12.5 hrs (+$468.75)<br>
+                    <b>Average Wage:</b> $15.00/hr<br><br>
+                    <b>Department Breakdown:</b><br>
+                    <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                        • Kitchen: $1,950 (130 hrs)<br>
+                        • Front-of-House: $1,575 (105 hrs)<br>
+                        • Management: $1,162.50 (77.5 hrs)
+                    </div><br>
+                    <span style="color:#7c3aed; font-size:12px;">💡 <b>Want to see payroll for another store?</b> Type the store number!</span>`
+            },
+            6: {
+                title: 'Shift Coverage Analysis',
+                content: `<b style="color:#3b82f6;">👥 Shift Coverage for Store #{STORE}</b><br><br>Coverage Status:<br><br>
+                    <b style="color:#10b981;">✓ Well Covered:</b> 78%<br>
+                    <b style="color:#f59e0b;">⚠ Partially Covered:</b> 18%<br>
+                    <b style="color:#dc2626;">✗ Understaffed:</b> 4%<br><br>
+                    <b>Peak Hours Analysis:</b><br>
+                    <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                        • Friday 5-8 PM: 3 staff (need 4)<br>
+                        • Saturday 12-3 PM: 4 staff (adequate)<br>
+                        • Sunday 6-9 PM: 2 staff (need 3)
+                    </div><br>
+                    <span style="color:#2563eb;">💡 Consider adding coverage for Friday and Sunday peak hours.</span><br><br>
+                    <span style="color:#7c3aed; font-size:12px;">💡 <b>Want to see coverage for another store?</b> Type the store number!</span>`
+            }
+        };
+
+        // ========== STORE & STATE SETUP ==========
+
+        // Store database
+        const storeDatabase = {
+            '99999': { name: 'Downtown Toronto', city: 'Toronto, ON' },
+            '10001': { name: 'Westfield Mall', city: 'Toronto, ON' },
+            '10002': { name: 'Mississauga Center', city: 'Mississauga, ON' },
+            '10003': { name: 'North York Plaza', city: 'North York, ON' },
+            '10004': { name: 'Brampton Station', city: 'Brampton, ON' },
+            '10005': { name: 'Oakville Downtown', city: 'Oakville, ON' },
+            '10006': { name: 'Hamilton Square', city: 'Hamilton, ON' },
+            '10007': { name: 'Burlington Mall', city: 'Burlington, ON' },
+            '10008': { name: 'Scarborough Town', city: 'Scarborough, ON' },
+            '10009': { name: 'Markham Centre', city: 'Markham, ON' },
+            '10010': { name: 'Vaughan Mills', city: 'Vaughan, ON' }
+        };
+
+        let currentStore = '99999';
+        let currentModule = null;
+        let lastUserMessage = '';
+        let favourites = JSON.parse(localStorage.getItem('metraFavourites') || '[]');
+
+        // Random person photos
+        const personPhotos = [
+            'https://randomuser.me/api/portraits/women/44.jpg',
+            'https://randomuser.me/api/portraits/men/32.jpg',
+            'https://randomuser.me/api/portraits/women/68.jpg',
+            'https://randomuser.me/api/portraits/men/75.jpg',
+            'https://randomuser.me/api/portraits/women/52.jpg',
+            'https://randomuser.me/api/portraits/men/41.jpg',
+            'https://randomuser.me/api/portraits/women/26.jpg',
+            'https://randomuser.me/api/portraits/men/55.jpg',
+            'https://randomuser.me/api/portraits/women/33.jpg',
+            'https://randomuser.me/api/portraits/men/18.jpg',
+        ];
+        const metraAvatarUrl = 'chatbotgirl.png';
+        const userIdx        = Math.floor(Math.random() * personPhotos.length);
+        const userAvatarUrl  = personPhotos[userIdx];
+
+        // Seed the static welcome-message avatar
+        const welcomeAvatarImg = document.querySelector('#chatboxBody .chat-msg-avatar img');
+        if (welcomeAvatarImg) welcomeAvatarImg.src = metraAvatarUrl;
+
+        // ========== ADVANCED NLP ENGINE ==========
+
+        // Expanded store database with more stores
+        const storeNameLookup = {};
+        Object.entries(storeDatabase).forEach(([id, info]) => {
+            storeNameLookup[info.name.toLowerCase()] = id;
+            // Also map partial names
+            info.name.toLowerCase().split(' ').forEach(word => {
+                if (word.length > 3) storeNameLookup[word] = id;
+            });
+        });
+
+        // Employee database for name recognition
+        const employeeDB = {
+            'james parker':   { role: 'Cashier', hrs: 38.5, rating: 4.2, dept: 'Front-of-House' },
+            'maria gonzalez': { role: 'Cook', hrs: 39.0, rating: 4.5, dept: 'Kitchen' },
+            'maria lopez':    { role: 'Cook', hrs: 36.0, rating: 4.3, dept: 'Kitchen' },
+            'kevin lee':      { role: 'Shift Lead', hrs: 41.5, rating: 4.6, dept: 'Management' },
+            'sarah mitchell':  { role: 'Server', hrs: 35.0, rating: 4.9, dept: 'Front-of-House' },
+            'david chen':     { role: 'Cook', hrs: 37.5, rating: 4.8, dept: 'Kitchen' },
+            'rachel green':   { role: 'Cashier', hrs: 32.0, rating: 4.7, dept: 'Front-of-House' },
+            'mark johnson':   { role: 'Server', hrs: 28.0, rating: 3.2, dept: 'Front-of-House' },
+            'lisa brown':     { role: 'Cashier', hrs: 34.0, rating: 3.5, dept: 'Front-of-House' },
+            'marcus lee':     { role: 'Cook', hrs: 40.0, rating: 4.4, dept: 'Kitchen' },
+            'amy rodriguez':  { role: 'Manager', hrs: 44.0, rating: 4.7, dept: 'Management' },
+            'tom wilson':     { role: 'Dishwasher', hrs: 30.0, rating: 4.1, dept: 'Kitchen' }
+        };
+
+        // Day names
+        const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+        const dayAbbr  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+        // --- Intent detection with weighted scoring ---
+        const intentPatterns = {
+            schedule_hours: {
+                keywords: ['schedule','scheduled','hours','total hours','work hours','weekly hours','how many hours','hours this week','hours next week','my schedule','who is working','staffing hours'],
+                weight: 3,
+                responseKey: 1
+            },
+            unassigned_shifts: {
+                keywords: ['unassigned','open shift','vacant','unfilled','empty shift','needs coverage','no one assigned','available shift','uncovered','open position','who can cover'],
+                weight: 3,
+                responseKey: 2
+            },
+            overtime: {
+                keywords: ['overtime','over time','OT','compliance','labor law','labor violation','40 hours','exceed','approaching overtime','overtime alert','overtime warning'],
+                weight: 3,
+                responseKey: 3
+            },
+            performance: {
+                keywords: ['performance','rating','review','top performer','best employee','worst employee','attendance','no-show','no show','late','tardiness','tardy','punctual'],
+                weight: 2,
+                responseKey: 4
+            },
+            payroll: {
+                keywords: ['payroll','pay','wage','salary','labor cost','labor budget','how much','cost','earning','compensation','paycheck','pay period','pay rate'],
+                weight: 2,
+                responseKey: 5
+            },
+            coverage: {
+                keywords: ['coverage','understaffed','overstaffed','peak hour','busy','rush hour','staff enough','enough people','short staffed','staffing level','how many people','headcount'],
+                weight: 2,
+                responseKey: 6
+            },
+            forecast: {
+                keywords: ['forecast','prediction','projected','expected sales','sales forecast','demand','traffic forecast','customer count','predict'],
+                weight: 2,
+                module: 'forecast',
+                detailedKey: 'forecast_1'
+            },
+            sales: {
+                keywords: ['sales','revenue','transaction','receipt','ticket average','sales today','sales this week','daily sales','weekly sales','monthly sales','top selling','best selling','category sales','sales breakdown','how much did we sell','total revenue'],
+                weight: 2,
+                module: 'sales',
+                detailedKey: 'sales_1'
+            },
+            inventory: {
+                keywords: ['inventory','stock','low stock','out of stock','reorder','items left','supply','shortage','warehouse','storage','shelf','count','inventory count'],
+                weight: 2,
+                module: 'inventory',
+                detailedKey: 'inv_1'
+            },
+            ordering: {
+                keywords: ['order','pending order','delivery','supplier','vendor','purchase order','when will','arrive','shipment','incoming','receipt of goods'],
+                weight: 2,
+                module: 'ordering',
+                detailedKey: 'ord_1'
+            },
+            checklist: {
+                keywords: ['checklist','task','todo','to-do','to do','daily task','opening task','closing task','inspection','incomplete','done','complete','not done'],
+                weight: 2,
+                module: 'checklist',
+                detailedKey: 'chk_1'
+            },
+            prep: {
+                keywords: ['prep','prepping','preparation','pull','pull list','food prep','need to prep','prep list','what needs to be prepped','prep status'],
+                weight: 2,
+                module: 'prep',
+                detailedKey: 'prep_1'
+            },
+            clock: {
+                keywords: ['clock in','clock out','punch','time card','timecard','time clock','clocked','who clocked','late punch','missed punch','break','lunch break'],
+                weight: 2,
+                module: 'clock',
+                detailedKey: 'clock_1'
+            },
+            shiftbook: {
+                keywords: ['shift swap','swap','trade shift','pickup','drop shift','shift change','give away shift','want to swap','available pickup','shift request'],
+                weight: 2,
+                module: 'shiftbook',
+                detailedKey: 'shift_1'
+            },
+            tunes: {
+                keywords: ['music','playlist','song','playing','tunes','track','what is playing','change music'],
+                weight: 1,
+                module: 'tunes',
+                detailedKey: 'tunes_1'
+            },
+            employee_lookup: {
+                keywords: [], // handled separately via name detection
+                weight: 4
+            },
+            store_switch: {
+                keywords: ['switch store','change store','different store','another store','store number','go to store','select store','switch location','change location'],
+                weight: 4
+            },
+            greeting: {
+                keywords: ['hi','hello','hey','good morning','good afternoon','good evening','sup','whats up','how are you','howdy'],
+                weight: 1
+            },
+            thanks: {
+                keywords: ['thank','thanks','thank you','appreciate','great','awesome','perfect','cool','nice','thx'],
+                weight: 1
+            },
+            today: {
+                keywords: ['today','whats happening','what is happening','summary','overview','dashboard','status','how are things','how is the store','store status','daily summary','daily report'],
+                weight: 2
+            },
+            compare: {
+                keywords: ['compare','versus','vs','difference between','comparison','better','which store','compare store'],
+                weight: 3
+            },
+            specific_day: {
+                keywords: ['monday','tuesday','wednesday','thursday','friday','saturday','sunday','tomorrow','yesterday','next week','last week'],
+                weight: 1
+            },
+            specific_role: {
+                keywords: ['cashier','cook','server','manager','shift lead','dishwasher','bartender','host','hostess','busser','barista'],
+                weight: 1
+            }
+        };
+
+        // --- Extract store from text ---
+        function extractStore(text) {
+            // Match 4-5 digit store numbers
+            const numMatch = text.match(/\b(\d{4,5})\b/);
+            if (numMatch) return numMatch[1];
+            // Match store names
+            const lower = text.toLowerCase();
+            for (const [name, id] of Object.entries(storeNameLookup)) {
+                if (lower.includes(name)) return id;
+            }
+            // Match "store X" pattern
+            const storeWordMatch = text.match(/store\s*#?\s*(\w+)/i);
+            if (storeWordMatch) {
+                const val = storeWordMatch[1];
+                if (storeDatabase[val]) return val;
+            }
+            return null;
+        }
+
+        // --- Extract employee name from text ---
+        function extractEmployee(text) {
+            const lower = text.toLowerCase();
+            for (const name of Object.keys(employeeDB)) {
+                if (lower.includes(name)) return name;
+                // Also try last name only
+                const lastName = name.split(' ')[1];
+                if (lower.includes(lastName) && lastName.length > 3) return name;
+                // Also try first name only
+                const firstName = name.split(' ')[0];
+                if (lower.includes(firstName) && firstName.length > 3) return name;
+            }
+            return null;
+        }
+
+        // --- Extract day of week ---
+        function extractDay(text) {
+            const lower = text.toLowerCase();
+            if (lower.includes('tomorrow')) {
+                const d = new Date(); d.setDate(d.getDate() + 1);
+                return { name: dayNames[d.getDay()], abbr: dayAbbr[d.getDay()], date: d };
+            }
+            if (lower.includes('yesterday')) {
+                const d = new Date(); d.setDate(d.getDate() - 1);
+                return { name: dayNames[d.getDay()], abbr: dayAbbr[d.getDay()], date: d };
+            }
+            for (let i = 0; i < dayNames.length; i++) {
+                if (lower.includes(dayNames[i].toLowerCase())) {
+                    return { name: dayNames[i], abbr: dayAbbr[i] };
+                }
+            }
+            return null;
+        }
+
+        // --- Extract role ---
+        function extractRole(text) {
+            const roles = ['cashier','cook','server','manager','shift lead','dishwasher','bartender','host','hostess','busser','barista'];
+            const lower = text.toLowerCase();
+            for (const role of roles) {
+                if (lower.includes(role)) return role.charAt(0).toUpperCase() + role.slice(1);
+            }
+            return null;
+        }
+
+        // --- Score intents ---
+        function detectIntent(text) {
+            const lower = text.toLowerCase();
+            const scores = {};
+
+            for (const [intent, config] of Object.entries(intentPatterns)) {
+                scores[intent] = 0;
+                for (const kw of config.keywords) {
+                    if (lower.includes(kw.toLowerCase())) {
+                        scores[intent] += config.weight;
+                        // Bonus for exact phrase match
+                        if (lower === kw.toLowerCase()) scores[intent] += 2;
+                    }
+                }
+            }
+
+            // Employee name detection bonus
+            if (extractEmployee(text)) scores.employee_lookup = 10;
+
+            // Store number detection bonus
+            if (extractStore(text) && !Object.values(scores).some(s => s > 2)) {
+                scores.store_switch = 8;
+            }
+
+            // Get top intent
+            const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            return sorted[0][1] > 0 ? sorted[0][0] : null;
+        }
+
+        // --- Generate dynamic employee response ---
+        function generateEmployeeResponse(empName, store) {
+            const emp = employeeDB[empName];
+            const displayName = empName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            const storeName = storeDatabase[store]?.name || 'Unknown';
+            const otWarning = emp.hrs > 40 ? `<br><span style="color:#dc2626; font-weight:600;">⚠ OVERTIME — ${emp.hrs} hrs exceeds the 40-hour limit!</span>` :
+                              emp.hrs >= 38 ? `<br><span style="color:#f59e0b; font-weight:600;">⚡ Approaching overtime — ${emp.hrs} hrs scheduled this week.</span>` : '';
+            const ratingStars = '★'.repeat(Math.round(emp.rating)) + '☆'.repeat(5 - Math.round(emp.rating));
+
+            return `<b style="color:#3b82f6;">👤 Employee Profile: ${displayName}</b><br><br>
+                <b>Store #${store} — ${storeName}</b><br><br>
+                <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                    <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Field</td><td style="padding:8px; border:1px solid #e5e7eb;">Details</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Name</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>${displayName}</b></td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Role</td><td style="padding:8px; border:1px solid #f0f0f0;">${emp.role}</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Department</td><td style="padding:8px; border:1px solid #f0f0f0;">${emp.dept}</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Hours This Week</td><td style="padding:8px; border:1px solid #f0f0f0;">${emp.hrs} hrs</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rating</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#f59e0b;">${ratingStars}</span> ${emp.rating}/5.0</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Status</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Active</td></tr>
+                </table>
+                ${otWarning}<br>
+                <b>📅 This Week's Schedule:</b><br>
+                <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                    • Mon: 6:00 AM – 2:00 PM (8 hrs)<br>
+                    • Wed: 10:00 AM – 6:00 PM (8 hrs)<br>
+                    • Thu: 2:00 PM – 10:00 PM (8 hrs)<br>
+                    • Fri: 6:00 AM – 2:00 PM (8 hrs)<br>
+                    • Sat: 8:00 AM – 4:30 PM (${emp.hrs - 32} hrs)
+                </div>`;
+        }
+
+        // --- Generate day-specific schedule ---
+        function generateDaySchedule(day, store) {
+            const storeName = storeDatabase[store]?.name || 'Unknown';
+            const employees = [
+                { name: 'Sarah Mitchell', role: 'Server', time: '6:00 AM – 2:00 PM', hrs: 8 },
+                { name: 'James Parker', role: 'Cashier', time: '8:00 AM – 4:00 PM', hrs: 8 },
+                { name: 'David Chen', role: 'Cook', time: '6:00 AM – 2:00 PM', hrs: 8 },
+                { name: 'Kevin Lee', role: 'Shift Lead', time: '10:00 AM – 6:00 PM', hrs: 8 },
+                { name: 'Maria Gonzalez', role: 'Cook', time: '2:00 PM – 10:00 PM', hrs: 8 },
+                { name: 'Rachel Green', role: 'Cashier', time: '2:00 PM – 10:00 PM', hrs: 8 },
+                { name: 'Marcus Lee', role: 'Cook', time: '4:00 PM – 12:00 AM', hrs: 8 },
+                { name: 'Amy Rodriguez', role: 'Manager', time: '8:00 AM – 5:00 PM', hrs: 9 }
+            ];
+            const totalHrs = employees.reduce((s, e) => s + e.hrs, 0);
+            return `<b style="color:#3b82f6;">📅 Schedule for ${day.name}</b><br><br>
+                <b>Store #${store} — ${storeName}</b><br><br>
+                <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                    <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Shift</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td></tr>
+                    ${employees.map(e => `<tr><td style="padding:8px; border:1px solid #f0f0f0;">${e.name}</td><td style="padding:8px; border:1px solid #f0f0f0;">${e.role}</td><td style="padding:8px; border:1px solid #f0f0f0;">${e.time}</td><td style="padding:8px; border:1px solid #f0f0f0;">${e.hrs} hrs</td></tr>`).join('')}
+                    <tr style="font-weight:600;"><td style="padding:8px; border:1px solid #f0f0f0;" colspan="3"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>${totalHrs} hrs</b></td></tr>
+                </table><br>
+                <span style="color:#22c55e; font-weight:600;">✅ ${employees.length} employees scheduled | ${totalHrs} total hours</span>`;
+        }
+
+        // --- Generate role-specific listing ---
+        function generateRoleResponse(role, store) {
+            const storeName = storeDatabase[store]?.name || 'Unknown';
+            const allEmps = Object.entries(employeeDB).filter(([_, e]) => e.role.toLowerCase() === role.toLowerCase());
+            if (allEmps.length === 0) return `No employees found with the role <b>${role}</b> at Store #${store}.`;
+            return `<b style="color:#3b82f6;">👥 All ${role}s at Store #${store}</b><br><br>
+                <b>Store #${store} — ${storeName}</b><br><br>
+                <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                    <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours This Week</td><td style="padding:8px; border:1px solid #e5e7eb;">Rating</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+                    ${allEmps.map(([name, e]) => {
+                        const display = name.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                        const status = e.hrs > 40 ? '<span style="color:#dc2626;">⚠ OT</span>' : '<span style="color:#22c55e;">✅ OK</span>';
+                        return `<tr><td style="padding:8px; border:1px solid #f0f0f0;">${display}</td><td style="padding:8px; border:1px solid #f0f0f0;">${e.hrs} hrs</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#f59e0b;">${'★'.repeat(Math.round(e.rating))}</span> ${e.rating}</td><td style="padding:8px; border:1px solid #f0f0f0;">${status}</td></tr>`;
+                    }).join('')}
+                </table>`;
+        }
+
+        // --- Generate daily summary ---
+        function generateTodaySummary(store) {
+            const storeName = storeDatabase[store]?.name || 'Unknown';
+            return `<b style="color:#3b82f6;">📋 Daily Summary — Store #${store}</b><br><br>
+                <b>${storeName}</b> | ${new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'})}<br><br>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0;">
+                    <div style="background:#f0fdf4; padding:10px; border-radius:8px; border:1px solid #bbf7d0;">
+                        <div style="font-size:11px; color:#16a34a; font-weight:600;">SALES TODAY</div>
+                        <div style="font-size:20px; font-weight:700; color:#15803d;">$4,250</div>
+                        <div style="font-size:11px; color:#22c55e;">📈 +8.2% vs yesterday</div>
+                    </div>
+                    <div style="background:#eff6ff; padding:10px; border-radius:8px; border:1px solid #bfdbfe;">
+                        <div style="font-size:11px; color:#2563eb; font-weight:600;">EMPLOYEES ON DUTY</div>
+                        <div style="font-size:20px; font-weight:700; color:#1d4ed8;">14 / 18</div>
+                        <div style="font-size:11px; color:#3b82f6;">2 on break, 2 off today</div>
+                    </div>
+                    <div style="background:#fefce8; padding:10px; border-radius:8px; border:1px solid #fef08a;">
+                        <div style="font-size:11px; color:#ca8a04; font-weight:600;">OPEN SHIFTS</div>
+                        <div style="font-size:20px; font-weight:700; color:#a16207;">3</div>
+                        <div style="font-size:11px; color:#f59e0b;">⚡ Need coverage for evening</div>
+                    </div>
+                    <div style="background:#fef2f2; padding:10px; border-radius:8px; border:1px solid #fecaca;">
+                        <div style="font-size:11px; color:#dc2626; font-weight:600;">ALERTS</div>
+                        <div style="font-size:20px; font-weight:700; color:#b91c1c;">2</div>
+                        <div style="font-size:11px; color:#ef4444;">1 OT risk, 1 late arrival</div>
+                    </div>
+                </div><br>
+                <b>🔔 Action Items:</b><br>
+                <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                    • Kevin Lee approaching overtime (41.5 hrs) — consider adjusting Thu shift<br>
+                    • 3 unassigned evening shifts need coverage by 2:00 PM<br>
+                    • Checklist: Opening tasks 90% complete, 2 items pending<br>
+                    • Low stock alert: Chicken breast below reorder level
+                </div>`;
+        }
+
+        // --- Generate store comparison ---
+        function generateStoreComparison(store1, store2) {
+            const s1 = storeDatabase[store1];
+            const s2 = storeDatabase[store2];
+            if (!s1 || !s2) return `Could not find both stores. Available stores: ${Object.keys(storeDatabase).join(', ')}`;
+            return `<b style="color:#3b82f6;">📊 Store Comparison</b><br><br>
+                <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                    <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Metric</td><td style="padding:8px; border:1px solid #e5e7eb;">#${store1} — ${s1.name}</td><td style="padding:8px; border:1px solid #e5e7eb;">#${store2} — ${s2.name}</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Weekly Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$28,450</td><td style="padding:8px; border:1px solid #f0f0f0;">$24,320</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Scheduled Hours</td><td style="padding:8px; border:1px solid #f0f0f0;">312.5 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">285.0 hrs</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Labor Cost</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,687</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,275</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">OT Employees</td><td style="padding:8px; border:1px solid #f0f0f0;">3</td><td style="padding:8px; border:1px solid #f0f0f0;">1</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Open Shifts</td><td style="padding:8px; border:1px solid #f0f0f0;">5</td><td style="padding:8px; border:1px solid #f0f0f0;">2</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Avg Employee Rating</td><td style="padding:8px; border:1px solid #f0f0f0;">4.3 / 5</td><td style="padding:8px; border:1px solid #f0f0f0;">4.5 / 5</td></tr>
+                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">Labor % of Sales</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">16.5%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">17.6%</td></tr>
+                </table><br>
+                <span style="color:#2563eb;">💡 Store #${store1} has higher sales but also more overtime concerns. Store #${store2} runs leaner with better labor efficiency.</span>`;
+        }
+
+        // ========== MAIN SEND FUNCTION ==========
+        function sendUserMessage() {
+            const text = chatboxInput.value.trim();
+            if (!text) return;
+            chatboxInput.value = '';
+            appendUserMsg(text);
+
+            const lower = text.toLowerCase();
+
+            // --- 1. Extract contextual data ---
+            const detectedStore = extractStore(text);
+            const detectedEmployee = extractEmployee(text);
+            const detectedDay = extractDay(text);
+            const detectedRole = extractRole(text);
+
+            // --- 2. Store switch: if user just types a number or "switch to X" ---
+            if (detectedStore && (lower.match(/^\d{4,5}$/) || lower.includes('switch') || lower.includes('change store') || lower.includes('go to'))) {
+                if (storeDatabase[detectedStore]) {
+                    currentStore = detectedStore;
+                    showTypingThenCustom(`📍 Switched to <b>${storeDatabase[detectedStore].name}</b> (Store #${detectedStore}, ${storeDatabase[detectedStore].city}). What would you like to know?`);
+                    return;
+                } else {
+                    showTypingThenCustom(`I couldn't find Store #${detectedStore} in the system. Available stores:<br><br>${Object.entries(storeDatabase).map(([id, s]) => `• <b>#${id}</b> — ${s.name} (${s.city})`).join('<br>')}`);
+                    return;
+                }
+            }
+
+            // If store number detected alongside a question, update context silently
+            if (detectedStore && storeDatabase[detectedStore]) {
+                currentStore = detectedStore;
+            }
+
+            // --- 3. Employee lookup ---
+            if (detectedEmployee) {
+                const empIntent = detectIntent(text);
+                // If asking about specific employee data
+                showTypingThenCustom(generateEmployeeResponse(detectedEmployee, currentStore));
+                return;
+            }
+
+            // --- 4. Comparison requests ---
+            if (lower.includes('compare') || lower.includes(' vs ') || lower.includes('versus')) {
+                const numbers = text.match(/\d{4,5}/g);
+                if (numbers && numbers.length >= 2) {
+                    showTypingThenCustom(generateStoreComparison(numbers[0], numbers[1]));
+                    return;
+                } else {
+                    showTypingThenCustom(`To compare stores, mention two store numbers. For example: <b>"Compare 99999 vs 10001"</b><br><br>Available stores:<br>${Object.entries(storeDatabase).map(([id, s]) => `• <b>#${id}</b> — ${s.name}`).join('<br>')}`);
+                    return;
+                }
+            }
+
+            // --- 5. Day-specific schedule ---
+            if (detectedDay && (lower.includes('schedule') || lower.includes('working') || lower.includes('shift') || lower.includes('who'))) {
+                showTypingThenCustom(generateDaySchedule(detectedDay, currentStore));
+                return;
+            }
+
+            // --- 6. Role-specific queries ---
+            if (detectedRole && (lower.includes('all') || lower.includes('list') || lower.includes('show') || lower.includes('how many') || lower.includes('who'))) {
+                showTypingThenCustom(generateRoleResponse(detectedRole, currentStore));
+                return;
+            }
+
+            // --- 7. Intent-based detection ---
+            const intent = detectIntent(text);
+
+            if (intent === 'greeting') {
+                const greetings = [
+                    `Hey there! 👋 I'm Metra, your AI assistant for <b>Store #${currentStore} — ${storeDatabase[currentStore]?.name || ''}</b>. How can I help you today?`,
+                    `Hello! 😊 Ready to help with your store. You can ask me about schedules, sales, employees, inventory — anything! What do you need?`,
+                    `Hi! Welcome to Metra. Currently viewing <b>Store #${currentStore}</b>. What would you like to know?`
+                ];
+                showTypingThenCustom(greetings[Math.floor(Math.random() * greetings.length)]);
+                return;
+            }
+
+            if (intent === 'thanks') {
+                const thanksReplies = [
+                    `You're welcome! 😊 Let me know if you need anything else.`,
+                    `Happy to help! Feel free to ask more questions anytime.`,
+                    `Glad I could help! I'm here whenever you need me. 👍`
+                ];
+                showTypingThenCustom(thanksReplies[Math.floor(Math.random() * thanksReplies.length)]);
+                return;
+            }
+
+            if (intent === 'today') {
+                showTypingThenCustom(generateTodaySummary(currentStore));
+                return;
+            }
+
+            if (intent === 'store_switch') {
+                showTypingThenCustom(`Which store would you like to switch to? Available stores:<br><br>${Object.entries(storeDatabase).map(([id, s]) => `• <b>#${id}</b> — ${s.name} (${s.city})`).join('<br>')}<br><br>Just type the store number!`);
+                return;
+            }
+
+            // Module-based detailed responses
+            if (intent && intentPatterns[intent]?.detailedKey) {
+                const resp = getDetailedResponse(intentPatterns[intent].detailedKey);
+                showTypingThenCustom(resp);
+                return;
+            }
+
+            // Legacy numbered responses
+            if (intent && intentPatterns[intent]?.responseKey) {
+                showTypingThenRespond(intentPatterns[intent].responseKey);
+                return;
+            }
+
+            // --- 8. If only a day mentioned without clear intent ---
+            if (detectedDay) {
+                showTypingThenCustom(generateDaySchedule(detectedDay, currentStore));
+                return;
+            }
+
+            // --- 9. If only a role mentioned ---
+            if (detectedRole) {
+                showTypingThenCustom(generateRoleResponse(detectedRole, currentStore));
+                return;
+            }
+
+            // --- 10. Help fallback ---
+            if (lower.includes('help') || lower === '?') {
+                showTypingThenCustom(`<b>I can help you with all of these! Just ask naturally:</b><br><br>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:13px;">
+                        <div style="padding:6px 10px; background:#f0fdf4; border-radius:6px;">📅 "What's my schedule?"</div>
+                        <div style="padding:6px 10px; background:#eff6ff; border-radius:6px;">📍 "Show open shifts"</div>
+                        <div style="padding:6px 10px; background:#fef2f2; border-radius:6px;">⚠️ "Any overtime alerts?"</div>
+                        <div style="padding:6px 10px; background:#fefce8; border-radius:6px;">💰 "Show me payroll"</div>
+                        <div style="padding:6px 10px; background:#f5f3ff; border-radius:6px;">👤 "How is Kevin Lee doing?"</div>
+                        <div style="padding:6px 10px; background:#fdf4ff; border-radius:6px;">📊 "Compare 99999 vs 10001"</div>
+                        <div style="padding:6px 10px; background:#ecfdf5; border-radius:6px;">📋 "What's the status today?"</div>
+                        <div style="padding:6px 10px; background:#fff7ed; border-radius:6px;">🔄 "Switch to store 10002"</div>
+                    </div>`);
+                return;
+            }
+
+            // --- 11. Smart fallback: try to be helpful ---
+            showTypingThenCustom(`I understand you're asking about "<b>${text}</b>" — let me help you find what you need!<br><br>
+                <b>Here are some things I can do for Store #${currentStore}:</b><br><br>
+                <div style="font-size:13px; line-height:2;">
+                    📅 Schedule, shifts & hours<br>
+                    💰 Sales, payroll & labor costs<br>
+                    👤 Employee info — <i>try typing a name like "Kevin Lee"</i><br>
+                    📦 Inventory & ordering<br>
+                    📊 Forecasts & comparisons<br>
+                    📋 Checklists, prep & shift swaps
+                </div><br>
+                <span style="color:#7c3aed;">💡 <b>Pro tip:</b> Type naturally! e.g. "Who's working Friday?" or "Show me cashiers" or "Sales for store 10001"</span>`);
+        }
+
+        // Module Questions Mapping - Top 3 questions per module
+        const moduleQuestions = {
+            forecast: {
+                name: 'Forecast',
+                icon: '📊',
+                questions: [
+                    { text: 'What is the sales forecast for this week?', id: 'forecast_1' },
+                    { text: 'Show me forecasted vs actual traffic', id: 'forecast_2' },
+                    { text: 'What are the peak hours predictions?', id: 'forecast_3' }
+                ]
+            },
+            sales: {
+                name: 'Sales',
+                icon: '💰',
+                questions: [
+                    { text: 'What were total sales for this week?', id: 'sales_1' },
+                    { text: 'Show me sales breakdown by category', id: 'sales_2' },
+                    { text: 'How do current sales compare to last week?', id: 'sales_3' }
+                ]
+            },
+            employee: {
+                name: 'Employee',
+                icon: '👤',
+                questions: [
+                    { text: 'Show me employee performance ratings', id: 'emp_1' },
+                    { text: 'Who are the top performers?', id: 'emp_2' },
+                    { text: 'What are the attendance issues?', id: 'emp_3' }
+                ]
+            },
+            inventory: {
+                name: 'Inventory',
+                icon: '📦',
+                questions: [
+                    { text: 'What items are low in stock?', id: 'inv_1' },
+                    { text: 'Show me inventory turnover rates', id: 'inv_2' },
+                    { text: 'What needs to be reordered?', id: 'inv_3' }
+                ]
+            },
+            ordering: {
+                name: 'Ordering',
+                icon: '📋',
+                questions: [
+                    { text: 'What orders are pending?', id: 'ord_1' },
+                    { text: 'Show me recent order history', id: 'ord_2' },
+                    { text: 'When will pending orders arrive?', id: 'ord_3' }
+                ]
+            },
+            tunes: {
+                name: 'Tunes',
+                icon: '🎵',
+                questions: [
+                    { text: 'What music is currently playing?', id: 'tunes_1' },
+                    { text: 'Show me playlist recommendations', id: 'tunes_2' },
+                    { text: 'What are popular tracks this week?', id: 'tunes_3' }
+                ]
+            },
+            schedule: {
+                name: 'Schedule',
+                icon: '📅',
+                questions: [
+                    { text: 'What is my schedule for this week?', id: 'sch_1' },
+                    { text: 'Show me unassigned shifts', id: 'sch_2' },
+                    { text: 'What are the overtime alerts?', id: 'sch_3' }
+                ]
+            },
+            clock: {
+                name: 'Clock',
+                icon: '🕐',
+                questions: [
+                    { text: 'Show me time clock status', id: 'clk_1' },
+                    { text: 'Who is currently clocked in?', id: 'clk_2' },
+                    { text: 'What are late arrivals today?', id: 'clk_3' }
+                ]
+            },
+            checklist: {
+                name: 'Checklist',
+                icon: '✓',
+                questions: [
+                    { text: 'What are todays tasks?', id: 'chk_1' },
+                    { text: 'Show me incomplete checklists', id: 'chk_2' },
+                    { text: 'What needs to be done?', id: 'chk_3' }
+                ]
+            },
+            prep: {
+                name: 'Prep & Pull',
+                icon: '🔪',
+                questions: [
+                    { text: 'What needs to be prepped?', id: 'prep_1' },
+                    { text: 'Show me prep completion status', id: 'prep_2' },
+                    { text: 'What items need to be pulled?', id: 'prep_3' }
+                ]
+            },
+            shiftbook: {
+                name: 'ShiftBook',
+                icon: '📞',
+                questions: [
+                    { text: 'Show me shift change requests', id: 'shift_1' },
+                    { text: 'What are available pickups?', id: 'shift_2' },
+                    { text: 'Who wants to swap shifts?', id: 'shift_3' }
+                ]
+            }
+        };
+
+        // Comprehensive Response Mapping for All Questions
+        function getDetailedResponse(qId) {
+            const store = currentStore;
+            const responses = {
+                // Forecast Responses
+                forecast_1: `<b style="color:#3b82f6;">📊 Sales Forecast for This Week (May 5-11)</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Last Year</td><td style="padding:8px; border:1px solid #e5e7eb;">Trend</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,250</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,980</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +6.8%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,890</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,650</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +6.6%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,120</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,720</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +10.8%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,680</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,220</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +10.9%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,240</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +7.2%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">$6,150</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,620</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +9.4%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,330</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$26,080</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>📈 +8.6%</b></td></tr>
+                    </table><br>
+                    <span style="color:#22c55e; font-weight:600;">✅ Strong growth forecasted for the week — plan inventory accordingly.</span>`,
+                
+                forecast_2: `<b style="color:#3b82f6;">📊 Forecasted vs Actual Traffic</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Time Period</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted</td><td style="padding:8px; border:1px solid #e5e7eb;">Actual (Avg)</td><td style="padding:8px; border:1px solid #e5e7eb;">Variance</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM - 9:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">145 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">152 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+4.8%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">9:00 AM - 12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">287 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">298 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+3.8%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">12:00 PM - 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">412 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">398 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#ef4444;">-3.4%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 5:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">267 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">271 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+1.5%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">5:00 PM - 8:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">456 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">468 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2.6%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Daily Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,567 customers</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,587 customers</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+1.3%</b></td></tr>
+                    </table>`,
+                
+                forecast_3: `<b style="color:#3b82f6;">⏰ Peak Hours Predictions</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Today's Date: May 7, 2026<br><br>
+                    <b style="color:#dc2626;">🔴 Peak Hours Today:</b><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:2;">
+                        <b>12:00 PM - 1:30 PM</b> — Expected 450+ customers (Lunch Rush)<br>
+                        <b>5:30 PM - 7:00 PM</b> — Expected 420+ customers (Dinner Rush)<br>
+                    </div><br>
+                    <b style="color:#f59e0b;">⚡ Staffing Recommendation:</b><br>
+                    <div style="margin:8px 0 8px 8px; font-size:13px;">
+                        • Add 2 cashiers for noon rush<br>
+                        • Add 3 kitchen staff for dinner preparation<br>
+                        • Ensure 4 customer service reps on duty
+                    </div>`,
+                
+                // Sales Responses
+                sales_1: `<b style="color:#3b82f6;">💰 Total Sales Summary (This Week)</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Metric</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">vs Last Week</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total Sales</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+12.3%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Food Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$16,780</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+10.2%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverage Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$7,240</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+15.8%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Merchandise Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,430</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+8.9%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Average Transaction</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$18.12</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2.1%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Transactions Count</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,568</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+9.8%</td></tr>
+                    </table><br>
+                    <span style="color:#22c55e; font-weight:600;">✅ Excellent performance this week! Sales are up across all categories.</span>`,
+                
+                sales_2: `<b style="color:#3b82f6;">📊 Sales Breakdown by Category</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">% of Total</td><td style="padding:8px; border:1px solid #e5e7eb;">Trend</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Entrees</td><td style="padding:8px; border:1px solid #f0f0f0;">$9,850</td><td style="padding:8px; border:1px solid #f0f0f0;">34.6%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+11.2%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Appetizers</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,240</td><td style="padding:8px; border:1px solid #f0f0f0;">14.9%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+8.5%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">$7,240</td><td style="padding:8px; border:1px solid #f0f0f0;">25.4%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+15.8%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Desserts</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,120</td><td style="padding:8px; border:1px solid #f0f0f0;">11.0%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+6.3%</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>TOTAL</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>100%</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+12.3%</b></td></tr>
+                    </table>`,
+                
+                sales_3: `<b style="color:#3b82f6;">📈 Current Week vs Last Week</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Week</td><td style="padding:8px; border:1px solid #e5e7eb;">Total Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Avg Transaction</td><td style="padding:8px; border:1px solid #e5e7eb;">Transactions</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">This Week (May 5-11)</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;">$18.12</td><td style="padding:8px; border:1px solid #f0f0f0;">1,568</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Last Week (Apr 28-May 4)</td><td style="padding:8px; border:1px solid #f0f0f0;">$25,320</td><td style="padding:8px; border:1px solid #f0f0f0;">$17.75</td><td style="padding:8px; border:1px solid #f0f0f0;">1,427</td></tr>
+                        <tr style="background:#fef3c7;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>GROWTH</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+$3,130 (+12.3%)</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+$0.37 (+2.1%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+141 (+9.8%)</td></tr>
+                    </table><br>
+                    <span style="color:#22c55e; font-weight:600;">✅ Strong week-over-week growth across all metrics!</span>`,
+                
+                // Employee Responses
+                emp_1: `<b style="color:#3b82f6;">⭐ Employee Performance Ratings</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Rating</td><td style="padding:8px; border:1px solid #e5e7eb;">Shifts</td><td style="padding:8px; border:1px solid #e5e7eb;">No-Shows</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐⭐⭐ 4.9</td><td style="padding:8px; border:1px solid #f0f0f0;">156</td><td style="padding:8px; border:1px solid #f0f0f0;">0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐⭐⭐ 4.8</td><td style="padding:8px; border:1px solid #f0f0f0;">142</td><td style="padding:8px; border:1px solid #f0f0f0;">1</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐⭐ 4.7</td><td style="padding:8px; border:1px solid #f0f0f0;">138</td><td style="padding:8px; border:1px solid #f0f0f0;">0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">James Parker</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐ 3.5</td><td style="padding:8px; border:1px solid #f0f0f0;">98</td><td style="padding:8px; border:1px solid #f0f0f0;">3</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐ 3.2</td><td style="padding:8px; border:1px solid #f0f0f0;">75</td><td style="padding:8px; border:1px solid #f0f0f0;">5</td></tr>
+                    </table>`,
+                
+                emp_2: `<b style="color:#3b82f6;">🏆 Top Performers</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#22c55e; font-size:14px;">🥇 Top 3 Performers:</b><br><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:2.2;">
+                        <b>1. Sarah Mitchell</b> (Rating: 4.9/5)<br>
+                        <span style="margin-left:12px; color:#666;">156 shifts completed | 0 no-shows | Consistent excellence</span><br><br>
+                        <b>2. David Chen</b> (Rating: 4.8/5)<br>
+                        <span style="margin-left:12px; color:#666;">142 shifts completed | 1 no-show | Strong customer service</span><br><br>
+                        <b>3. Rachel Green</b> (Rating: 4.7/5)<br>
+                        <span style="margin-left:12px; color:#666;">138 shifts completed | 0 no-shows | Leadership potential</span>
+                    </div><br>
+                    <span style="color:#7c3aed; font-weight:600;">💡 Consider these employees for leadership roles or training opportunities.</span>`,
+                
+                emp_3: `<b style="color:#3b82f6;">⚠️ Attendance Issues</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#dc2626;">🔴 Employees Requiring Attention:</b><br><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:2.2;">
+                        <b>Lisa Brown</b> — 5 no-shows in last 30 days | Rating: 3.2/5<br>
+                        <span style="margin-left:12px; color:#666;">Last 3 shifts: 2 no-shows | Recommendation: Performance review needed</span><br><br>
+                        <b>Mark Johnson</b> — 3 no-shows in last 30 days | Rating: 3.5/5<br>
+                        <span style="margin-left:12px; color:#666;">Late arrivals: 6 times | Recommendation: Discuss scheduling challenges</span><br><br>
+                        <b>Tom Wilson</b> — 2 no-shows in last 30 days | Rating: 3.8/5<br>
+                        <span style="margin-left:12px; color:#666;">Recent improvement noted | Recommendation: Continue monitoring</span>
+                    </div>`,
+                
+                // Inventory Responses
+                inv_1: `<b style="color:#3b82f6;">📦 Low Stock Items Alert</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Current</td><td style="padding:8px; border:1px solid #e5e7eb;">Min. Level</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken Breast</td><td style="padding:8px; border:1px solid #f0f0f0;">4.2 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">8 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tomato Sauce</td><td style="padding:8px; border:1px solid #f0f0f0;">2.1 gal</td><td style="padding:8px; border:1px solid #f0f0f0;">5 gal</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lettuce</td><td style="padding:8px; border:1px solid #f0f0f0;">6.5 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">10 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>LOW</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Olive Oil</td><td style="padding:8px; border:1px solid #f0f0f0;">1.8 L</td><td style="padding:8px; border:1px solid #f0f0f0;">3 L</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>LOW</b></td></tr>
+                    </table><br>
+                    <span style="color:#dc2626; font-weight:600;">⚠️ URGENT: Chicken and tomato sauce need immediate restocking!</span>`,
+                
+                inv_2: `<b style="color:#3b82f6;">📊 Inventory Turnover Rates</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Turnover Rate</td><td style="padding:8px; border:1px solid #e5e7eb;">Industry Avg</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Perishables</td><td style="padding:8px; border:1px solid #f0f0f0;">8.2x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">7.5x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Excellent</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">5.8x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">5.5x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Good</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Packaged Goods</td><td style="padding:8px; border:1px solid #f0f0f0;">2.1x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">2.3x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">⚠️ Monitor</td></tr>
+                    </table>`,
+                
+                inv_3: `<b style="color:#3b82f6;">🔄 Reorder Recommendations</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <div style="font-size:13px; line-height:2;">
+                        <b style="color:#dc2626;">🔴 Reorder Immediately:</b><br>
+                        • Chicken Breast — Order 50 lbs (delivery: 1-2 hours)<br>
+                        • Tomato Sauce — Order 30 gal (delivery: next day)<br><br>
+                        <b style="color:#f59e0b;">⚡ Reorder within 2 hours:</b><br>
+                        • Lettuce — Order 40 lbs<br>
+                        • Olive Oil — Order 15 L<br><br>
+                        <b style="color:#22c55e;">✅ Reorder within 24 hours:</b><br>
+                        • Ground Beef — Order 30 lbs<br>
+                        • Cheese — Order 20 lbs
+                    </div>`,
+                
+                // Ordering Responses
+                ord_1: `<b style="color:#3b82f6;">📋 Pending Orders</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,250</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Processing</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47829</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Processing</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,540</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><b>Shipped</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$3,680</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td></tr>
+                    </table>`,
+                
+                ord_2: `<b style="color:#3b82f6;">📜 Recent Order History</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,540</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>✅ Delivered</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47812</td><td style="padding:8px; border:1px solid #f0f0f0;">May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">$2,120</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>✅ Delivered</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47798</td><td style="padding:8px; border:1px solid #f0f0f0;">May 3</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,875</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>✅ Delivered</b></td></tr>
+                    </table>`,
+                
+                ord_3: `<b style="color:#3b82f6;">⏰ Pending Order Arrival Times</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Arrival</td><td style="padding:8px; border:1px solid #e5e7eb;">Time Window</td><td style="padding:8px; border:1px solid #e5e7eb;">Tracking</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">May 8, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track</u></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47829</td><td style="padding:8px; border:1px solid #f0f0f0;">May 8, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">1:00 PM - 5:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track</u></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">Out for Delivery</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>Track</u></td></tr>
+                    </table>`,
+                
+                // Tunes Responses
+                tunes_1: `<b style="color:#3b82f6;">🎵 Currently Playing</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Time: 2:45 PM<br><br>
+                    <div style="margin:12px 0; font-size:13px;">
+                        <b>Now Playing:</b><br>
+                        <span style="margin-left:12px;">Song: "Good as Hell" by Lizzo</span><br>
+                        <span style="margin-left:12px;">Album: Cuz I Love You</span><br>
+                        <span style="margin-left:12px;">Duration: 3:34 (Playing 2:15)</span><br>
+                        <span style="margin-left:12px;">Genre: Pop | Mood: Upbeat & Fun</span><br><br>
+                        <b>Up Next:</b><br>
+                        <span style="margin-left:12px;">1. "Walking on Sunshine" by Katrina & The Waves</span><br>
+                        <span style="margin-left:12px;">2. "Don't Stop Me Now" by Queen</span><br>
+                        <span style="margin-left:12px;">3. "Good Day" by Surfaces
+                    </div>`,
+                
+                tunes_2: `<b style="color:#3b82f6;">🎶 Playlist Recommendations</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Playlist</td><td style="padding:8px; border:1px solid #e5e7eb;">Songs</td><td style="padding:8px; border:1px solid #e5e7eb;">Mood</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Upbeat Energy</td><td style="padding:8px; border:1px solid #f0f0f0;">45 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Happy & Energetic</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Dinner Time</td><td style="padding:8px; border:1px solid #f0f0f0;">38 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Smooth & Relaxing</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Peak Hours</td><td style="padding:8px; border:1px solid #f0f0f0;">52 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Fast & Upbeat</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
+                    </table>`,
+                
+                tunes_3: `<b style="color:#3b82f6;">📊 Popular Tracks This Week</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Rank</td><td style="padding:8px; border:1px solid #e5e7eb;">Song</td><td style="padding:8px; border:1px solid #e5e7eb;">Artist</td><td style="padding:8px; border:1px solid #e5e7eb;">Plays</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">🥇 #1</td><td style="padding:8px; border:1px solid #f0f0f0;">Good as Hell</td><td style="padding:8px; border:1px solid #f0f0f0;">Lizzo</td><td style="padding:8px; border:1px solid #f0f0f0;">342</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">🥈 #2</td><td style="padding:8px; border:1px solid #f0f0f0;">Levitating</td><td style="padding:8px; border:1px solid #f0f0f0;">Dua Lipa</td><td style="padding:8px; border:1px solid #f0f0f0;">298</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">🥉 #3</td><td style="padding:8px; border:1px solid #f0f0f0;">Walking on Sunshine</td><td style="padding:8px; border:1px solid #f0f0f0;">Katrina & The Waves</td><td style="padding:8px; border:1px solid #f0f0f0;">267</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">#4</td><td style="padding:8px; border:1px solid #f0f0f0;">Don't Stop Me Now</td><td style="padding:8px; border:1px solid #f0f0f0;">Queen</td><td style="padding:8px; border:1px solid #f0f0f0;">245</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">#5</td><td style="padding:8px; border:1px solid #f0f0f0;">Good Day</td><td style="padding:8px; border:1px solid #f0f0f0;">Surfaces</td><td style="padding:8px; border:1px solid #f0f0f0;">218</td></tr>
+                    </table>`,
+                
+                // Schedule Responses
+                sch_1: `<b style="color:#3b82f6;">📅 Your Schedule for This Week</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 10:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM - 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM - 6:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:8px; border:1px solid #f0f0f0;">4:00 PM - 12:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">OFF</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">0.0</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>TOTAL</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>32.0 hrs</b></td></tr>
+                    </table>`,
+                
+                sch_2: `<b style="color:#3b82f6;">📭 Unassigned Shifts</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 4:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>⚠ OPEN</b></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sun, May 11</td><td style="padding:8px; border:1px solid #f0f0f0;">11:00 AM - 7:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>⚠ OPEN</b></td></tr>
+                    </table><br>
+                    <span style="color:#2563eb;">💡 Click "Pickup Available" to claim a shift or use Auto-Fill feature.</span>`,
+                
+                sch_3: `<b style="color:#3b82f6;">⚠️ Overtime Alerts</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#dc2626;">🔴 3 Employees Approaching Overtime:</b><br>
+                    <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
+                        • <b>James Parker</b> — 38.5 hrs scheduled (limit: 40 hrs) ⚠ 1.5 hrs until OT<br>
+                        • <b>Maria Gonzalez</b> — 39.0 hrs scheduled (limit: 40 hrs) ⚠ 1.0 hrs until OT<br>
+                        • <b>Kevin Lee</b> — 41.5 hrs scheduled <span style="color:#dc2626; font-weight:600;">⚠ OVERTIME (+1.5 hrs)</span>
+                    </div><br>
+                    <b style="color:#f59e0b;">💰 Estimated OT Cost:</b> $112.50 (1.5 hrs @ 1.5x rate)<br><br>
+                    <span style="color:#2563eb;">💡 Adjust Kevin's Thursday shift to stay within limits.</span>`,
+                
+                // Clock Responses
+                clk_1: `<b style="color:#3b82f6;">⏱️ Time Clock Status</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Current Time: 2:47 PM<br><br>
+                    <b style="color:#22c55e;">✅ Currently Clocked In: 14 employees</b><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Clock In</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">✅ In</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">✅ In</td><td style="padding:8px; border:1px solid #f0f0f0;">10:15 AM</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">✅ In</td><td style="padding:8px; border:1px solid #f0f0f0;">9:50 AM</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>+ 11 more employees</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td></tr>
+                    </table>`,
+                
+                clk_2: `<b style="color:#3b82f6;">👥 Currently Clocked In</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Time: 2:47 PM<br><br>
+                    <b style="color:#22c55e;">✅ 14 of 22 employees clocked in</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Clock In</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td><td style="padding:8px; border:1px solid #e5e7eb;">Station</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 47m</td><td style="padding:8px; border:1px solid #f0f0f0;">Register 1</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">10:15 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 32m</td><td style="padding:8px; border:1px solid #f0f0f0;">Kitchen</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">9:50 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 57m</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td></tr>
+                    </table>`,
+                
+                clk_3: `<b style="color:#3b82f6;">🚨 Late Arrivals Today</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#f59e0b;">⚠️ 2 Late Arrivals (Today: May 7)</b><br><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:2;">
+                        <b>Mark Johnson</b> — Scheduled: 6:00 AM | Arrived: 6:18 AM | Late by: 18 minutes<br>
+                        <b>Tom Wilson</b> — Scheduled: 2:00 PM | Arrived: 2:12 PM | Late by: 12 minutes
+                    </div>`,
+                
+                // Checklist Responses
+                chk_1: `<b style="color:#3b82f6;">✅ Today's Tasks</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Date: May 7, 2026<br><br>
+                    <b style="color:#22c55e;">✅ Completed (8/12)</b><br>
+                    <div style="margin:8px 0; font-size:13px;">
+                        ✓ Morning opening procedures<br>
+                        ✓ Stock front-of-house items<br>
+                        ✓ Equipment inspection & testing<br>
+                        ✓ Staff briefing
+                    </div><br>
+                    <b style="color:#f59e0b;">⏳ In Progress (2/12)</b><br>
+                    <div style="margin:8px 0; font-size:13px;">
+                        ⏳ Lunch rush prep (Sarah Mitchell)<br>
+                        ⏳ Inventory count (David Chen)
+                    </div><br>
+                    <b style="color:#dc2626;">❌ Remaining (2/12)</b><br>
+                    <div style="margin:8px 0; font-size:13px;">
+                        ❌ Close & secure kitchen<br>
+                        ❌ End-of-day cash reconciliation
+                    </div>`,
+                
+                chk_2: `<b style="color:#3b82f6;">📋 Incomplete Checklists</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#dc2626;">🔴 5 Incomplete Checklists</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Checklist</td><td style="padding:8px; border:1px solid #e5e7eb;">Completed</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td><td style="padding:8px; border:1px solid #e5e7eb;">Due</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Deep Clean</td><td style="padding:8px; border:1px solid #f0f0f0;">3/8</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 PM</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Inventory</td><td style="padding:8px; border:1px solid #f0f0f0;">5/12</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">7:00 PM</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Safety Audit</td><td style="padding:8px; border:1px solid #f0f0f0;">2/6</td><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 PM</td></tr>
+                    </table>`,
+                
+                chk_3: `<b style="color:#3b82f6;">🎯 What Needs to Be Done</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#dc2626;">URGENT (Complete by 5:00 PM):</b><br>
+                    <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
+                        ❌ Health & Safety Inspection (50 items)<br>
+                        ❌ Count cash drawer & reconcile<br>
+                        ❌ Restock high-use items
+                    </div><br>
+                    <b style="color:#f59e0b;">HIGH PRIORITY (Complete by 8:00 PM):</b><br>
+                    <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+                        ❌ Deep clean dining area<br>
+                        ❌ Complete inventory<br>
+                        ❌ Equipment maintenance check
+                    </div>`,
+                
+                // Prep & Pull Responses
+                prep_1: `<b style="color:#3b82f6;">🔪 Prep Items for Today</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Date: May 7, 2026<br><br>
+                    <b style="color:#22c55e;">✅ Prepped (8 items)</b><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+                        ✓ Chicken breast — 24 portions<br>
+                        ✓ Lettuce — 15 lbs washed<br>
+                        ✓ Tomatoes — 12 lbs diced<br>
+                        ✓ Onions — 8 lbs sliced
+                    </div><br>
+                    <b style="color:#dc2626;">⏳ To Be Prepped (5 items)</b><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+                        ❌ Ground beef — 30 lbs<br>
+                        ❌ Bell peppers — 20 lbs sliced<br>
+                        ❌ Garlic — 2 lbs minced<br>
+                        ❌ Fresh herbs — bundle for plating
+                    </div>`,
+                
+                prep_2: `<b style="color:#3b82f6;">📊 Prep Completion Status</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken breast</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Done</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Ground beef</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">⏳ In progress</td><td style="padding:8px; border:1px solid #f0f0f0;">20 min</td><td style="padding:8px; border:1px solid #f0f0f0;">Marcus Lee</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bell peppers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">❌ Not started</td><td style="padding:8px; border:1px solid #f0f0f0;">15 min</td><td style="padding:8px; border:1px solid #f0f0f0;">Pending</td></tr>
+                    </table>`,
+                
+                prep_3: `<b style="color:#3b82f6;">📦 Items to Pull</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#22c55e;">✅ Pulled (12 items)</b><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+                        ✓ Dinner plates — 100 units<br>
+                        ✓ Service napkins — 500 units<br>
+                        ✓ Silverware sets — 120 units
+                    </div><br>
+                    <b style="color:#dc2626;">❌ Still Needed (6 items)</b><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+                        ❌ Wine glasses — 50 units<br>
+                        ❌ Water glasses — 80 units<br>
+                        ❌ Dessert plates — 60 units<br>
+                        ❌ Coffee cups — 100 units
+                    </div>`,
+                
+                // ShiftBook Responses
+                shift_1: `<b style="color:#3b82f6;">🔄 Shift Change Requests</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#f59e0b;">⏳ 3 Pending Requests</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Request</td><td style="padding:8px; border:1px solid #e5e7eb;">Reason</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">James Parker</td><td style="padding:8px; border:1px solid #f0f0f0;">Swap Thu 4PM to Fri 2PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Doctor appt</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#2563eb;"><u>Approve</u></span></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Maria Lopez</td><td style="padding:8px; border:1px solid #f0f0f0;">Cancel Sat 8AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Personal</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#2563eb;"><u>Review</u></span></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kevin Lee</td><td style="padding:8px; border:1px solid #f0f0f0;">Swap Wed 10AM to Mon 6AM</td><td style="padding:8px; border:1px solid #f0f0f0;">School</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#2563eb;"><u>Review</u></span></td></tr>
+                    </table>`,
+                
+                shift_2: `<b style="color:#3b82f6;">🆓 Available Pickups</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#22c55e;">✅ 4 Shifts Available for Pickup</b><br><br>
+                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 10:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>PICKUP</u></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 4:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>PICKUP</u></td></tr>
+                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sun, May 11</td><td style="padding:8px; border:1px solid #f0f0f0;">11:00 AM - 7:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>PICKUP</u></td></tr>
+                    </table>`,
+                
+                shift_3: `<b style="color:#3b82f6;">🔁 Shift Swap Requests</b><br><br>
+                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+                    <b style="color:#f59e0b;">⏳ 2 Employees Seeking Swaps</b><br><br>
+                    <div style="margin:8px 0; font-size:13px; line-height:2.2;">
+                        <b>James Parker</b> (Cashier)<br>
+                        <span style="margin-left:12px; color:#666;">Has: Thu 4:00 PM - 12:00 AM | Wants: Fri 2:00 PM - 10:00 PM<br>
+                        Reason: Doctor appointment | Interested: Marcus Lee</span><br><br>
+                        <b>Maria Lopez</b> (Cook)<br>
+                        <span style="margin-left:12px; color:#666;">Has: Sat 8:00 AM - 4:00 PM | Wants: Sun 8:00 AM - 4:00 PM<br>
+                        Reason: Family event | Interested: Sarah Mitchell</span>
+                    </div>`
+            };
+            return responses[qId] || `<b>Professional Insight</b><br><br>Thank you for your question about ${currentModule}. Detailed data is being fetched from your store system.`;
+        }
+
+        // Open chatbox
+        chatbotContainer.addEventListener('click', function() {
+            chatboxOverlay.classList.add('open');
+            chatbotWidget.style.display = 'none';
+            chatboxInput.focus();
+        });
+
+        // Close chatbox
+        chatboxClose.addEventListener('click', function() {
+            chatboxOverlay.classList.remove('open', 'maximized');
+            chatbotWidget.style.display = 'block';
+        });
+
+        // Minimize (same as close — returns to widget)
+        chatboxMinimize.addEventListener('click', function() {
+            chatboxOverlay.classList.remove('open', 'maximized');
+            chatbotWidget.style.display = 'block';
+        });
+
+        // Maximize / Restore toggle
+        chatboxMaximize.addEventListener('click', function() {
+            const panel = document.getElementById('chatboxPanel');
+            chatboxOverlay.classList.toggle('maximized');
+            const icon = this.querySelector('i');
+            if (chatboxOverlay.classList.contains('maximized')) {
+                icon.className = 'bi bi-arrows-angle-contract';
+                this.title = 'Restore';
+                panel.style.animation = 'none';
+                panel.offsetHeight;
+                panel.style.animation = 'chatboxExpand 0.5s cubic-bezier(0.16, 1, 0.3, 1) both';
+            } else {
+                icon.className = 'bi bi-arrows-angle-expand';
+                this.title = 'Maximize';
+                panel.style.animation = 'none';
+                panel.offsetHeight;
+                panel.style.animation = 'chatboxContract 0.4s cubic-bezier(0.16, 1, 0.3, 1) both';
+            }
+        });
+
+        // Click on numbered options
+        document.addEventListener('click', function(e) {
+            // Handle module box clicks
+            const moduleBox = e.target.closest('.module-box');
+            if (moduleBox) {
+                const moduleName = moduleBox.getAttribute('data-module');
+                showModuleQuestions(moduleName);
+                return;
+            }
+
+            // Handle back button
+            const backBtn = e.target.closest('.back-btn');
+            if (backBtn) {
+                showModules();
+                return;
+            }
+
+            // Handle module question clicks
+            const moduleQuestion = e.target.closest('[data-module-question]');
+            if (moduleQuestion) {
+                const qId = moduleQuestion.getAttribute('data-module-question');
+                const text = moduleQuestion.textContent.trim();
+                appendUserMsg(text);
+                const response = getDetailedResponse(qId);
+                showTypingThenCustom(response);
+                return;
+            }
+
+            // Handle clickable options (legacy)
+            const option = e.target.closest('.clickable-option:not([data-module-question])');
+            if (option) {
+                const qNum = option.getAttribute('data-question');
+                handleQuestion(qNum, option.textContent.trim());
+            }
+        });
+
+        // Send button
+        chatboxSendBtn.addEventListener('click', sendUserMessage);
+        chatboxInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendUserMessage();
+        });
+
+        function handleQuestion(qNum, label) {
+            appendUserMsg(label);
+            const qNumber = parseInt(qNum);
+            const typingDiv = appendTyping();
+            setTimeout(() => {
+                typingDiv.remove();
+                const resp = aiResponses[qNumber];
+                const content = resp.content.replace(/{STORE}/g, currentStore);
+                appendAIResponse(content);
+            }, 1200);
+        }
+
+        function showModules() {
+            currentModule = null;
+            const welcomeDiv = document.createElement('div');
+            welcomeDiv.className = 'chat-msg';
+            welcomeDiv.id = 'welcome-msg';
+            welcomeDiv.innerHTML = `
+                <div class="chat-msg-avatar"><img src="${metraAvatarUrl}" alt="Metra"></div>
+                <div class="chat-msg-content">
+                    <div style="margin-bottom: 8px; font-size:13px; color:#555;">Choose a module to get started:</div>
+                    <div class="modules-grid">
+                        <div class="module-box" data-module="forecast"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipForecast.svg" alt="Forecast"></span><span class="module-name">Forecast</span></div>
+                        <div class="module-box" data-module="sales"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipForecast.svg" alt="Sales"></span><span class="module-name">Sales</span></div>
+                        <div class="module-box" data-module="employee"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/pimages/surveillance/svg/psuvi_plum.svg" alt="Employee"></span><span class="module-name">Employee</span></div>
+                        <div class="module-box" data-module="inventory"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/zipInventory/svg/zipInventory.svg" alt="Inventory"></span><span class="module-name">Inventory</span></div>
+                        <div class="module-box" data-module="ordering"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipOrdering_color.svg" alt="Ordering"></span><span class="module-name">Ordering</span></div>
+                        <div class="module-box" data-module="tunes"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/ptune/svg/ptune_appsetting.svg" alt="Tunes"></span><span class="module-name">Tunes</span></div>
+                        <div class="module-box" data-module="schedule"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipSchedules.svg" alt="Schedule"></span><span class="module-name">Schedule</span></div>
+                        <div class="module-box" data-module="clock"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/zipclock-setting.svg" alt="Clock"></span><span class="module-name">Clock</span></div>
+                        <div class="module-box" data-module="checklist"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/Checklist.svg" alt="Checklist"></span><span class="module-name">Checklist</span></div>
+                        <div class="module-box" data-module="prep"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/zipPrepnPull/svg/prepPull_logo_purple.svg" alt="Prep & Pull"></span><span class="module-name">Prep & Pull</span></div>
+                        <div class="module-box" data-module="shiftbook"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipShiftbook.svg" alt="ShiftBook"></span><span class="module-name">ShiftBook</span></div>
+                    </div>
+                    <div class="chat-feedback">
+                        <button class="thumbs-up" title="Helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-up"></i></button>
+                        <button class="thumbs-down" title="Not helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-down"></i></button>
+                    </div>
+                </div>
+            `;
+            chatboxBody.appendChild(welcomeDiv);
+            scrollToBottom();
+        }
+
+        function showModuleQuestions(moduleName) {
+            currentModule = moduleName;
+            const module = moduleQuestions[moduleName];
+            if (!module) return;
+
+            appendUserMsg(module.name);
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'chat-msg';
+            msgDiv.innerHTML = `
+                <div class="chat-msg-avatar"><img src="${metraAvatarUrl}" alt="Metra"></div>
+                <div class="chat-msg-content">
+                    <button class="back-btn" title="Go back"><i class="bi bi-arrow-left" style="margin-right:4px;"></i>Back</button>
+                    <div style="margin-bottom: 8px; font-weight: 500;">Top questions for <b>${module.name}</b>:</div>
+                    <ol>
+                        ${module.questions.map((q, idx) => `<li class="clickable-option" data-module-question="${q.id}">${q.text}</li>`).join('')}
+                    </ol>
+                    <div class="chat-feedback">
+                        <button class="thumbs-up" title="Helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-up"></i></button>
+                        <button class="thumbs-down" title="Not helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-down"></i></button>
+                    </div>
+                </div>
+            `;
+            chatboxBody.appendChild(msgDiv);
+            scrollToBottom();
+        }
+
+        function appendUserMsg(text) {
+            lastUserMessage = text;
+            const escapedQ = text.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            const msgDiv = document.createElement('div');
+            msgDiv.style.cssText = 'display:flex; justify-content:flex-end; align-items:flex-start; gap:6px; animation: fadeInMsg 0.3s ease;';
+            msgDiv.innerHTML = `
+                <button class="fav-question-btn" title="Mark as favourite" onclick="toggleFavourite(this)" data-fav-question="${escapedQ}"><i class="bi bi-star"></i></button>
+                <div style="background:#90c945; color:#fff; padding:10px 16px; border-radius:16px 16px 4px 16px; font-size:14px; max-width:75%; line-height:1.5; box-shadow:0 2px 8px rgba(144,201,69,0.3);">${text}</div>
+                <div class="user-msg-avatar"><img src="${userAvatarUrl}" alt="You"></div>`;
+            chatboxBody.appendChild(msgDiv);
+            scrollToBottom();
+        }
+
+        function showTypingThenRespond(qNum) {
+            const typingDiv = appendTyping();
+            setTimeout(() => {
+                typingDiv.remove();
+                const resp = aiResponses[qNum];
+                const content = resp.content.replace(/{STORE}/g, currentStore);
+                appendAIResponse(content);
+            }, 1200);
+        }
+
+        function showTypingThenCustom(html) {
+            const typingDiv = appendTyping();
+            setTimeout(() => {
+                typingDiv.remove();
+                appendAIResponse(html);
+            }, 1000);
+        }
+
+        function appendTyping() {
+            const div = document.createElement('div');
+            div.className = 'chat-msg';
+            div.innerHTML = `
+                <div class="chat-msg-avatar"><img src="${metraAvatarUrl}" alt="Metra"></div>
+                <div class="chat-msg-content">
+                    <div class="ai-typing"><span></span><span></span><span></span></div>
+                </div>`;
+            chatboxBody.appendChild(div);
+            scrollToBottom();
+            return div;
+        }
+
+        function appendAIResponse(html) {
+            const div = document.createElement('div');
+            div.className = 'chat-msg';
+
+            // Check if response contains a table
+            const hasTable = html.includes('<table');
+
+            const actionHtml = hasTable ? `
+                <div class="export-dropdown">
+                    <button class="export-trigger" title="Export" onclick="toggleExportMenu(this)"><i class="bi bi-download"></i></button>
+                    <div class="export-menu">
+                        <button onclick="exportToPDF(this)"><i class="bi bi-file-pdf"></i> Export PDF</button>
+                        <button onclick="exportToCSV(this)"><i class="bi bi-file-earmark-spreadsheet"></i> Export CSV</button>
+                        <button onclick="exportToPNG(this)"><i class="bi bi-file-earmark-image"></i> Export PNG</button>
+                    </div>
+                </div>` : `<button class="copy-btn" title="Copy" onclick="copyResponse(this)"><i class="bi bi-clipboard"></i></button>`;
+
+            div.innerHTML = `
+                <div class="chat-msg-avatar"><img src="${metraAvatarUrl}" alt="Metra"></div>
+                <div class="chat-msg-content">
+                    <div class="ai-response-bubble">${html}</div>
+                    <div class="chat-feedback">
+                        <button class="thumbs-up" title="Helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-up"></i></button>
+                        <button class="thumbs-down" title="Not helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-down"></i></button>
+                        <span class="feedback-divider"></span>
+                        ${actionHtml}
+                    </div>
+                </div>`;
+            chatboxBody.appendChild(div);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            requestAnimationFrame(() => {
+                chatboxBody.scrollTop = chatboxBody.scrollHeight;
+            });
+        }
+
+        function exportToPDF(button) {
+            const messageDiv = button.closest('.chat-msg');
+            const responseBubble = messageDiv.querySelector('.ai-response-bubble');
+
+            if (!responseBubble) return;
+
+            const element = document.createElement('div');
+            element.innerHTML = responseBubble.innerHTML;
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+            element.style.fontSize = '12px';
+
+            const opt = {
+                margin: 10,
+                filename: 'chatbot-response.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+
+            const menu = button.closest('.export-menu');
+            const trigger = button.closest('.export-dropdown').querySelector('.export-trigger');
+            if (menu) menu.classList.remove('open');
+            const originalIcon = trigger.innerHTML;
+            trigger.innerHTML = '<i class="bi bi-check-lg"></i>';
+            trigger.style.color = '#10b981';
+            setTimeout(() => {
+                trigger.innerHTML = originalIcon;
+                trigger.style.color = '';
+            }, 2000);
+        }
+
+        function exportToCSV(button) {
+            const messageDiv = button.closest('.chat-msg');
+            const responseBubble = messageDiv.querySelector('.ai-response-bubble');
+            
+            if (!responseBubble) return;
+
+            const table = responseBubble.querySelector('table');
+            if (!table) return;
+
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td, th');
+                const rowData = Array.from(cols).map(col => {
+                    let text = col.textContent.trim();
+                    // Escape quotes and wrap in quotes if contains comma
+                    if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+                        text = '"' + text.replace(/"/g, '""') + '"';
+                    }
+                    return text;
+                });
+                csv.push(rowData.join(','));
+            });
+
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'chatbot-response.csv');
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            const menu = button.closest('.export-menu');
+            const trigger = button.closest('.export-dropdown').querySelector('.export-trigger');
+            if (menu) menu.classList.remove('open');
+            const originalIcon = trigger.innerHTML;
+            trigger.innerHTML = '<i class="bi bi-check-lg"></i>';
+            trigger.style.color = '#10b981';
+            setTimeout(() => {
+                trigger.innerHTML = originalIcon;
+                trigger.style.color = '';
+            }, 2000);
+        }
+
+        function exportToPNG(button) {
+            const messageDiv = button.closest('.chat-msg');
+            const responseBubble = messageDiv.querySelector('.ai-response-bubble');
+
+            if (!responseBubble) return;
+
+            const menu = button.closest('.export-menu');
+            const trigger = button.closest('.export-dropdown').querySelector('.export-trigger');
+            if (menu) menu.classList.remove('open');
+
+            // Build a clean off-screen clone with solid, high-contrast styles
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = `
+                position: fixed; left: -9999px; top: 0;
+                background: #ffffff;
+                padding: 24px 28px;
+                border-radius: 12px;
+                font-family: 'Roboto', Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.7;
+                color: #111827;
+                width: ${responseBubble.offsetWidth}px;
+                box-sizing: border-box;
+            `;
+
+            wrapper.innerHTML = responseBubble.innerHTML;
+
+            // Force all text to dark, all backgrounds to white
+            wrapper.querySelectorAll('*').forEach(el => {
+                el.style.color = el.style.color || '#111827';
+                el.style.backgroundColor = 'transparent';
+            });
+
+            // Style tables clearly
+            wrapper.querySelectorAll('table').forEach(t => {
+                t.style.cssText = 'width:100%;border-collapse:collapse;font-size:13px;';
+            });
+            wrapper.querySelectorAll('th').forEach(th => {
+                th.style.cssText = 'padding:8px 12px;background:#1e40af;color:#ffffff;font-weight:600;border:1px solid #1e40af;text-align:left;';
+            });
+            wrapper.querySelectorAll('td').forEach((td, i) => {
+                td.style.cssText = `padding:8px 12px;border:1px solid #d1d5db;color:#111827;background:${Math.floor(i / td.closest('tr').cells.length) % 2 === 0 ? '#f9fafb' : '#ffffff'};`;
+            });
+            // Zebra stripe via row index
+            wrapper.querySelectorAll('tr').forEach((tr, i) => {
+                if (i === 0) return;
+                tr.querySelectorAll('td').forEach(td => {
+                    td.style.background = i % 2 === 0 ? '#f9fafb' : '#ffffff';
+                });
+            });
+
+            document.body.appendChild(wrapper);
+
+            html2canvas(wrapper, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                document.body.removeChild(wrapper);
+
+                const link = document.createElement('a');
+                link.download = 'chatbot-response.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                const originalIcon = trigger.innerHTML;
+                trigger.innerHTML = '<i class="bi bi-check-lg"></i>';
+                trigger.style.color = '#10b981';
+                setTimeout(() => {
+                    trigger.innerHTML = originalIcon;
+                    trigger.style.color = '';
+                }, 2000);
+            }).catch(() => document.body.removeChild(wrapper));
+        }
+
+        function copyResponse(button) {
+            const messageDiv = button.closest('.chat-msg');
+            const responseBubble = messageDiv.querySelector('.ai-response-bubble');
+
+            if (!responseBubble) return;
+
+            navigator.clipboard.writeText(responseBubble.textContent.trim()).then(() => {
+                const originalIcon = button.innerHTML;
+                button.innerHTML = '<i class="bi bi-check-lg"></i>';
+                button.style.color = '#10b981';
+                setTimeout(() => {
+                    button.innerHTML = originalIcon;
+                    button.style.color = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        function toggleExportMenu(trigger) {
+            const menu = trigger.nextElementSibling;
+            const isOpen = menu.classList.contains('open');
+            document.querySelectorAll('.export-menu.open').forEach(m => m.classList.remove('open'));
+            if (!isOpen) menu.classList.add('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.export-dropdown')) {
+                document.querySelectorAll('.export-menu.open').forEach(m => m.classList.remove('open'));
+            }
+        });
+
+        function toggleFeedback(button) {
+            const feedbackContainer = button.closest('.chat-feedback');
+            const thumbsButtons = feedbackContainer.querySelectorAll('.thumbs-up, .thumbs-down');
+            const isActive = button.classList.contains('active');
+
+            thumbsButtons.forEach(btn => {
+                btn.classList.remove('active');
+                const icon = btn.querySelector('i');
+                if (btn.classList.contains('thumbs-up')) {
+                    icon.className = 'bi bi-hand-thumbs-up';
+                } else if (btn.classList.contains('thumbs-down')) {
+                    icon.className = 'bi bi-hand-thumbs-down';
+                }
+            });
+
+            if (!isActive) {
+                button.classList.add('active');
+                const icon = button.querySelector('i');
+                if (button.classList.contains('thumbs-up')) {
+                    icon.className = 'bi bi-hand-thumbs-up-fill';
+                } else if (button.classList.contains('thumbs-down')) {
+                    icon.className = 'bi bi-hand-thumbs-down-fill';
+                }
+            }
+        }
+
+        // --- Favourites ---
+
+        function toggleFavourite(button) {
+            const isActive = button.classList.contains('active');
+            const question = button.getAttribute('data-fav-question') || 'Saved question';
+
+            // Find the AI response that follows this question bubble
+            let sibling = button.parentElement.nextElementSibling;
+            let responseBubble = null;
+            while (sibling) {
+                responseBubble = sibling.querySelector('.ai-response-bubble');
+                if (responseBubble) break;
+                sibling = sibling.nextElementSibling;
+            }
+
+            if (isActive) {
+                const id = button.getAttribute('data-fav-id');
+                favourites = favourites.filter(f => f.id !== id);
+                button.removeAttribute('data-fav-id');
+                button.classList.remove('active');
+                button.querySelector('i').className = 'bi bi-star';
+                button.title = 'Mark as favourite';
+            } else {
+                // Prevent duplicate: same question text already saved
+                const isDuplicate = favourites.some(f => f.question.trim().toLowerCase() === question.trim().toLowerCase());
+                if (isDuplicate) {
+                    button.style.animation = 'none';
+                    button.offsetHeight; // reflow
+                    button.style.animation = 'favShake 0.35s ease';
+                    return;
+                }
+                const id = 'fav_' + Date.now();
+                button.setAttribute('data-fav-id', id);
+                const fav = {
+                    id,
+                    question,
+                    response: responseBubble ? responseBubble.innerHTML : '',
+                    timestamp: new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                };
+                favourites.push(fav);
+                button.classList.add('active');
+                button.querySelector('i').className = 'bi bi-star-fill';
+                button.title = 'Remove from favourites';
+            }
+
+            localStorage.setItem('metraFavourites', JSON.stringify(favourites));
+            updateFavBadge();
+        }
+
+        function updateFavBadge() {
+            const btn = document.getElementById('chatboxFavourites');
+            if (!btn) return;
+            let badge = btn.querySelector('.fav-count-badge');
+            if (favourites.length > 0) {
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.className = 'fav-count-badge';
+                    btn.appendChild(badge);
+                }
+                badge.textContent = favourites.length > 9 ? '9+' : favourites.length;
+            } else if (badge) {
+                badge.remove();
+            }
+        }
+
+        function buildFavItemsHtml(list) {
+            if (list.length === 0) {
+                return `<div class="favourites-empty">
+                    <i class="bi bi-star" style="font-size:36px; color:#f59e0b; display:block; margin-bottom:12px;"></i>
+                    No favourite questions yet.<br>
+                    <span style="font-size:12px;">Click the ⭐ on any question to save it here.</span>
+                </div>`;
+            }
+            return list.map(fav => `
+                <div class="fav-item" onclick="reaskFavourite('${fav.id}')">
+                    <div class="fav-item-question"><i class="bi bi-star-fill"></i>${fav.question}</div>
+                    <div class="fav-item-meta">Saved ${fav.timestamp}</div>
+                    <button class="fav-item-remove" title="Remove" onclick="removeFavourite(event,'${fav.id}')"><i class="bi bi-x"></i></button>
+                </div>`).join('');
+        }
+
+        function showFavouritesPanel() {
+            const existing = document.getElementById('favouritesPanel');
+            if (existing) { existing.remove(); return; }
+
+            const panel = document.createElement('div');
+            panel.id = 'favouritesPanel';
+            panel.className = 'favourites-panel';
+
+            panel.innerHTML = `
+                <div class="favourites-panel-header">
+                    <div class="favourites-panel-title"><i class="bi bi-star-fill"></i> Favourite Questions (${favourites.length})</div>
+                    <button style="width:30px;height:30px;border:none;background:rgba(255,255,255,0.2);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;border:1px solid rgba(255,255,255,0.3);transition:all 0.2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.35)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'" onclick="document.getElementById('favouritesPanel').remove()" title="Close"><i class="bi bi-x-lg"></i></button>
+                </div>
+                <div class="fav-search-wrap">
+                    <input class="fav-search-input" id="favSearchInput" type="text" placeholder="Search Favourite questions…" oninput="filterFavourites(this.value)" autocomplete="off">
+                </div>
+                <div class="favourites-body" id="favouritesBody">${buildFavItemsHtml(favourites)}</div>`;
+
+            document.getElementById('chatboxPanel').appendChild(panel);
+            setTimeout(() => { const s = document.getElementById('favSearchInput'); if(s) s.focus(); }, 120);
+        }
+
+        function filterFavourites(query) {
+            const body = document.getElementById('favouritesBody');
+            if (!body) return;
+            const q = query.trim().toLowerCase();
+            const filtered = q ? favourites.filter(f => f.question.toLowerCase().includes(q)) : favourites;
+            body.innerHTML = buildFavItemsHtml(filtered.length === 0 && q
+                ? [/* empty — show no-match state */]
+                : filtered);
+            if (filtered.length === 0 && q) {
+                body.innerHTML = `<div class="favourites-empty"><i class="bi bi-search" style="font-size:28px;color:#d1d5db;display:block;margin-bottom:10px;"></i>No matches for "<b>${query}</b>"</div>`;
+            }
+        }
+
+        function removeFavourite(e, id) {
+            e.stopPropagation();
+            favourites = favourites.filter(f => f.id !== id);
+            localStorage.setItem('metraFavourites', JSON.stringify(favourites));
+            updateFavBadge();
+            const btn = document.querySelector(`.fav-question-btn[data-fav-id="${id}"]`);
+            if (btn) {
+                btn.classList.remove('active');
+                btn.querySelector('i').className = 'bi bi-star';
+                btn.removeAttribute('data-fav-id');
+                btn.title = 'Mark as favourite';
+            }
+            // Refresh panel in-place preserving search query
+            const searchInput = document.getElementById('favSearchInput');
+            const currentQuery = searchInput ? searchInput.value : '';
+            const titleEl = document.querySelector('#favouritesPanel .favourites-panel-title');
+            if (titleEl) titleEl.innerHTML = `<i class="bi bi-star-fill"></i> Favourite Questions (${favourites.length})`;
+            filterFavourites(currentQuery);
+        }
+
+        function reaskFavourite(id) {
+            const fav = favourites.find(f => f.id === id);
+            if (!fav) return;
+            document.getElementById('favouritesPanel').remove();
+
+            // If no saved response, the favourite was a module-selection bubble.
+            // Find the matching module key by name and show its questions instead.
+            if (!fav.response) {
+                const moduleKey = Object.keys(moduleQuestions).find(
+                    k => moduleQuestions[k].name.toLowerCase() === fav.question.toLowerCase()
+                );
+                if (moduleKey) {
+                    showModuleQuestions(moduleKey);
+                    return;
+                }
+            }
+
+            appendUserMsg(fav.question);
+            showTypingThenCustom(fav.response);
+        }
+
+        updateFavBadge();
+
+        // --- Mic / Speech Recognition ---
+        const chatboxMicBtn = document.getElementById('chatboxMicBtn');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isListening = false;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function(event) {
+                let interim = '';
+                let final = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const t = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) final += t;
+                    else interim += t;
+                }
+                chatboxInput.value = final || interim;
+            };
+
+            recognition.onend = function() {
+                const text = chatboxInput.value.trim();
+                stopListening();
+                if (text) sendUserMessage();
+            };
+
+            recognition.onerror = function() { stopListening(); };
+        } else {
+            chatboxMicBtn.style.display = 'none'; // hide if browser unsupported
+        }
+
+        chatboxMicBtn.addEventListener('click', function() {
+            if (isListening) { stopListening(); } else { startListening(); }
+        });
+
+        function startListening() {
+            if (!recognition) return;
+            isListening = true;
+            chatboxMicBtn.classList.add('listening');
+            chatboxMicBtn.querySelector('i').className = 'bi bi-stop-circle-fill';
+            chatboxMicBtn.title = 'Stop listening';
+            chatboxInput.value = '';
+            chatboxInput.placeholder = 'Listening…';
+            recognition.start();
+        }
+
+        function stopListening() {
+            isListening = false;
+            chatboxMicBtn.classList.remove('listening');
+            chatboxMicBtn.querySelector('i').className = 'bi bi-mic-fill';
+            chatboxMicBtn.title = 'Speak your question';
+            chatboxInput.placeholder = 'Type your message here...';
+            try { recognition && recognition.stop(); } catch(e) {}
+        }
+
+        function clearChat() {
+            // Close favourites panel if open
+            const fp = document.getElementById('favouritesPanel');
+            if (fp) fp.remove();
+
+            // Reset state
+            currentModule = null;
+            lastUserMessage = '';
+
+            // Clear body and restore welcome message
+            chatboxBody.innerHTML = `
+                <div class="chat-msg">
+                    <div class="chat-msg-avatar"><img src="${metraAvatarUrl}" alt="Metra"></div>
+                    <div class="chat-msg-content">
+                        <div style="margin-bottom: 8px; font-size:13px; color:#555;">Choose a module to get started:</div>
+                        <div class="modules-grid" id="modulesGrid">
+                            <div class="module-box" data-module="forecast"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipForecast.svg" alt="Forecast"></span><span class="module-name">Forecast</span></div>
+                            <div class="module-box" data-module="employee"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/pimages/surveillance/svg/psuvi_plum.svg" alt="Employee"></span><span class="module-name">Employee</span></div>
+                            <div class="module-box" data-module="inventory"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/zipInventory/svg/zipInventory.svg" alt="Inventory"></span><span class="module-name">Inventory</span></div>
+                            <div class="module-box" data-module="ordering"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipOrdering_color.svg" alt="Ordering"></span><span class="module-name">Ordering</span></div>
+                            <div class="module-box" data-module="tunes"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/ptune/svg/ptune_appsetting.svg" alt="Tunes"></span><span class="module-name">Tunes</span></div>
+                            <div class="module-box" data-module="schedule"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipSchedules.svg" alt="Schedule"></span><span class="module-name">Schedule</span></div>
+                            <div class="module-box" data-module="clock"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/zipclock-setting.svg" alt="Clock"></span><span class="module-name">Clock</span></div>
+                            <div class="module-box" data-module="checklist"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/Checklist.svg" alt="Checklist"></span><span class="module-name">Checklist</span></div>
+                            <div class="module-box" data-module="prep"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/zipPrepnPull/svg/prepPull_logo_purple.svg" alt="Prep & Pull"></span><span class="module-name">Prep & Pull</span></div>
+                            <div class="module-box" data-module="shiftbook"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipShiftbook.svg" alt="ShiftBook"></span><span class="module-name">ShiftBook</span></div>
+                            <div class="module-box" data-module="sales"><span class="module-icon"><img src="https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipForecast.svg" alt="Sales"></span><span class="module-name">Sales</span></div>
+                        </div>
+                        <div class="chat-feedback">
+                            <button class="thumbs-up" title="Helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-up"></i></button>
+                            <button class="thumbs-down" title="Not helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-down"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+
+            // Brief visual feedback on the button
+            const btn = document.getElementById('chatboxClearChat');
+            const icon = btn.querySelector('i');
+            icon.className = 'bi bi-check-lg';
+            btn.style.color = '#10b981';
+            setTimeout(() => {
+                icon.className = 'bi bi-arrow-counterclockwise';
+                btn.style.color = '';
+            }, 1200);
+        }
+    </script>
+</body>
+</html>
