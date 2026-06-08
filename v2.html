@@ -1485,6 +1485,125 @@
             min-width: 18px; height: 18px; border-radius: 9px;
             display: flex; align-items: center; justify-content: center; padding: 0 4px;
         }
+
+        /* ===== Security Model ===== */
+        .sec-modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.55); z-index: 3000;
+            align-items: center; justify-content: center;
+        }
+        .sec-modal-overlay.open { display: flex; animation: secFadeBg 0.2s ease; }
+        @keyframes secFadeBg { from { opacity:0; } to { opacity:1; } }
+        .sec-modal {
+            background: #fff; border-radius: 16px; width: 520px;
+            max-width: 94vw; max-height: 88vh; overflow-y: auto;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+            animation: secModalIn 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+        @keyframes secModalIn {
+            from { opacity:0; transform:scale(0.92) translateY(16px); }
+            to   { opacity:1; transform:scale(1) translateY(0); }
+        }
+        .sec-modal::-webkit-scrollbar { width:4px; }
+        .sec-modal::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.15); border-radius:10px; }
+        .sec-modal-head {
+            background: linear-gradient(135deg, #0f2557 0%, #1e3fa5 100%);
+            padding: 18px 20px; border-radius: 16px 16px 0 0;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sec-modal-head-icon {
+            width:42px; height:42px; background:rgba(255,255,255,0.18);
+            border-radius:10px; display:flex; align-items:center;
+            justify-content:center; color:#fff; font-size:20px; flex-shrink:0;
+        }
+        .sec-modal-head-txt h2 { font-size:15px; font-weight:700; color:#fff; margin-bottom:2px; }
+        .sec-modal-head-txt p  { font-size:11px; color:rgba(255,255,255,0.68); }
+        .sec-modal-head-close {
+            margin-left:auto; background:rgba(255,255,255,0.15); border:none;
+            border-radius:8px; width:32px; height:32px; color:#fff; font-size:16px;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
+            transition:background 0.2s; flex-shrink:0;
+        }
+        .sec-modal-head-close:hover { background:rgba(255,255,255,0.28); }
+        .sec-modal-body { padding:18px 20px; }
+        .sec-user-card {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border: 1px solid #bfdbfe; border-radius: 10px;
+            padding: 13px 15px; display: flex; align-items: center;
+            gap: 12px; margin-bottom: 16px;
+        }
+        .sec-user-avt {
+            width:44px; height:44px; border-radius:50%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            display:flex; align-items:center; justify-content:center;
+            color:#fff; font-size:17px; font-weight:700; flex-shrink:0;
+        }
+        .sec-user-info { flex-grow:1; }
+        .sec-user-name { font-size:13px; font-weight:700; color:#1e3a5f; line-height:1.3; }
+        .sec-user-role { font-size:11px; color:#2563eb; font-weight:600; margin-top:2px; }
+        .sec-user-stores { font-size:11px; color:#64748b; margin-top:2px; }
+        .sec-lvl-badge {
+            background:#1d4ed8; color:#fff; font-size:10px;
+            font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap;
+        }
+        .sec-section-lbl {
+            font-size:11px; font-weight:700; color:#374151; margin-bottom:8px;
+            display:flex; align-items:center; gap:6px;
+            text-transform:uppercase; letter-spacing:0.5px;
+        }
+        .sec-rules { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+        .sec-rule {
+            display:flex; align-items:flex-start; gap:10px;
+            padding:10px 12px; border-radius:8px; font-size:13px; line-height:1.5;
+        }
+        .sec-rule.ok { background:#f0fdf4; border:1px solid #bbf7d0; }
+        .sec-rule.no { background:#fef2f2; border:1px solid #fecaca; }
+        .sec-rule-ico { font-size:15px; flex-shrink:0; margin-top:1px; }
+        .sec-rule-ico.ok { color:#16a34a; }
+        .sec-rule-ico.no { color:#dc2626; }
+        .sec-rule-txt strong { display:block; font-weight:600; color:#1e293b; margin-bottom:2px; font-size:13px; }
+        .sec-rule-txt span   { color:#64748b; font-size:12px; }
+        .sec-hier { display:flex; flex-direction:column; gap:3px; margin-bottom:16px; }
+        .sec-hier-row {
+            display:flex; align-items:center; gap:8px; padding:7px 12px;
+            border-radius:6px; font-size:12px; background:#f8fafc; border:1px solid #e2e8f0;
+        }
+        .sec-hier-row.me { background:#eff6ff; border-color:#3b82f6; font-weight:600; color:#1e3a5f; }
+        .sec-hier-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+        .sec-active-tag {
+            margin-left:auto; background:#10b981; border-radius:20px;
+            padding:2px 9px; font-size:10px; color:#fff; font-weight:600;
+        }
+        .sec-locked-tag {
+            margin-left:auto; background:#dc2626; border-radius:20px;
+            padding:2px 9px; font-size:10px; color:#fff; font-weight:600;
+        }
+        .sec-divider { border:none; border-top:1px solid #e5e7eb; margin:14px 0; }
+        .sec-scenarios { display:flex; flex-direction:column; gap:6px; margin-bottom:16px; }
+        .sec-scenario {
+            display:flex; gap:10px; padding:10px 12px;
+            border-radius:8px; font-size:12px; line-height:1.5;
+        }
+        .sec-scenario.pass { background:#f0fdf4; border:1px solid #bbf7d0; }
+        .sec-scenario.fail { background:#fef2f2; border:1px solid #fecaca; }
+        .sec-scenario-q { font-weight:600; color:#1e293b; display:block; }
+        .sec-scenario-a { color:#64748b; font-size:11px; }
+        .sec-blocked-response {
+            background:#fef2f2; border-left:4px solid #dc2626;
+            border-radius:8px; padding:13px 15px;
+            font-size:13px; line-height:1.65;
+        }
+        .sec-blocked-response .sec-block-title {
+            font-weight:700; color:#dc2626; font-size:13px;
+            margin-bottom:8px; display:flex; align-items:center; gap:6px;
+        }
+        .sec-blocked-response .sec-block-what {
+            font-size:12px; color:#6b7280; margin-top:8px;
+        }
+        .sec-allowed-list {
+            margin-top:6px; padding-left:16px;
+            font-size:12px; color:#374151; line-height:2;
+        }
     </style>
 </head>
 <body>
@@ -1561,6 +1680,7 @@
                     <div class="chatbox-header-title">How can I help?</div>
                 </div>
                 <div class="chatbox-header-controls">
+                    <button class="chatbox-ctrl-btn" id="chatboxSecurity" title="Security Model" onclick="openSecurityModal()" style="position:relative;"><i class="bi bi-shield-lock"></i></button>
                     <button class="chatbox-ctrl-btn" id="chatboxFavourites" title="Saved Favourites" style="position:relative;" onclick="showFavouritesPanel()"><i class="bi bi-star"></i></button>
                     <button class="chatbox-ctrl-btn" id="chatboxClearChat" title="Clear Chat" onclick="clearChat()"><i class="bi bi-arrow-counterclockwise"></i></button>
                     <button class="chatbox-ctrl-btn" id="chatboxMaximize" title="Maximize"><i class="bi bi-arrows-angle-expand"></i></button>
@@ -1603,6 +1723,73 @@
                     <button class="chatbox-send-btn" id="chatboxSendBtn"><i class="bi bi-send-fill"></i></button>
                 </div>
                 <div class="chatbox-disclaimer">Metra can make mistakes - review information carefully.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Model Modal -->
+    <div class="sec-modal-overlay" id="secModalOverlay" onclick="if(event.target===this)closeSecurityModal()">
+        <div class="sec-modal">
+            <div class="sec-modal-head">
+                <div class="sec-modal-head-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                <div class="sec-modal-head-txt">
+                    <h2>Security Model</h2>
+                    <p>Role-based access control — active on this session</p>
+                </div>
+                <button class="sec-modal-head-close" onclick="closeSecurityModal()"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="sec-modal-body">
+                <div class="sec-user-card">
+                    <div class="sec-user-avt">AJ</div>
+                    <div class="sec-user-info">
+                        <div class="sec-user-name">Alex Johnson</div>
+                        <div class="sec-user-role">Store Manager</div>
+                        <div class="sec-user-stores">Assigned Store: #99999 — Downtown Toronto</div>
+                    </div>
+                    <div class="sec-lvl-badge">Level 3</div>
+                </div>
+
+                <div class="sec-section-lbl"><i class="bi bi-diagram-3"></i>&nbsp;Role Hierarchy</div>
+                <div class="sec-hier">
+                    <div class="sec-hier-row"><div class="sec-hier-dot" style="background:#7c3aed;"></div>Corporate / VP / C-Suite<div class="sec-locked-tag">Restricted</div></div>
+                    <div class="sec-hier-row"><div class="sec-hier-dot" style="background:#dc2626;"></div>Regional Director<div class="sec-locked-tag">Restricted</div></div>
+                    <div class="sec-hier-row"><div class="sec-hier-dot" style="background:#ea580c;"></div>Area Manager<div class="sec-locked-tag">Restricted</div></div>
+                    <div class="sec-hier-row"><div class="sec-hier-dot" style="background:#d97706;"></div>District Manager<div class="sec-locked-tag">Restricted</div></div>
+                    <div class="sec-hier-row me"><div class="sec-hier-dot" style="background:#2563eb;"></div>Store Manager &larr; You<div class="sec-active-tag">Current Level</div></div>
+                    <div class="sec-hier-row"><div class="sec-hier-dot" style="background:#16a34a;"></div>Shift Lead<div class="sec-active-tag">Viewable</div></div>
+                    <div class="sec-hier-row"><div class="sec-hier-dot" style="background:#15803d;"></div>Hourly Employees<div class="sec-active-tag">Viewable</div></div>
+                </div>
+
+                <hr class="sec-divider">
+
+                <div class="sec-section-lbl"><i class="bi bi-list-check"></i>&nbsp;Access Rules</div>
+                <div class="sec-rules">
+                    <div class="sec-rule ok"><span class="sec-rule-ico ok"><i class="bi bi-check-circle-fill"></i></span><div class="sec-rule-txt"><strong>Your Store Data (Store #99999)</strong><span>Full access: schedule, sales, payroll totals, punches, time-off, availability, inventory, ordering.</span></div></div>
+                    <div class="sec-rule no"><span class="sec-rule-ico no"><i class="bi bi-x-circle-fill"></i></span><div class="sec-rule-txt"><strong>Other Stores</strong><span>Cross-store data access is blocked. You can only view data for stores assigned to your account.</span></div></div>
+                    <div class="sec-rule ok"><span class="sec-rule-ico ok"><i class="bi bi-check-circle-fill"></i></span><div class="sec-rule-txt"><strong>Pay Rates — Hourly Staff &amp; Shift Leads</strong><span>You can view pay rates for employees below your management level (shift leads, hourly staff).</span></div></div>
+                    <div class="sec-rule no"><span class="sec-rule-ico no"><i class="bi bi-x-circle-fill"></i></span><div class="sec-rule-txt"><strong>Pay Rates — Same Level &amp; Above</strong><span>Pay rate, salary, and compensation data for managers at or above your level is confidential and blocked.</span></div></div>
+                    <div class="sec-rule no"><span class="sec-rule-ico no"><i class="bi bi-x-circle-fill"></i></span><div class="sec-rule-txt"><strong>Payroll Breakdown (Manager-Level)</strong><span>Individual payroll details for district managers, area managers, or above cannot be accessed.</span></div></div>
+                    <div class="sec-rule ok"><span class="sec-rule-ico ok"><i class="bi bi-check-circle-fill"></i></span><div class="sec-rule-txt"><strong>Time-Off Requests (Your Store)</strong><span>View and manage time-off requests for employees in your assigned store only.</span></div></div>
+                    <div class="sec-rule no"><span class="sec-rule-ico no"><i class="bi bi-x-circle-fill"></i></span><div class="sec-rule-txt"><strong>Time-Off / Availability / Punches (Other Stores)</strong><span>Operational data for stores outside your assignment is not accessible.</span></div></div>
+                    <div class="sec-rule no"><span class="sec-rule-ico no"><i class="bi bi-x-circle-fill"></i></span><div class="sec-rule-txt"><strong>Sensitive Personal Data</strong><span>SSN, bank account, home address, tax ID, disciplinary records — never exposed via chat.</span></div></div>
+                </div>
+
+                <hr class="sec-divider">
+
+                <div class="sec-section-lbl"><i class="bi bi-chat-square-text"></i>&nbsp;Example Scenarios</div>
+                <div class="sec-scenarios">
+                    <div class="sec-scenario pass"><div><span class="sec-scenario-q">&#10003; "Show me today's schedule for store 99999"</span><span class="sec-scenario-a">Allowed — your assigned store.</span></div></div>
+                    <div class="sec-scenario fail"><div><span class="sec-scenario-q">&#10007; "Show me sales for store 10002"</span><span class="sec-scenario-a">Blocked — Store 10002 is not in your assigned stores.</span></div></div>
+                    <div class="sec-scenario pass"><div><span class="sec-scenario-q">&#10003; "What is Kevin Lee's schedule this week?"</span><span class="sec-scenario-a">Allowed — shift lead in your assigned store.</span></div></div>
+                    <div class="sec-scenario fail"><div><span class="sec-scenario-q">&#10007; "What is the district manager's pay rate?"</span><span class="sec-scenario-a">Blocked — pay rates above your level are confidential.</span></div></div>
+                    <div class="sec-scenario fail"><div><span class="sec-scenario-q">&#10007; "Show me payroll for store 10001"</span><span class="sec-scenario-a">Blocked — cross-store data access not permitted.</span></div></div>
+                    <div class="sec-scenario pass"><div><span class="sec-scenario-q">&#10003; "Who requested time off this week?"</span><span class="sec-scenario-a">Allowed — time-off for your assigned store.</span></div></div>
+                    <div class="sec-scenario fail"><div><span class="sec-scenario-q">&#10007; "What's the senior manager's salary?"</span><span class="sec-scenario-a">Blocked — compensation above your level is confidential.</span></div></div>
+                    <div class="sec-scenario fail"><div><span class="sec-scenario-q">&#10007; "Show punches for Mississauga store"</span><span class="sec-scenario-a">Blocked — punches for stores outside your assignment are restricted.</span></div></div>
+                </div>
+
+                <hr class="sec-divider">
+                <div style="font-size:11px; color:#9ca3af; text-align:center; padding-bottom:4px;">Security model enforced by Metra AI &middot; Role: Store Manager &middot; Store #99999</div>
             </div>
         </div>
     </div>
@@ -2139,6 +2326,139 @@
         }
 
         // ========== MAIN SEND FUNCTION ==========
+        // ========== SECURITY MODEL ==========
+        const SecurityModel = {
+            currentUser: {
+                name: 'Alex Johnson',
+                initials: 'AJ',
+                role: 'store_manager',
+                level: 3,
+                assignedStores: ['99999']
+            },
+
+            roleHierarchy: {
+                'employee': 1, 'dishwasher': 1, 'busser': 1, 'host': 1,
+                'hostess': 1, 'barista': 1, 'cashier': 2, 'server': 2,
+                'cook': 2, 'shift lead': 3, 'shift_lead': 3,
+                'manager': 4, 'store manager': 4, 'store_manager': 4,
+                'assistant manager': 4, 'district manager': 5,
+                'district_manager': 5, 'area manager': 6, 'area_manager': 6,
+                'regional director': 7, 'regional_director': 7,
+                'senior manager': 5, 'vp': 8, 'vice president': 8,
+                'director': 7, 'president': 9, 'ceo': 9, 'coo': 9,
+                'cfo': 9, 'corporate': 9
+            },
+
+            payKeywords: [
+                'pay rate', 'payrate', 'salary', 'wage', 'hourly rate',
+                'compensation', 'how much does', 'how much is', 'what does',
+                'earning', 'paycheck', 'pay stub', 'income', 'take home',
+                'base pay', 'annual pay', 'make a year', 'make per hour',
+                'paid per hour', 'what do they earn', 'what does he make',
+                'what does she make', 'what is his pay', 'what is her pay'
+            ],
+
+            seniorTitles: [
+                'district manager', 'area manager', 'regional director',
+                'regional manager', 'vice president', 'vp of', 'director of',
+                'president', 'ceo', 'coo', 'cfo', 'corporate',
+                'senior manager', 'senior director', 'chief', 'head of'
+            ],
+
+            sensitiveDataKeywords: [
+                'ssn', 'social security', 'tax id', 'sin number',
+                'bank account', 'direct deposit', 'routing number',
+                'home address', 'personal address', 'emergency contact',
+                'disciplinary', 'write up', 'written up', 'termination',
+                'reason for firing', 'background check', 'criminal record',
+                'medical record', 'health insurance id', 'date of birth',
+                'dob', 'passport'
+            ],
+
+            canAccessStore(storeId) {
+                if (this.currentUser.level >= 4) return true;
+                return this.currentUser.assignedStores.includes(storeId);
+            },
+
+            asksAboutPay(lower) {
+                return this.payKeywords.some(kw => lower.includes(kw));
+            },
+
+            asksAboutSeniorPay(lower, detectedEmployee) {
+                if (!this.asksAboutPay(lower)) return false;
+                if (this.seniorTitles.some(t => lower.includes(t))) return true;
+                if (detectedEmployee) {
+                    const emp = employeeDB[detectedEmployee.toLowerCase()];
+                    if (emp) {
+                        const empLevel = this.roleHierarchy[emp.role.toLowerCase()] || 0;
+                        if (empLevel >= this.currentUser.level) return true;
+                    }
+                }
+                if (/pay\s*rate|salary|wage|compensation|how much|earning/i.test(lower) &&
+                    /manager|director|executive|regional|corporate|senior|head|chief|vp|president/i.test(lower)) return true;
+                return false;
+            },
+
+            asksAboutSensitiveData(lower) {
+                return this.sensitiveDataKeywords.some(kw => lower.includes(kw));
+            },
+
+            check(query, intent, detectedStore, detectedEmployee) {
+                const lower = query.toLowerCase();
+
+                // 1. Cross-store access
+                if (detectedStore && !this.canAccessStore(detectedStore)) {
+                    return { blocked: true, reason: 'cross_store_access', safeResponse: this.crossStoreResponse(detectedStore) };
+                }
+
+                // 2. Senior / peer pay rate
+                if (this.asksAboutSeniorPay(lower, detectedEmployee)) {
+                    return { blocked: true, reason: 'unauthorized_pay_access', safeResponse: this.seniorPayResponse() };
+                }
+
+                // 3. Time-off, availability, punches for unauthorized stores
+                if (/time.?off|vacation|pto|paid leave|availability|punch|clock.?in|clock.?out|time\s*card/.test(lower) &&
+                    detectedStore && !this.canAccessStore(detectedStore)) {
+                    return { blocked: true, reason: 'ops_data_cross_store', safeResponse: this.crossStoreResponse(detectedStore) };
+                }
+
+                // 4. Sensitive personal data
+                if (this.asksAboutSensitiveData(lower)) {
+                    return { blocked: true, reason: 'sensitive_personal_data', safeResponse: this.sensitiveDataResponse() };
+                }
+
+                return { blocked: false };
+            },
+
+            crossStoreResponse(storeId) {
+                const sdb = storeDatabase[storeId];
+                const storeName = sdb ? `${sdb.name} (Store #${storeId})` : `Store #${storeId}`;
+                const myId = this.currentUser.assignedStores[0];
+                const myName = storeDatabase[myId] ? storeDatabase[myId].name : 'Your Store';
+                return `<div class="sec-blocked-response">
+                    <div class="sec-block-title"><i class="bi bi-shield-lock-fill"></i> Access Restricted</div>
+                    You don't have permission to view data for <b>${storeName}</b>.<br><br>
+                    <b>Your assigned store:</b> #${myId} — ${myName}<br><br>
+                </div>`;
+            },
+
+            seniorPayResponse() {
+                return `<div class="sec-blocked-response">
+                    <div class="sec-block-title"><i class="bi bi-shield-lock-fill"></i> Access Denied</div>
+                    You don't have access to view compensation details for managers at or above your level. Please contact HR for more information.
+                </div>`;
+            },
+
+            sensitiveDataResponse() {
+                return `<div class="sec-blocked-response">
+                    <div class="sec-block-title"><i class="bi bi-shield-lock-fill"></i> Sensitive Information Protected</div>
+                    This type of personal data is protected under our privacy policy and cannot be accessed through the chat interface.<br><br>
+                    For sensitive employee records, please log into the <b>secure HR portal</b> or contact HR directly.
+                    <div class="sec-block-what">Protected fields include: SSN, tax ID, bank details, home address, disciplinary records, and medical information.</div>
+                </div>`;
+            }
+        };
+
         function sendUserMessage() {
             const text = chatboxInput.value.trim();
             if (!text) return;
@@ -2158,6 +2478,13 @@
             const detectedEmployee = extractEmployee(text);
             const detectedDay = extractDay(text);
             const detectedRole = extractRole(text);
+
+            // --- Security check (before any data is returned) ---
+            const secCheck = SecurityModel.check(text, detectIntent(text), detectedStore, detectedEmployee);
+            if (secCheck.blocked) {
+                showTypingThenCustom(secCheck.safeResponse);
+                return;
+            }
 
             // --- 2. Store switch: if user just types a number or "switch to X" ---
             if (detectedStore && (lower.match(/^\d{4,5}$/) || lower.includes('switch') || lower.includes('change store') || lower.includes('go to'))) {
@@ -2296,7 +2623,7 @@
                 <span style="color:#7c3aed;">💡 <b>Pro tip:</b> Type naturally! e.g. "Who's working Friday?" or "Show me cashiers" or "Sales for store 10001"</span>`);
         }
 
-        // Module Questions Mapping - Top 3 questions per module
+        // Module Questions Mapping - Top 5 questions per module
         const moduleQuestions = {
             forecast: {
                 name: 'Forecast',
@@ -2305,7 +2632,9 @@
                 questions: [
                     { text: 'What is the sales forecast for this week?', id: 'forecast_1' },
                     { text: 'Show me forecasted vs actual traffic', id: 'forecast_2' },
-                    { text: 'What are the peak hours predictions?', id: 'forecast_3' }
+                    { text: 'What are the peak hours predictions?', id: 'forecast_3' },
+                    { text: "How accurate was last week's forecast?", id: 'forecast_4' },
+                    { text: 'What is the labor cost forecast for this week?', id: 'forecast_5' }
                 ]
             },
             sales: {
@@ -2315,7 +2644,9 @@
                 questions: [
                     { text: 'What were total sales for this week?', id: 'sales_1' },
                     { text: 'Show me sales breakdown by category', id: 'sales_2' },
-                    { text: 'How do current sales compare to last week?', id: 'sales_3' }
+                    { text: 'How do current sales compare to last week?', id: 'sales_3' },
+                    { text: 'What is the net sales after discounts and voids?', id: 'sales_4' },
+                    { text: 'What are the top selling items today?', id: 'sales_5' }
                 ]
             },
             employee: {
@@ -2325,7 +2656,9 @@
                 questions: [
                     { text: 'Show me employee performance ratings', id: 'emp_1' },
                     { text: 'Who are the top performers?', id: 'emp_2' },
-                    { text: 'What are the attendance issues?', id: 'emp_3' }
+                    { text: 'What are the attendance issues?', id: 'emp_3' },
+                    { text: 'Which employees are approaching overtime this week?', id: 'emp_4' },
+                    { text: 'Who has pending time-off or availability requests?', id: 'emp_5' }
                 ]
             },
             inventory: {
@@ -2335,7 +2668,9 @@
                 questions: [
                     { text: 'What items are low in stock?', id: 'inv_1' },
                     { text: 'Show me inventory turnover rates', id: 'inv_2' },
-                    { text: 'What needs to be reordered?', id: 'inv_3' }
+                    { text: 'What needs to be reordered?', id: 'inv_3' },
+                    { text: 'What was the inventory variance from the last count?', id: 'inv_4' },
+                    { text: 'What are the top waste and spoilage items this week?', id: 'inv_5' }
                 ]
             },
             ordering: {
@@ -2345,7 +2680,9 @@
                 questions: [
                     { text: 'What orders are pending?', id: 'ord_1' },
                     { text: 'Show me recent order history', id: 'ord_2' },
-                    { text: 'When will pending orders arrive?', id: 'ord_3' }
+                    { text: 'When will pending orders arrive?', id: 'ord_3' },
+                    { text: 'What is the total spend per supplier this month?', id: 'ord_4' },
+                    { text: 'Are there any overdue or delayed orders?', id: 'ord_5' }
                 ]
             },
             tunes: {
@@ -2355,7 +2692,9 @@
                 questions: [
                     { text: 'What music is currently playing?', id: 'tunes_1' },
                     { text: 'Show me playlist recommendations', id: 'tunes_2' },
-                    { text: 'What are popular tracks this week?', id: 'tunes_3' }
+                    { text: 'Show me device status for all Zip Tunes devices', id: 'tunes_3' },
+                    { text: 'What zones are active and what is each zone playing?', id: 'tunes_4' },
+                    { text: 'How do I schedule a playlist for the dinner rush?', id: 'tunes_5' }
                 ]
             },
             schedule: {
@@ -2365,7 +2704,9 @@
                 questions: [
                     { text: 'What is my schedule for this week?', id: 'sch_1' },
                     { text: 'Show me unassigned shifts', id: 'sch_2' },
-                    { text: 'What are the overtime alerts?', id: 'sch_3' }
+                    { text: 'What are the overtime alerts?', id: 'sch_3' },
+                    { text: 'Which employees called out or no-showed today?', id: 'sch_4' },
+                    { text: 'How does scheduled labor compare to the sales forecast?', id: 'sch_5' }
                 ]
             },
             clock: {
@@ -2375,7 +2716,9 @@
                 questions: [
                     { text: 'Show me time clock status', id: 'clk_1' },
                     { text: 'Who is currently clocked in?', id: 'clk_2' },
-                    { text: 'What are late arrivals today?', id: 'clk_3' }
+                    { text: 'What are late arrivals today?', id: 'clk_3' },
+                    { text: 'Which punches need my approval right now?', id: 'clk_4' },
+                    { text: 'Show me the pay period summary for current period', id: 'clk_5' }
                 ]
             },
             checklist: {
@@ -2385,7 +2728,9 @@
                 questions: [
                     { text: 'What are todays tasks?', id: 'chk_1' },
                     { text: 'Show me incomplete checklists', id: 'chk_2' },
-                    { text: 'What needs to be done?', id: 'chk_3' }
+                    { text: 'What needs to be done?', id: 'chk_3' },
+                    { text: 'Which checklists are escalated or overdue?', id: 'chk_4' },
+                    { text: 'What is the checklist completion rate for this week?', id: 'chk_5' }
                 ]
             },
             prep: {
@@ -2395,17 +2740,21 @@
                 questions: [
                     { text: 'What needs to be prepped?', id: 'prep_1' },
                     { text: 'Show me prep completion status', id: 'prep_2' },
-                    { text: 'What items need to be pulled?', id: 'prep_3' }
+                    { text: 'What items need to be pulled?', id: 'prep_3' },
+                    { text: 'What is the prep schedule for each shift today?', id: 'prep_4' },
+                    { text: 'Which prep tasks are running behind schedule?', id: 'prep_5' }
                 ]
             },
             shiftbook: {
                 name: 'ShiftBook',
-                icon: '📞',
+                icon: '📔',
                 imgIcon: 'https://agcdn.altametrics.com/releaseHubWorks/agassets/v3/assets/images/account/ZipShiftbook.svg',
                 questions: [
-                    { text: 'Show me shift change requests', id: 'shift_1' },
-                    { text: 'What are available pickups?', id: 'shift_2' },
-                    { text: 'Who wants to swap shifts?', id: 'shift_3' }
+                    { text: "Show me today's shift log entries", id: 'shift_1' },
+                    { text: 'Are there any critical log entries this week?', id: 'shift_2' },
+                    { text: 'Show me employee evaluations this month', id: 'shift_3' },
+                    { text: 'What events are scheduled this week?', id: 'shift_4' },
+                    { text: 'Who are the top performers this period?', id: 'shift_5' }
                 ]
             }
         };
@@ -2414,404 +2763,775 @@
         function getDetailedResponse(qId) {
             const store = currentStore;
             const responses = {
-                // Forecast Responses
-                forecast_1: `<b style="color:#3b82f6;">📊 Sales Forecast for This Week (May 5-11)</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Last Year</td><td style="padding:8px; border:1px solid #e5e7eb;">Trend</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,250</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,980</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +6.8%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,890</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,650</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +6.6%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,120</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,720</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +10.8%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,680</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,220</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +10.9%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,240</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +7.2%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">$6,150</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,620</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">📈 +9.4%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,330</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$26,080</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>📈 +8.6%</b></td></tr>
-                    </table><br>
-                    <span style="color:#22c55e; font-weight:600;">✅ Strong growth forecasted for the week — plan inventory accordingly.</span>`,
-                
-                forecast_2: `<b style="color:#3b82f6;">📊 Forecasted vs Actual Traffic</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Time Period</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted</td><td style="padding:8px; border:1px solid #e5e7eb;">Actual (Avg)</td><td style="padding:8px; border:1px solid #e5e7eb;">Variance</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM - 9:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">145 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">152 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+4.8%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">9:00 AM - 12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">287 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">298 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+3.8%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">12:00 PM - 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">412 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">398 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#ef4444;">-3.4%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 5:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">267 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">271 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+1.5%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">5:00 PM - 8:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">456 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">468 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2.6%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Daily Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,567 customers</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,587 customers</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+1.3%</b></td></tr>
-                    </table>`,
-                
-                forecast_3: `<b style="color:#3b82f6;">⏰ Peak Hours Predictions</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Today's Date: May 7, 2026<br><br>
-                    <b style="color:#dc2626;">🔴 Peak Hours Today:</b><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:2;">
-                        <b>12:00 PM - 1:30 PM</b> — Expected 450+ customers (Lunch Rush)<br>
-                        <b>5:30 PM - 7:00 PM</b> — Expected 420+ customers (Dinner Rush)<br>
-                    </div><br>
-                    <b style="color:#f59e0b;">⚡ Staffing Recommendation:</b><br>
-                    <div style="margin:8px 0 8px 8px; font-size:13px;">
-                        • Add 2 cashiers for noon rush<br>
-                        • Add 3 kitchen staff for dinner preparation<br>
-                        • Ensure 4 customer service reps on duty
-                    </div>`,
-                
-                // Sales Responses
-                sales_1: `<b style="color:#3b82f6;">💰 Total Sales Summary (This Week)</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Metric</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">vs Last Week</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total Sales</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+12.3%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Food Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$16,780</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+10.2%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverage Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$7,240</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+15.8%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Merchandise Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,430</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+8.9%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Average Transaction</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$18.12</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2.1%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Transactions Count</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,568</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+9.8%</td></tr>
-                    </table><br>
-                    <span style="color:#22c55e; font-weight:600;">✅ Excellent performance this week! Sales are up across all categories.</span>`,
-                
-                sales_2: `<b style="color:#3b82f6;">📊 Sales Breakdown by Category</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">% of Total</td><td style="padding:8px; border:1px solid #e5e7eb;">Trend</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Entrees</td><td style="padding:8px; border:1px solid #f0f0f0;">$9,850</td><td style="padding:8px; border:1px solid #f0f0f0;">34.6%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+11.2%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Appetizers</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,240</td><td style="padding:8px; border:1px solid #f0f0f0;">14.9%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+8.5%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">$7,240</td><td style="padding:8px; border:1px solid #f0f0f0;">25.4%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+15.8%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Desserts</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,120</td><td style="padding:8px; border:1px solid #f0f0f0;">11.0%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+6.3%</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>TOTAL</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>100%</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+12.3%</b></td></tr>
-                    </table>`,
-                
-                sales_3: `<b style="color:#3b82f6;">📈 Current Week vs Last Week</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Week</td><td style="padding:8px; border:1px solid #e5e7eb;">Total Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Avg Transaction</td><td style="padding:8px; border:1px solid #e5e7eb;">Transactions</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">This Week (May 5-11)</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;">$18.12</td><td style="padding:8px; border:1px solid #f0f0f0;">1,568</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Last Week (Apr 28-May 4)</td><td style="padding:8px; border:1px solid #f0f0f0;">$25,320</td><td style="padding:8px; border:1px solid #f0f0f0;">$17.75</td><td style="padding:8px; border:1px solid #f0f0f0;">1,427</td></tr>
-                        <tr style="background:#fef3c7;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>GROWTH</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+$3,130 (+12.3%)</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+$0.37 (+2.1%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+141 (+9.8%)</td></tr>
-                    </table><br>
-                    <span style="color:#22c55e; font-weight:600;">✅ Strong week-over-week growth across all metrics!</span>`,
-                
-                // Employee Responses
-                emp_1: `<b style="color:#3b82f6;">⭐ Employee Performance Ratings</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Rating</td><td style="padding:8px; border:1px solid #e5e7eb;">Shifts</td><td style="padding:8px; border:1px solid #e5e7eb;">No-Shows</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐⭐⭐ 4.9</td><td style="padding:8px; border:1px solid #f0f0f0;">156</td><td style="padding:8px; border:1px solid #f0f0f0;">0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐⭐⭐ 4.8</td><td style="padding:8px; border:1px solid #f0f0f0;">142</td><td style="padding:8px; border:1px solid #f0f0f0;">1</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐⭐ 4.7</td><td style="padding:8px; border:1px solid #f0f0f0;">138</td><td style="padding:8px; border:1px solid #f0f0f0;">0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">James Parker</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐ 3.5</td><td style="padding:8px; border:1px solid #f0f0f0;">98</td><td style="padding:8px; border:1px solid #f0f0f0;">3</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0;">⭐⭐⭐ 3.2</td><td style="padding:8px; border:1px solid #f0f0f0;">75</td><td style="padding:8px; border:1px solid #f0f0f0;">5</td></tr>
-                    </table>`,
-                
-                emp_2: `<b style="color:#3b82f6;">🏆 Top Performers</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#22c55e; font-size:14px;">🥇 Top 3 Performers:</b><br><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:2.2;">
-                        <b>1. Sarah Mitchell</b> (Rating: 4.9/5)<br>
-                        <span style="margin-left:12px; color:#666;">156 shifts completed | 0 no-shows | Consistent excellence</span><br><br>
-                        <b>2. David Chen</b> (Rating: 4.8/5)<br>
-                        <span style="margin-left:12px; color:#666;">142 shifts completed | 1 no-show | Strong customer service</span><br><br>
-                        <b>3. Rachel Green</b> (Rating: 4.7/5)<br>
-                        <span style="margin-left:12px; color:#666;">138 shifts completed | 0 no-shows | Leadership potential</span>
-                    </div><br>
-                    <span style="color:#7c3aed; font-weight:600;">💡 Consider these employees for leadership roles or training opportunities.</span>`,
-                
-                emp_3: `<b style="color:#3b82f6;">⚠️ Attendance Issues</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#dc2626;">🔴 Employees Requiring Attention:</b><br><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:2.2;">
-                        <b>Lisa Brown</b> — 5 no-shows in last 30 days | Rating: 3.2/5<br>
-                        <span style="margin-left:12px; color:#666;">Last 3 shifts: 2 no-shows | Recommendation: Performance review needed</span><br><br>
-                        <b>Mark Johnson</b> — 3 no-shows in last 30 days | Rating: 3.5/5<br>
-                        <span style="margin-left:12px; color:#666;">Late arrivals: 6 times | Recommendation: Discuss scheduling challenges</span><br><br>
-                        <b>Tom Wilson</b> — 2 no-shows in last 30 days | Rating: 3.8/5<br>
-                        <span style="margin-left:12px; color:#666;">Recent improvement noted | Recommendation: Continue monitoring</span>
-                    </div>`,
-                
-                // Inventory Responses
-                inv_1: `<b style="color:#3b82f6;">📦 Low Stock Items Alert</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Current</td><td style="padding:8px; border:1px solid #e5e7eb;">Min. Level</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken Breast</td><td style="padding:8px; border:1px solid #f0f0f0;">4.2 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">8 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tomato Sauce</td><td style="padding:8px; border:1px solid #f0f0f0;">2.1 gal</td><td style="padding:8px; border:1px solid #f0f0f0;">5 gal</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lettuce</td><td style="padding:8px; border:1px solid #f0f0f0;">6.5 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">10 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>LOW</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Olive Oil</td><td style="padding:8px; border:1px solid #f0f0f0;">1.8 L</td><td style="padding:8px; border:1px solid #f0f0f0;">3 L</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>LOW</b></td></tr>
-                    </table><br>
-                    <span style="color:#dc2626; font-weight:600;">⚠️ URGENT: Chicken and tomato sauce need immediate restocking!</span>`,
-                
-                inv_2: `<b style="color:#3b82f6;">📊 Inventory Turnover Rates</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Turnover Rate</td><td style="padding:8px; border:1px solid #e5e7eb;">Industry Avg</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Perishables</td><td style="padding:8px; border:1px solid #f0f0f0;">8.2x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">7.5x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Excellent</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">5.8x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">5.5x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Good</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Packaged Goods</td><td style="padding:8px; border:1px solid #f0f0f0;">2.1x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">2.3x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">⚠️ Monitor</td></tr>
-                    </table>`,
-                
-                inv_3: `<b style="color:#3b82f6;">🔄 Reorder Recommendations</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <div style="font-size:13px; line-height:2;">
-                        <b style="color:#dc2626;">🔴 Reorder Immediately:</b><br>
-                        • Chicken Breast — Order 50 lbs (delivery: 1-2 hours)<br>
-                        • Tomato Sauce — Order 30 gal (delivery: next day)<br><br>
-                        <b style="color:#f59e0b;">⚡ Reorder within 2 hours:</b><br>
-                        • Lettuce — Order 40 lbs<br>
-                        • Olive Oil — Order 15 L<br><br>
-                        <b style="color:#22c55e;">✅ Reorder within 24 hours:</b><br>
-                        • Ground Beef — Order 30 lbs<br>
-                        • Cheese — Order 20 lbs
-                    </div>`,
-                
-                // Ordering Responses
-                ord_1: `<b style="color:#3b82f6;">📋 Pending Orders</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,250</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Processing</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47829</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Processing</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,540</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><b>Shipped</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$3,680</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td></tr>
-                    </table>`,
-                
-                ord_2: `<b style="color:#3b82f6;">📜 Recent Order History</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,540</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>✅ Delivered</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47812</td><td style="padding:8px; border:1px solid #f0f0f0;">May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">$2,120</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>✅ Delivered</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47798</td><td style="padding:8px; border:1px solid #f0f0f0;">May 3</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,875</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>✅ Delivered</b></td></tr>
-                    </table>`,
-                
-                ord_3: `<b style="color:#3b82f6;">⏰ Pending Order Arrival Times</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Arrival</td><td style="padding:8px; border:1px solid #e5e7eb;">Time Window</td><td style="padding:8px; border:1px solid #e5e7eb;">Tracking</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">May 8, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track</u></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47829</td><td style="padding:8px; border:1px solid #f0f0f0;">May 8, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">1:00 PM - 5:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track</u></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">Out for Delivery</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>Track</u></td></tr>
-                    </table>`,
-                
-                // Tunes Responses
-                tunes_1: `<b style="color:#3b82f6;">🎵 Currently Playing</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Time: 2:45 PM<br><br>
-                    <div style="margin:12px 0; font-size:13px;">
-                        <b>Now Playing:</b><br>
-                        <span style="margin-left:12px;">Song: "Good as Hell" by Lizzo</span><br>
-                        <span style="margin-left:12px;">Album: Cuz I Love You</span><br>
-                        <span style="margin-left:12px;">Duration: 3:34 (Playing 2:15)</span><br>
-                        <span style="margin-left:12px;">Genre: Pop | Mood: Upbeat & Fun</span><br><br>
-                        <b>Up Next:</b><br>
-                        <span style="margin-left:12px;">1. "Walking on Sunshine" by Katrina & The Waves</span><br>
-                        <span style="margin-left:12px;">2. "Don't Stop Me Now" by Queen</span><br>
-                        <span style="margin-left:12px;">3. "Good Day" by Surfaces
-                    </div>`,
-                
-                tunes_2: `<b style="color:#3b82f6;">🎶 Playlist Recommendations</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Playlist</td><td style="padding:8px; border:1px solid #e5e7eb;">Songs</td><td style="padding:8px; border:1px solid #e5e7eb;">Mood</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Upbeat Energy</td><td style="padding:8px; border:1px solid #f0f0f0;">45 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Happy & Energetic</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Dinner Time</td><td style="padding:8px; border:1px solid #f0f0f0;">38 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Smooth & Relaxing</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Peak Hours</td><td style="padding:8px; border:1px solid #f0f0f0;">52 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Fast & Upbeat</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
-                    </table>`,
-                
-                tunes_3: `<b style="color:#3b82f6;">📊 Popular Tracks This Week</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Rank</td><td style="padding:8px; border:1px solid #e5e7eb;">Song</td><td style="padding:8px; border:1px solid #e5e7eb;">Artist</td><td style="padding:8px; border:1px solid #e5e7eb;">Plays</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">🥇 #1</td><td style="padding:8px; border:1px solid #f0f0f0;">Good as Hell</td><td style="padding:8px; border:1px solid #f0f0f0;">Lizzo</td><td style="padding:8px; border:1px solid #f0f0f0;">342</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">🥈 #2</td><td style="padding:8px; border:1px solid #f0f0f0;">Levitating</td><td style="padding:8px; border:1px solid #f0f0f0;">Dua Lipa</td><td style="padding:8px; border:1px solid #f0f0f0;">298</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">🥉 #3</td><td style="padding:8px; border:1px solid #f0f0f0;">Walking on Sunshine</td><td style="padding:8px; border:1px solid #f0f0f0;">Katrina & The Waves</td><td style="padding:8px; border:1px solid #f0f0f0;">267</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">#4</td><td style="padding:8px; border:1px solid #f0f0f0;">Don't Stop Me Now</td><td style="padding:8px; border:1px solid #f0f0f0;">Queen</td><td style="padding:8px; border:1px solid #f0f0f0;">245</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">#5</td><td style="padding:8px; border:1px solid #f0f0f0;">Good Day</td><td style="padding:8px; border:1px solid #f0f0f0;">Surfaces</td><td style="padding:8px; border:1px solid #f0f0f0;">218</td></tr>
-                    </table>`,
-                
-                // Schedule Responses
-                sch_1: `<b style="color:#3b82f6;">📅 Your Schedule for This Week</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 10:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM - 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM - 6:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:8px; border:1px solid #f0f0f0;">4:00 PM - 12:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">OFF</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">0.0</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>TOTAL</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>32.0 hrs</b></td></tr>
-                    </table>`,
-                
-                sch_2: `<b style="color:#3b82f6;">📭 Unassigned Shifts</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 4:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>⚠ OPEN</b></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sun, May 11</td><td style="padding:8px; border:1px solid #f0f0f0;">11:00 AM - 7:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>⚠ OPEN</b></td></tr>
-                    </table><br>
-                    <span style="color:#2563eb;">💡 Click "Pickup Available" to claim a shift or use Auto-Fill feature.</span>`,
-                
-                sch_3: `<b style="color:#3b82f6;">⚠️ Overtime Alerts</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#dc2626;">🔴 3 Employees Approaching Overtime:</b><br>
-                    <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
-                        • <b>James Parker</b> — 38.5 hrs scheduled (limit: 40 hrs) ⚠ 1.5 hrs until OT<br>
-                        • <b>Maria Gonzalez</b> — 39.0 hrs scheduled (limit: 40 hrs) ⚠ 1.0 hrs until OT<br>
-                        • <b>Kevin Lee</b> — 41.5 hrs scheduled <span style="color:#dc2626; font-weight:600;">⚠ OVERTIME (+1.5 hrs)</span>
-                    </div><br>
-                    <b style="color:#f59e0b;">💰 Estimated OT Cost:</b> $112.50 (1.5 hrs @ 1.5x rate)<br><br>
-                    <span style="color:#2563eb;">💡 Adjust Kevin's Thursday shift to stay within limits.</span>`,
-                
-                // Clock Responses
-                clk_1: `<b style="color:#3b82f6;">⏱️ Time Clock Status</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Current Time: 2:47 PM<br><br>
-                    <b style="color:#22c55e;">✅ Currently Clocked In: 14 employees</b><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Clock In</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">✅ In</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">✅ In</td><td style="padding:8px; border:1px solid #f0f0f0;">10:15 AM</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">✅ In</td><td style="padding:8px; border:1px solid #f0f0f0;">9:50 AM</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>+ 11 more employees</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td></tr>
-                    </table>`,
-                
-                clk_2: `<b style="color:#3b82f6;">👥 Currently Clocked In</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Time: 2:47 PM<br><br>
-                    <b style="color:#22c55e;">✅ 14 of 22 employees clocked in</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Clock In</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td><td style="padding:8px; border:1px solid #e5e7eb;">Station</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 47m</td><td style="padding:8px; border:1px solid #f0f0f0;">Register 1</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">10:15 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 32m</td><td style="padding:8px; border:1px solid #f0f0f0;">Kitchen</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">9:50 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 57m</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td></tr>
-                    </table>`,
-                
-                clk_3: `<b style="color:#3b82f6;">🚨 Late Arrivals Today</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#f59e0b;">⚠️ 2 Late Arrivals (Today: May 7)</b><br><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:2;">
-                        <b>Mark Johnson</b> — Scheduled: 6:00 AM | Arrived: 6:18 AM | Late by: 18 minutes<br>
-                        <b>Tom Wilson</b> — Scheduled: 2:00 PM | Arrived: 2:12 PM | Late by: 12 minutes
-                    </div>`,
-                
-                // Checklist Responses
-                chk_1: `<b style="color:#3b82f6;">✅ Today's Tasks</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Date: May 7, 2026<br><br>
-                    <b style="color:#22c55e;">✅ Completed (8/12)</b><br>
-                    <div style="margin:8px 0; font-size:13px;">
-                        ✓ Morning opening procedures<br>
-                        ✓ Stock front-of-house items<br>
-                        ✓ Equipment inspection & testing<br>
-                        ✓ Staff briefing
-                    </div><br>
-                    <b style="color:#f59e0b;">⏳ In Progress (2/12)</b><br>
-                    <div style="margin:8px 0; font-size:13px;">
-                        ⏳ Lunch rush prep (Sarah Mitchell)<br>
-                        ⏳ Inventory count (David Chen)
-                    </div><br>
-                    <b style="color:#dc2626;">❌ Remaining (2/12)</b><br>
-                    <div style="margin:8px 0; font-size:13px;">
-                        ❌ Close & secure kitchen<br>
-                        ❌ End-of-day cash reconciliation
-                    </div>`,
-                
-                chk_2: `<b style="color:#3b82f6;">📋 Incomplete Checklists</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#dc2626;">🔴 5 Incomplete Checklists</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Checklist</td><td style="padding:8px; border:1px solid #e5e7eb;">Completed</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td><td style="padding:8px; border:1px solid #e5e7eb;">Due</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Deep Clean</td><td style="padding:8px; border:1px solid #f0f0f0;">3/8</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 PM</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Inventory</td><td style="padding:8px; border:1px solid #f0f0f0;">5/12</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">7:00 PM</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Safety Audit</td><td style="padding:8px; border:1px solid #f0f0f0;">2/6</td><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 PM</td></tr>
-                    </table>`,
-                
-                chk_3: `<b style="color:#3b82f6;">🎯 What Needs to Be Done</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#dc2626;">URGENT (Complete by 5:00 PM):</b><br>
-                    <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
-                        ❌ Health & Safety Inspection (50 items)<br>
-                        ❌ Count cash drawer & reconcile<br>
-                        ❌ Restock high-use items
-                    </div><br>
-                    <b style="color:#f59e0b;">HIGH PRIORITY (Complete by 8:00 PM):</b><br>
-                    <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
-                        ❌ Deep clean dining area<br>
-                        ❌ Complete inventory<br>
-                        ❌ Equipment maintenance check
-                    </div>`,
-                
-                // Prep & Pull Responses
-                prep_1: `<b style="color:#3b82f6;">🔪 Prep Items for Today</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b> | Date: May 7, 2026<br><br>
-                    <b style="color:#22c55e;">✅ Prepped (8 items)</b><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
-                        ✓ Chicken breast — 24 portions<br>
-                        ✓ Lettuce — 15 lbs washed<br>
-                        ✓ Tomatoes — 12 lbs diced<br>
-                        ✓ Onions — 8 lbs sliced
-                    </div><br>
-                    <b style="color:#dc2626;">⏳ To Be Prepped (5 items)</b><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
-                        ❌ Ground beef — 30 lbs<br>
-                        ❌ Bell peppers — 20 lbs sliced<br>
-                        ❌ Garlic — 2 lbs minced<br>
-                        ❌ Fresh herbs — bundle for plating
-                    </div>`,
-                
-                prep_2: `<b style="color:#3b82f6;">📊 Prep Completion Status</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken breast</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">✅ Done</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Ground beef</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">⏳ In progress</td><td style="padding:8px; border:1px solid #f0f0f0;">20 min</td><td style="padding:8px; border:1px solid #f0f0f0;">Marcus Lee</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bell peppers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">❌ Not started</td><td style="padding:8px; border:1px solid #f0f0f0;">15 min</td><td style="padding:8px; border:1px solid #f0f0f0;">Pending</td></tr>
-                    </table>`,
-                
-                prep_3: `<b style="color:#3b82f6;">📦 Items to Pull</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#22c55e;">✅ Pulled (12 items)</b><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
-                        ✓ Dinner plates — 100 units<br>
-                        ✓ Service napkins — 500 units<br>
-                        ✓ Silverware sets — 120 units
-                    </div><br>
-                    <b style="color:#dc2626;">❌ Still Needed (6 items)</b><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:1.8;">
-                        ❌ Wine glasses — 50 units<br>
-                        ❌ Water glasses — 80 units<br>
-                        ❌ Dessert plates — 60 units<br>
-                        ❌ Coffee cups — 100 units
-                    </div>`,
-                
-                // ShiftBook Responses
-                shift_1: `<b style="color:#3b82f6;">🔄 Shift Change Requests</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#f59e0b;">⏳ 3 Pending Requests</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Request</td><td style="padding:8px; border:1px solid #e5e7eb;">Reason</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">James Parker</td><td style="padding:8px; border:1px solid #f0f0f0;">Swap Thu 4PM to Fri 2PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Doctor appt</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#2563eb;"><u>Approve</u></span></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Maria Lopez</td><td style="padding:8px; border:1px solid #f0f0f0;">Cancel Sat 8AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Personal</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#2563eb;"><u>Review</u></span></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kevin Lee</td><td style="padding:8px; border:1px solid #f0f0f0;">Swap Wed 10AM to Mon 6AM</td><td style="padding:8px; border:1px solid #f0f0f0;">School</td><td style="padding:8px; border:1px solid #f0f0f0;"><span style="color:#2563eb;"><u>Review</u></span></td></tr>
-                    </table>`,
-                
-                shift_2: `<b style="color:#3b82f6;">🆓 Available Pickups</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#22c55e;">✅ 4 Shifts Available for Pickup</b><br><br>
-                    <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                        <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 10:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>PICKUP</u></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 4:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>PICKUP</u></td></tr>
-                        <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sun, May 11</td><td style="padding:8px; border:1px solid #f0f0f0;">11:00 AM - 7:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>PICKUP</u></td></tr>
-                    </table>`,
-                
-                shift_3: `<b style="color:#3b82f6;">🔁 Shift Swap Requests</b><br><br>
-                    <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
-                    <b style="color:#f59e0b;">⏳ 2 Employees Seeking Swaps</b><br><br>
-                    <div style="margin:8px 0; font-size:13px; line-height:2.2;">
-                        <b>James Parker</b> (Cashier)<br>
-                        <span style="margin-left:12px; color:#666;">Has: Thu 4:00 PM - 12:00 AM | Wants: Fri 2:00 PM - 10:00 PM<br>
-                        Reason: Doctor appointment | Interested: Marcus Lee</span><br><br>
-                        <b>Maria Lopez</b> (Cook)<br>
-                        <span style="margin-left:12px; color:#666;">Has: Sat 8:00 AM - 4:00 PM | Wants: Sun 8:00 AM - 4:00 PM<br>
-                        Reason: Family event | Interested: Sarah Mitchell</span>
-                    </div>`
-            };
-            return responses[qId] || `<b>Professional Insight</b><br><br>Thank you for your question about ${currentModule}. Detailed data is being fetched from your store system.`;
+ // Forecast Responses
+ forecast_1: `<b style="color:#3b82f6;">Sales Forecast for This Week (May 5-11)</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Last Year</td><td style="padding:8px; border:1px solid #e5e7eb;">Trend</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,250</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,980</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+6.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,890</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,650</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+6.6%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,120</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,720</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+10.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,680</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,220</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+10.9%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,240</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+7.2%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">$6,150</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,620</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+9.4%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,330</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$26,080</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+8.6%</b></td></tr>
+ </table><br>
+ <span style="color:#22c55e; font-weight:600;">Strong growth forecasted for the week — plan inventory accordingly.</span>`,
+ 
+ forecast_2: `<b style="color:#3b82f6;">Forecasted vs Actual Traffic</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Time Period</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted</td><td style="padding:8px; border:1px solid #e5e7eb;">Actual (Avg)</td><td style="padding:8px; border:1px solid #e5e7eb;">Variance</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM - 9:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">145 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">152 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+4.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">9:00 AM - 12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">287 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">298 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+3.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">12:00 PM - 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">412 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">398 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#ef4444;">-3.4%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 5:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">267 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">271 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+1.5%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">5:00 PM - 8:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">456 customers</td><td style="padding:8px; border:1px solid #f0f0f0;">468 customers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2.6%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Daily Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,567 customers</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,587 customers</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+1.3%</b></td></tr>
+ </table>`,
+ 
+ forecast_3: `<b style="color:#3b82f6;">Peak Hours Predictions</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Today's Date: May 7, 2026<br><br>
+ <b style="color:#dc2626;">Peak Hours Today:</b><br>
+ <div style="margin:8px 0; font-size:13px; line-height:2;">
+ <b>12:00 PM - 1:30 PM</b>— Expected 450+ customers (Lunch Rush)<br>
+ <b>5:30 PM - 7:00 PM</b>— Expected 420+ customers (Dinner Rush)<br>
+ </div><br>
+ <b style="color:#f59e0b;">Staffing Recommendation:</b><br>
+ <div style="margin:8px 0 8px 8px; font-size:13px;">
+ • Add 2 cashiers for noon rush<br>
+ • Add 3 kitchen staff for dinner preparation<br>
+ • Ensure 4 customer service reps on duty
+ </div>`,
+ 
+ // Sales Responses
+ sales_1: `<b style="color:#3b82f6;">Total Sales Summary (This Week)</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Metric</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">vs Last Week</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total Sales</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+12.3%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Food Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$16,780</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+10.2%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverage Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$7,240</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+15.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Merchandise Sales</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,430</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+8.9%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Average Transaction</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$18.12</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2.1%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Transactions Count</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>1,568</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+9.8%</td></tr>
+ </table><br>
+ <span style="color:#22c55e; font-weight:600;">Excellent performance this week! Sales are up across all categories.</span>`,
+ 
+ sales_2: `<b style="color:#3b82f6;">Sales Breakdown by Category</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">% of Total</td><td style="padding:8px; border:1px solid #e5e7eb;">Trend</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Entrees</td><td style="padding:8px; border:1px solid #f0f0f0;">$9,850</td><td style="padding:8px; border:1px solid #f0f0f0;">34.6%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+11.2%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Appetizers</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,240</td><td style="padding:8px; border:1px solid #f0f0f0;">14.9%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+8.5%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">$7,240</td><td style="padding:8px; border:1px solid #f0f0f0;">25.4%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+15.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Desserts</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,120</td><td style="padding:8px; border:1px solid #f0f0f0;">11.0%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+6.3%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>TOTAL</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>100%</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+12.3%</b></td></tr>
+ </table>`,
+ 
+ sales_3: `<b style="color:#3b82f6;">Current Week vs Last Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Week</td><td style="padding:8px; border:1px solid #e5e7eb;">Total Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Avg Transaction</td><td style="padding:8px; border:1px solid #e5e7eb;">Transactions</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">This Week (May 5-11)</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;">$18.12</td><td style="padding:8px; border:1px solid #f0f0f0;">1,568</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Last Week (Apr 28-May 4)</td><td style="padding:8px; border:1px solid #f0f0f0;">$25,320</td><td style="padding:8px; border:1px solid #f0f0f0;">$17.75</td><td style="padding:8px; border:1px solid #f0f0f0;">1,427</td></tr>
+ <tr style="background:#fef3c7;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>GROWTH</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>+$3,130 (+12.3%)</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+$0.37 (+2.1%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+141 (+9.8%)</td></tr>
+ </table><br>
+ <span style="color:#22c55e; font-weight:600;">Strong week-over-week growth across all metrics!</span>`,
+ 
+ // Employee Responses
+ emp_1: `<b style="color:#3b82f6;">Employee Performance Ratings</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Rating</td><td style="padding:8px; border:1px solid #e5e7eb;">Shifts</td><td style="padding:8px; border:1px solid #e5e7eb;">No-Shows</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">4.9</td><td style="padding:8px; border:1px solid #f0f0f0;">156</td><td style="padding:8px; border:1px solid #f0f0f0;">0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">4.8</td><td style="padding:8px; border:1px solid #f0f0f0;">142</td><td style="padding:8px; border:1px solid #f0f0f0;">1</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">4.7</td><td style="padding:8px; border:1px solid #f0f0f0;">138</td><td style="padding:8px; border:1px solid #f0f0f0;">0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">James Parker</td><td style="padding:8px; border:1px solid #f0f0f0;">3.5</td><td style="padding:8px; border:1px solid #f0f0f0;">98</td><td style="padding:8px; border:1px solid #f0f0f0;">3</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0;">3.2</td><td style="padding:8px; border:1px solid #f0f0f0;">75</td><td style="padding:8px; border:1px solid #f0f0f0;">5</td></tr>
+ </table>`,
+ 
+ emp_2: `<b style="color:#3b82f6;">Top Performers</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#22c55e; font-size:14px;">Top 3 Performers:</b><br><br>
+ <div style="margin:8px 0; font-size:13px; line-height:2.2;">
+ <b>1. Sarah Mitchell</b>(Rating: 4.9/5)<br>
+ <span style="margin-left:12px; color:#666;">156 shifts completed | 0 no-shows | Consistent excellence</span><br><br>
+ <b>2. David Chen</b>(Rating: 4.8/5)<br>
+ <span style="margin-left:12px; color:#666;">142 shifts completed | 1 no-show | Strong customer service</span><br><br>
+ <b>3. Rachel Green</b>(Rating: 4.7/5)<br>
+ <span style="margin-left:12px; color:#666;">138 shifts completed | 0 no-shows | Leadership potential</span>
+ </div><br>
+ <span style="color:#7c3aed; font-weight:600;">Consider these employees for leadership roles or training opportunities.</span>`,
+ 
+ emp_3: `<b style="color:#3b82f6;">Attendance Issues</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#dc2626;">Employees Requiring Attention:</b><br><br>
+ <div style="margin:8px 0; font-size:13px; line-height:2.2;">
+ <b>Lisa Brown</b>— 5 no-shows in last 30 days | Rating: 3.2/5<br>
+ <span style="margin-left:12px; color:#666;">Last 3 shifts: 2 no-shows | Recommendation: Performance review needed</span><br><br>
+ <b>Mark Johnson</b>— 3 no-shows in last 30 days | Rating: 3.5/5<br>
+ <span style="margin-left:12px; color:#666;">Late arrivals: 6 times | Recommendation: Discuss scheduling challenges</span><br><br>
+ <b>Tom Wilson</b>— 2 no-shows in last 30 days | Rating: 3.8/5<br>
+ <span style="margin-left:12px; color:#666;">Recent improvement noted | Recommendation: Continue monitoring</span>
+ </div>`,
+ 
+ // Inventory Responses
+ inv_1: `<b style="color:#3b82f6;">Low Stock Items Alert</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Current</td><td style="padding:8px; border:1px solid #e5e7eb;">Min. Level</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken Breast</td><td style="padding:8px; border:1px solid #f0f0f0;">4.2 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">8 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tomato Sauce</td><td style="padding:8px; border:1px solid #f0f0f0;">2.1 gal</td><td style="padding:8px; border:1px solid #f0f0f0;">5 gal</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lettuce</td><td style="padding:8px; border:1px solid #f0f0f0;">6.5 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">10 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>LOW</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Olive Oil</td><td style="padding:8px; border:1px solid #f0f0f0;">1.8 L</td><td style="padding:8px; border:1px solid #f0f0f0;">3 L</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>LOW</b></td></tr>
+ </table><br>
+ <span style="color:#dc2626; font-weight:600;">URGENT: Chicken and tomato sauce need immediate restocking!</span>`,
+ 
+ inv_2: `<b style="color:#3b82f6;">Inventory Turnover Rates</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Turnover Rate</td><td style="padding:8px; border:1px solid #e5e7eb;">Industry Avg</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Perishables</td><td style="padding:8px; border:1px solid #f0f0f0;">8.2x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">7.5x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Excellent</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">5.8x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">5.5x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Good</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Packaged Goods</td><td style="padding:8px; border:1px solid #f0f0f0;">2.1x/week</td><td style="padding:8px; border:1px solid #f0f0f0;">2.3x/week</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">Monitor</td></tr>
+ </table>`,
+ 
+ inv_3: `<b style="color:#3b82f6;">Reorder Recommendations</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <div style="font-size:13px; line-height:2;">
+ <b style="color:#dc2626;">Reorder Immediately:</b><br>
+ • Chicken Breast — Order 50 lbs (delivery: 1-2 hours)<br>
+ • Tomato Sauce — Order 30 gal (delivery: next day)<br><br>
+ <b style="color:#f59e0b;">Reorder within 2 hours:</b><br>
+ • Lettuce — Order 40 lbs<br>
+ • Olive Oil — Order 15 L<br><br>
+ <b style="color:#22c55e;">Reorder within 24 hours:</b><br>
+ • Ground Beef — Order 30 lbs<br>
+ • Cheese — Order 20 lbs
+ </div>`,
+ 
+ // Ordering Responses
+ ord_1: `<b style="color:#3b82f6;">Pending Orders</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,250</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Processing</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47829</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Processing</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,540</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><b>Shipped</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$3,680</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td></tr>
+ </table>`,
+ 
+ ord_2: `<b style="color:#3b82f6;">Recent Order History</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,540</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>Delivered</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47812</td><td style="padding:8px; border:1px solid #f0f0f0;">May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">$2,120</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>Delivered</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47798</td><td style="padding:8px; border:1px solid #f0f0f0;">May 3</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,875</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>Delivered</b></td></tr>
+ </table>`,
+ 
+ ord_3: `<b style="color:#3b82f6;">Pending Order Arrival Times</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Arrival</td><td style="padding:8px; border:1px solid #e5e7eb;">Time Window</td><td style="padding:8px; border:1px solid #e5e7eb;">Tracking</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">May 8, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track</u></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47829</td><td style="padding:8px; border:1px solid #f0f0f0;">May 8, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">1:00 PM - 5:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track</u></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47835</td><td style="padding:8px; border:1px solid #f0f0f0;">May 7, 2026</td><td style="padding:8px; border:1px solid #f0f0f0;">Out for Delivery</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><u>Track</u></td></tr>
+ </table>`,
+ 
+ // Tunes Responses
+ tunes_1: `<b style="color:#3b82f6;">Currently Playing</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Time: 2:45 PM<br><br>
+ <div style="margin:12px 0; font-size:13px;">
+ <b>Now Playing:</b><br>
+ <span style="margin-left:12px;">Song: "Good as Hell" by Lizzo</span><br>
+ <span style="margin-left:12px;">Album: Cuz I Love You</span><br>
+ <span style="margin-left:12px;">Duration: 3:34 (Playing 2:15)</span><br>
+ <span style="margin-left:12px;">Genre: Pop | Mood: Upbeat & Fun</span><br><br>
+ <b>Up Next:</b><br>
+ <span style="margin-left:12px;">1. "Walking on Sunshine" by Katrina & The Waves</span><br>
+ <span style="margin-left:12px;">2. "Don't Stop Me Now" by Queen</span><br>
+ <span style="margin-left:12px;">3. "Good Day" by Surfaces
+ </div>`,
+ 
+ tunes_2: `<b style="color:#3b82f6;">Playlist Recommendations</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Playlist</td><td style="padding:8px; border:1px solid #e5e7eb;">Songs</td><td style="padding:8px; border:1px solid #e5e7eb;">Mood</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Upbeat Energy</td><td style="padding:8px; border:1px solid #f0f0f0;">45 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Happy & Energetic</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Dinner Time</td><td style="padding:8px; border:1px solid #f0f0f0;">38 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Smooth & Relaxing</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Peak Hours</td><td style="padding:8px; border:1px solid #f0f0f0;">52 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Fast & Upbeat</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Play</u></td></tr>
+ </table>`,
+ 
+ tunes_3: `<b style="color:#3b82f6;">Zip Tunes Device Status</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Checked: Jun 4, 2026 — 2:45 PM<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Device</td><td style="padding:8px; border:1px solid #e5e7eb;">Zone</td><td style="padding:8px; border:1px solid #e5e7eb;">IP Address</td><td style="padding:8px; border:1px solid #e5e7eb;">Volume</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td><td style="padding:8px; border:1px solid #e5e7eb;">Last Seen</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tunes Device 1</td><td style="padding:8px; border:1px solid #f0f0f0;">Dining Area</td><td style="padding:8px; border:1px solid #f0f0f0;">192.168.1.51</td><td style="padding:8px; border:1px solid #f0f0f0;">65%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td><td style="padding:8px; border:1px solid #f0f0f0;">Just now</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tunes Device 2</td><td style="padding:8px; border:1px solid #f0f0f0;">Bar</td><td style="padding:8px; border:1px solid #f0f0f0;">192.168.1.52</td><td style="padding:8px; border:1px solid #f0f0f0;">75%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td><td style="padding:8px; border:1px solid #f0f0f0;">2 min ago</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tunes Device 3</td><td style="padding:8px; border:1px solid #f0f0f0;">Patio</td><td style="padding:8px; border:1px solid #f0f0f0;">192.168.1.53</td><td style="padding:8px; border:1px solid #f0f0f0;">55%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td><td style="padding:8px; border:1px solid #f0f0f0;">5 min ago</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tunes Device 4</td><td style="padding:8px; border:1px solid #f0f0f0;">Restrooms</td><td style="padding:8px; border:1px solid #f0f0f0;">192.168.1.54</td><td style="padding:8px; border:1px solid #f0f0f0;">30%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td><td style="padding:8px; border:1px solid #f0f0f0;">3 min ago</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tunes Device 5</td><td style="padding:8px; border:1px solid #f0f0f0;">Kitchen</td><td style="padding:8px; border:1px solid #f0f0f0;">192.168.1.55</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Offline</b></td><td style="padding:8px; border:1px solid #f0f0f0;">48 min ago</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>4 of 5 devices online.</b><br>
+ <b style="color:#dc2626;">Kitchen device offline for 48 min.</b>Restart via <b>Zip Tunes → Devices → Kitchen Speaker → Restart</b>.
+ </div>`,
+ 
+ // Schedule Responses
+ sch_1: `<b style="color:#3b82f6;">Your Schedule for This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon, May 5</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM - 10:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue, May 6</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM - 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed, May 7</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM - 6:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu, May 8</td><td style="padding:8px; border:1px solid #f0f0f0;">4:00 PM - 12:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri, May 9</td><td style="padding:8px; border:1px solid #f0f0f0;">OFF</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">0.0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>TOTAL</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>32.0 hrs</b></td></tr>
+ </table>`,
+ 
+ sch_2: `<b style="color:#3b82f6;">Unassigned Shifts</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat, May 10</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM - 4:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>OPEN</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sun, May 11</td><td style="padding:8px; border:1px solid #f0f0f0;">11:00 AM - 7:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>OPEN</b></td></tr>
+ </table><br>
+ <span style="color:#2563eb;">Click "Pickup Available" to claim a shift or use Auto-Fill feature.</span>`,
+ 
+ sch_3: `<b style="color:#3b82f6;">Overtime Alerts</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#dc2626;">3 Employees Approaching Overtime:</b><br>
+ <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
+ • <b>James Parker</b>— 38.5 hrs scheduled (limit: 40 hrs) 1.5 hrs until OT<br>
+ • <b>Maria Gonzalez</b>— 39.0 hrs scheduled (limit: 40 hrs) 1.0 hrs until OT<br>
+ • <b>Kevin Lee</b>— 41.5 hrs scheduled <span style="color:#dc2626; font-weight:600;">OVERTIME (+1.5 hrs)</span>
+ </div><br>
+ <b style="color:#f59e0b;">Estimated OT Cost:</b>$112.50 (1.5 hrs @ 1.5x rate)<br><br>
+ <span style="color:#2563eb;">Adjust Kevin's Thursday shift to stay within limits.</span>`,
+ 
+ // Clock Responses
+ clk_1: `<b style="color:#3b82f6;">Time Clock Status</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Current Time: 2:47 PM<br><br>
+ <b style="color:#22c55e;">Currently Clocked In: 14 employees</b><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Clock In</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">In</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">In</td><td style="padding:8px; border:1px solid #f0f0f0;">10:15 AM</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">In</td><td style="padding:8px; border:1px solid #f0f0f0;">9:50 AM</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>+ 11 more employees</b></td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td></tr>
+ </table>`,
+ 
+ clk_2: `<b style="color:#3b82f6;">Currently Clocked In</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Time: 2:47 PM<br><br>
+ <b style="color:#22c55e;">14 of 22 employees clocked in</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Clock In</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours</td><td style="padding:8px; border:1px solid #e5e7eb;">Station</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 47m</td><td style="padding:8px; border:1px solid #f0f0f0;">Register 1</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">10:15 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 32m</td><td style="padding:8px; border:1px solid #f0f0f0;">Kitchen</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">9:50 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">4h 57m</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td></tr>
+ </table>`,
+ 
+ clk_3: `<b style="color:#3b82f6;">Late Arrivals Today</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#f59e0b;">2 Late Arrivals (Today: May 7)</b><br><br>
+ <div style="margin:8px 0; font-size:13px; line-height:2;">
+ <b>Mark Johnson</b>— Scheduled: 6:00 AM | Arrived: 6:18 AM | Late by: 18 minutes<br>
+ <b>Tom Wilson</b>— Scheduled: 2:00 PM | Arrived: 2:12 PM | Late by: 12 minutes
+ </div>`,
+ 
+ // Checklist Responses
+ chk_1: `<b style="color:#3b82f6;">Today's Tasks</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Date: May 7, 2026<br><br>
+ <b style="color:#22c55e;">Completed (8/12)</b><br>
+ <div style="margin:8px 0; font-size:13px;">
+ Morning opening procedures<br>
+ Stock front-of-house items<br>
+ Equipment inspection & testing<br>
+ Staff briefing
+ </div><br>
+ <b style="color:#f59e0b;">In Progress (2/12)</b><br>
+ <div style="margin:8px 0; font-size:13px;">
+ Lunch rush prep (Sarah Mitchell)<br>
+ Inventory count (David Chen)
+ </div><br>
+ <b style="color:#dc2626;">Remaining (2/12)</b><br>
+ <div style="margin:8px 0; font-size:13px;">
+ Close & secure kitchen<br>
+ End-of-day cash reconciliation
+ </div>`,
+ 
+ chk_2: `<b style="color:#3b82f6;">Incomplete Checklists</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#dc2626;">5 Incomplete Checklists</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Checklist</td><td style="padding:8px; border:1px solid #e5e7eb;">Completed</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td><td style="padding:8px; border:1px solid #e5e7eb;">Due</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Deep Clean</td><td style="padding:8px; border:1px solid #f0f0f0;">3/8</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 PM</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Inventory</td><td style="padding:8px; border:1px solid #f0f0f0;">5/12</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">7:00 PM</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Safety Audit</td><td style="padding:8px; border:1px solid #f0f0f0;">2/6</td><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 PM</td></tr>
+ </table>`,
+ 
+ chk_3: `<b style="color:#3b82f6;">What Needs to Be Done</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#dc2626;">URGENT (Complete by 5:00 PM):</b><br>
+ <div style="margin:8px 0 12px 8px; font-size:13px; line-height:1.9;">
+ Health & Safety Inspection (50 items)<br>
+ Count cash drawer & reconcile<br>
+ Restock high-use items
+ </div><br>
+ <b style="color:#f59e0b;">HIGH PRIORITY (Complete by 8:00 PM):</b><br>
+ <div style="margin:8px 0 0 8px; font-size:13px; line-height:1.9;">
+ Deep clean dining area<br>
+ Complete inventory<br>
+ Equipment maintenance check
+ </div>`,
+ 
+ // Prep & Pull Responses
+ prep_1: `<b style="color:#3b82f6;">Prep Items for Today</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Date: May 7, 2026<br><br>
+ <b style="color:#22c55e;">Prepped (8 items)</b><br>
+ <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+ Chicken breast — 24 portions<br>
+ Lettuce — 15 lbs washed<br>
+ Tomatoes — 12 lbs diced<br>
+ Onions — 8 lbs sliced
+ </div><br>
+ <b style="color:#dc2626;">To Be Prepped (5 items)</b><br>
+ <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+ Ground beef — 30 lbs<br>
+ Bell peppers — 20 lbs sliced<br>
+ Garlic — 2 lbs minced<br>
+ Fresh herbs — bundle for plating
+ </div>`,
+ 
+ prep_2: `<b style="color:#3b82f6;">Prep Completion Status</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken breast</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Done</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Ground beef</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">In progress</td><td style="padding:8px; border:1px solid #f0f0f0;">20 min</td><td style="padding:8px; border:1px solid #f0f0f0;">Marcus Lee</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bell peppers</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">Not started</td><td style="padding:8px; border:1px solid #f0f0f0;">15 min</td><td style="padding:8px; border:1px solid #f0f0f0;">Pending</td></tr>
+ </table>`,
+ 
+ prep_3: `<b style="color:#3b82f6;">Items to Pull</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <b style="color:#22c55e;">Pulled (12 items)</b><br>
+ <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+ Dinner plates — 100 units<br>
+ Service napkins — 500 units<br>
+ Silverware sets — 120 units
+ </div><br>
+ <b style="color:#dc2626;">Still Needed (6 items)</b><br>
+ <div style="margin:8px 0; font-size:13px; line-height:1.8;">
+ Wine glasses — 50 units<br>
+ Water glasses — 80 units<br>
+ Dessert plates — 60 units<br>
+ Coffee cups — 100 units
+ </div>`,
+ 
+ // ShiftBook Responses
+ shift_1: `<b style="color:#3b82f6;">Today's Shift Log Entries</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Date: Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Entry</td><td style="padding:8px; border:1px solid #e5e7eb;">Flag</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">6:15 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Opening</td><td style="padding:8px; border:1px solid #f0f0f0;">Store opened on time. All stations ready.</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Normal</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">8:30 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Staffing</td><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown no-showed for 6AM–2PM cook shift. Short-staffed during morning rush.</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Critical</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">10:45 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Equipment</td><td style="padding:8px; border:1px solid #f0f0f0;">Fryer #2 making clicking noise. Maintenance ticket MT-0892 submitted.</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Critical</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">12:10 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Customer Experience</td><td style="padding:8px; border:1px solid #f0f0f0;">Table 7 waited 25 min for food. Comp dessert issued. Customer left satisfied.</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">Cust Exp</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">1:30 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Inventory</td><td style="padding:8px; border:1px solid #f0f0f0;">Chicken breast running low. Reorder placed with Sysco (ORD-47821).</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">Inventory</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Handoff</td><td style="padding:8px; border:1px solid #f0f0f0;">AM shift handed off to afternoon manager. All critical items flagged above.</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Normal</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Total Entries Today: 6</b>&nbsp;|&nbsp; <b style="color:#dc2626;">Critical: 2</b>&nbsp;|&nbsp; <b style="color:#f59e0b;">Customer Exp: 1</b><br>
+ Go to <b>ShiftBook → Log</b>to add a new entry or view all logs.
+ </div>`,
+
+ shift_2: `<b style="color:#3b82f6;">Critical Log Entries — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;">Entry</td><td style="padding:8px; border:1px solid #e5e7eb;">Logged By</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 4</td><td style="padding:8px; border:1px solid #f0f0f0;">Equipment</td><td style="padding:8px; border:1px solid #f0f0f0;">Fryer #2 clicking noise — maintenance called (MT-0892)</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 4</td><td style="padding:8px; border:1px solid #f0f0f0;">Staffing</td><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown no-showed — 6AM–2PM cook shift uncovered</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 3</td><td style="padding:8px; border:1px solid #f0f0f0;">Safety</td><td style="padding:8px; border:1px solid #f0f0f0;">Customer slipped near entrance on wet floor. Incident report filed.</td><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 2</td><td style="padding:8px; border:1px solid #f0f0f0;">Equipment</td><td style="padding:8px; border:1px solid #f0f0f0;">Walk-in cooler door seal worn — temporary fix applied</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">4 critical entries this week.</b><br>
+ <b>Action needed:</b>Jun 3 safety incident (customer slip) requires formal incident documentation for liability.<br>
+ Go to <b>ShiftBook → Log → Filter: Critical</b>to review all flagged entries.
+ </div>`,
+
+ shift_3: `<b style="color:#3b82f6;">Employee Evaluations — This Month</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Month: June 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Eval Type</td><td style="padding:8px; border:1px solid #e5e7eb;">Sub-Type</td><td style="padding:8px; border:1px solid #e5e7eb;">Action Taken</td><td style="padding:8px; border:1px solid #e5e7eb;">Date</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>Positive</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Customer Service</td><td style="padding:8px; border:1px solid #f0f0f0;">Commendation noted</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 3</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Corrective</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Attendance</td><td style="padding:8px; border:1px solid #f0f0f0;">Verbal warning issued</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 2</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kevin Lee</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Coaching</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Performance</td><td style="padding:8px; border:1px solid #f0f0f0;">1-on-1 coaching session</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 1</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mark Johnson</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Corrective</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Tardiness</td><td style="padding:8px; border:1px solid #f0f0f0;">Written warning on file</td><td style="padding:8px; border:1px solid #f0f0f0;">May 30</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>Positive</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Leadership</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift lead recognition</td><td style="padding:8px; border:1px solid #f0f0f0;">May 28</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Total Evaluations: 5</b>&nbsp;|&nbsp; <b style="color:#22c55e;">Positive: 2</b>&nbsp;|&nbsp; <b style="color:#dc2626;">Corrective: 2</b>&nbsp;|&nbsp; <b style="color:#f59e0b;">Coaching: 1</b><br>
+ Go to <b>ShiftBook → Staff Journals</b>to view full employee records.
+ </div>`,
+
+ // Forecast New Responses
+ forecast_4: `<b style="color:#3b82f6;">Forecast Accuracy — Last Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: May 26 – Jun 1, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted</td><td style="padding:8px; border:1px solid #e5e7eb;">Actual</td><td style="padding:8px; border:1px solid #e5e7eb;">Accuracy</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,250</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,318</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">98.4% </td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,890</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,720</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">95.6% </td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,120</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,095</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">99.4% </td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,680</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,890</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">95.7% </td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,240</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,310</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">98.7% </td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat</td><td style="padding:8px; border:1px solid #f0f0f0;">$6,150</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,820</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">94.6% </td></tr>
+ <tr style="background:#f0f9ff;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Weekly Avg</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,330</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,153</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>97.4% </b></td></tr>
+ </table>
+ <div style="margin-top:8px; font-size:13px; color:#555;">
+ <b style="color:#22c55e;">Best day:</b>Wednesday (99.4% accuracy)<br>
+ <b style="color:#dc2626;">Worst day:</b>Saturday — actual came in $330 below forecast. Review weekend traffic patterns.<br>
+ <b>MAPE (Mean Absolute % Error):</b>2.6% — within acceptable range.
+ </div>`,
+
+ forecast_5: `<b style="color:#3b82f6;">Labor Cost Forecast — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Scheduled Hours</td><td style="padding:8px; border:1px solid #e5e7eb;">Labor Cost</td><td style="padding:8px; border:1px solid #e5e7eb;">Labor %</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,250</td><td style="padding:8px; border:1px solid #f0f0f0;">64 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">$960</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">22.6%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,890</td><td style="padding:8px; border:1px solid #f0f0f0;">60 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">$900</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">23.1%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,120</td><td style="padding:8px; border:1px solid #f0f0f0;">64 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">$960</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">23.3%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,680</td><td style="padding:8px; border:1px solid #f0f0f0;">68 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,020</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">21.8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,240</td><td style="padding:8px; border:1px solid #f0f0f0;">80 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,200</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">22.9%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat</td><td style="padding:8px; border:1px solid #f0f0f0;">$6,150</td><td style="padding:8px; border:1px solid #f0f0f0;">96 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,440</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">23.4%</td></tr>
+ <tr style="background:#f0f9ff;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Weekly Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,330</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>432 hrs</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$6,480</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>22.9% </b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Target Labor %:</b>25% &nbsp;|&nbsp; <b>Current Forecast:</b>22.9% Under budget<br>
+ <b style="color:#22c55e;">Projected Savings:</b>$596 vs labor budget this week.
+ </div>`,
+
+ // Sales New Responses
+ sales_4: `<b style="color:#3b82f6;">Net Sales After Discounts &amp; Voids</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| This Week<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Metric</td><td style="padding:8px; border:1px solid #e5e7eb;">Amount</td><td style="padding:8px; border:1px solid #e5e7eb;">% of Gross</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;"><b>Gross Sales</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,450</b></td><td style="padding:8px; border:1px solid #f0f0f0;">100%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Discounts Applied</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">− $1,240</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">4.4%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Voided Transactions</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">− $380</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">1.3%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Refunds / Comps</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">− $210</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">0.7%</td></tr>
+ <tr style="background:#f0fdf4;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Net Sales</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>$26,620</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>93.6%</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Top Discount Types:</b>Employee discount (48%), Happy Hour promo (31%), Manager comp (21%)<br>
+ <b>Top Void Reasons:</b>Wrong item entered (62%), Customer change of mind (38%)<br>
+ <b style="color:#f59e0b;">Void rate 1.3% is slightly above the 1.0% target — review with team.</b>
+ </div>`,
+
+ sales_5: `<b style="color:#3b82f6;">Top Selling Items Today</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Rank</td><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Qty Sold</td><td style="padding:8px; border:1px solid #e5e7eb;">Revenue</td><td style="padding:8px; border:1px solid #e5e7eb;">vs Yesterday</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">1</td><td style="padding:8px; border:1px solid #f0f0f0;">Classic Cheeseburger</td><td style="padding:8px; border:1px solid #f0f0f0;">142</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,704</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+18%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">2</td><td style="padding:8px; border:1px solid #f0f0f0;">Grilled Chicken Wrap</td><td style="padding:8px; border:1px solid #f0f0f0;">118</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,298</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+9%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">3</td><td style="padding:8px; border:1px solid #f0f0f0;">Caesar Salad</td><td style="padding:8px; border:1px solid #f0f0f0;">96</td><td style="padding:8px; border:1px solid #f0f0f0;">$960</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+5%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">4</td><td style="padding:8px; border:1px solid #f0f0f0;">Iced Coffee Latte</td><td style="padding:8px; border:1px solid #f0f0f0;">204</td><td style="padding:8px; border:1px solid #f0f0f0;">$918</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+22%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">5</td><td style="padding:8px; border:1px solid #f0f0f0;">Loaded Fries</td><td style="padding:8px; border:1px solid #f0f0f0;">87</td><td style="padding:8px; border:1px solid #f0f0f0;">$696</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">-3%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">6</td><td style="padding:8px; border:1px solid #f0f0f0;">Chocolate Milkshake</td><td style="padding:8px; border:1px solid #f0f0f0;">74</td><td style="padding:8px; border:1px solid #f0f0f0;">$592</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+11%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">7</td><td style="padding:8px; border:1px solid #f0f0f0;">BBQ Ribs Platter</td><td style="padding:8px; border:1px solid #f0f0f0;">52</td><td style="padding:8px; border:1px solid #f0f0f0;">$884</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+7%</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px;">
+ <b style="color:#7c3aed;">Iced Coffee Latte is surging today (+22%) — ensure stock levels are sufficient for the dinner rush.</b>
+ </div>`,
+
+ // Employee New Responses
+ emp_4: `<b style="color:#3b82f6;">Overtime Risk Report — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Hours Worked</td><td style="padding:8px; border:1px solid #e5e7eb;">Hrs to OT</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kevin Lee</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0;">41.5 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>IN OVERTIME</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Maria Gonzalez</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">39.0 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">1.0 hr</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>AT RISK</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">James Parker</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0;">38.5 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">1.5 hrs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>AT RISK</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td><td style="padding:8px; border:1px solid #f0f0f0;">36.0 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">4.0 hrs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">On Track</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0;">34.5 hrs</td><td style="padding:8px; border:1px solid #f0f0f0;">5.5 hrs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">On Track</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">OT Cost Estimate:</b>$67.50 (Kevin Lee — 1.5 hrs @ 1.5x rate)<br>
+ <b style="color:#7c3aed;">Action:</b>Adjust Kevin Lee's next shift to bring total under 40 hrs.
+ </div>`,
+
+ emp_5: `<b style="color:#3b82f6;">Pending Time-Off &amp; Availability Requests</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b><br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Request Type</td><td style="padding:8px; border:1px solid #e5e7eb;">Date(s)</td><td style="padding:8px; border:1px solid #e5e7eb;">Reason</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0;">Day Off</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 7 (Sat)</td><td style="padding:8px; border:1px solid #f0f0f0;">Family event</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Pending</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tom Wilson</td><td style="padding:8px; border:1px solid #f0f0f0;">Availability Change</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 9 – Jun 30</td><td style="padding:8px; border:1px solid #f0f0f0;">School schedule</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Pending</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">Time Off (3 days)</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 12–14</td><td style="padding:8px; border:1px solid #f0f0f0;">Vacation</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Pending</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mark Johnson</td><td style="padding:8px; border:1px solid #f0f0f0;">Day Off</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 6 (Fri)</td><td style="padding:8px; border:1px solid #f0f0f0;">Medical appt</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>Approved</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#f59e0b;">3 requests still need your approval.</b><br>
+ Go to <b>Zip Schedules → Requests</b>to approve or deny pending submissions.
+ </div>`,
+
+ // Inventory New Responses
+ inv_4: `<b style="color:#3b82f6;">Inventory Variance — Last Count</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Count Date: Jun 3, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Expected</td><td style="padding:8px; border:1px solid #e5e7eb;">Counted</td><td style="padding:8px; border:1px solid #e5e7eb;">Variance</td><td style="padding:8px; border:1px solid #e5e7eb;">Cost Impact</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken Breast</td><td style="padding:8px; border:1px solid #f0f0f0;">24.0 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">21.5 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">−2.5 lbs (−10.4%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">−$14.75</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Ground Beef</td><td style="padding:8px; border:1px solid #f0f0f0;">18.0 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">17.2 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">−0.8 lbs (−4.4%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">−$3.92</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Olive Oil</td><td style="padding:8px; border:1px solid #f0f0f0;">4.0 L</td><td style="padding:8px; border:1px solid #f0f0f0;">4.0 L</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">0 (0%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">$0</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Cheese</td><td style="padding:8px; border:1px solid #f0f0f0;">12.0 lbs</td><td style="padding:8px; border:1px solid #f0f0f0;">11.4 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">−0.6 lbs (−5.0%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">−$3.00</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tomato Sauce</td><td style="padding:8px; border:1px solid #f0f0f0;">8.0 gal</td><td style="padding:8px; border:1px solid #f0f0f0;">8.3 gal</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+0.3 gal (+3.8%)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+$1.80</td></tr>
+ <tr style="background:#fff3f3;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total Variance</b></td><td colspan="3" style="padding:8px; border:1px solid #f0f0f0;"></td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>−$19.87</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">Chicken Breast variance (10.4%) exceeds the 5% threshold</b>— investigate possible waste, theft, or portioning issues.<br>
+ Go to <b>Zip Inventory → Variance Report</b>for a full audit trail.
+ </div>`,
+
+ inv_5: `<b style="color:#3b82f6;">Top Waste &amp; Spoilage Items — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Item</td><td style="padding:8px; border:1px solid #e5e7eb;">Qty Wasted</td><td style="padding:8px; border:1px solid #e5e7eb;">Waste Cost</td><td style="padding:8px; border:1px solid #e5e7eb;">vs Last Week</td><td style="padding:8px; border:1px solid #e5e7eb;">Reason</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lettuce</td><td style="padding:8px; border:1px solid #f0f0f0;">8.5 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">$12.75</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">+40%</td><td style="padding:8px; border:1px solid #f0f0f0;">Expired</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tomatoes</td><td style="padding:8px; border:1px solid #f0f0f0;">6.2 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">$9.30</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">+15%</td><td style="padding:8px; border:1px solid #f0f0f0;">Overprepped</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bread Rolls</td><td style="padding:8px; border:1px solid #f0f0f0;">24 units</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">$7.20</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">+5%</td><td style="padding:8px; border:1px solid #f0f0f0;">Expired</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Chicken Breast</td><td style="padding:8px; border:1px solid #f0f0f0;">3.0 lbs</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">$17.70</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">−10%</td><td style="padding:8px; border:1px solid #f0f0f0;">Over-thawed</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Milk</td><td style="padding:8px; border:1px solid #f0f0f0;">2.0 gal</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">$6.40</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">−20%</td><td style="padding:8px; border:1px solid #f0f0f0;">Expired</td></tr>
+ <tr style="background:#fff3f3;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total Waste Cost</b></td><td colspan="3" style="padding:8px; border:1px solid #f0f0f0;"></td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>$53.35</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">Lettuce waste increased 40% this week</b>— consider reducing par levels from 15 lbs to 12 lbs.<br>
+ <b style="color:#7c3aed;">Suggestion:</b>Review prep quantities for tomatoes to reduce over-prepping.
+ </div>`,
+
+ // Ordering New Responses
+ ord_4: `<b style="color:#3b82f6;">Supplier Spend — This Month</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Month: June 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Supplier</td><td style="padding:8px; border:1px solid #e5e7eb;">Category</td><td style="padding:8px; border:1px solid #e5e7eb;"># Orders</td><td style="padding:8px; border:1px solid #e5e7eb;">Total Spend</td><td style="padding:8px; border:1px solid #e5e7eb;">vs Last Month</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sysco Foods</td><td style="padding:8px; border:1px solid #f0f0f0;">Proteins &amp; Produce</td><td style="padding:8px; border:1px solid #f0f0f0;">6</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$4,820</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">−3%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">US Foods</td><td style="padding:8px; border:1px solid #f0f0f0;">Dry Goods &amp; Dairy</td><td style="padding:8px; border:1px solid #f0f0f0;">4</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$2,340</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">+12%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">PFG Distribution</td><td style="padding:8px; border:1px solid #f0f0f0;">Beverages</td><td style="padding:8px; border:1px solid #f0f0f0;">3</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$1,560</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">−8%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Gordon Food Service</td><td style="padding:8px; border:1px solid #f0f0f0;">Supplies &amp; Packaging</td><td style="padding:8px; border:1px solid #f0f0f0;">2</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$890</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">+2%</td></tr>
+ <tr style="background:#f0f9ff;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>15</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$9,610</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>−1.2% </b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#f59e0b;">US Foods spend up 12% vs last month</b>— review recent invoices for price increases on dry goods.<br>
+ Monthly budget: $11,000 &nbsp;|&nbsp; Current spend: $9,610 — <b style="color:#22c55e;">$1,390 remaining.</b>
+ </div>`,
+
+ ord_5: `<b style="color:#3b82f6;">Overdue &amp; Delayed Orders</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| As of: Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Order #</td><td style="padding:8px; border:1px solid #e5e7eb;">Supplier</td><td style="padding:8px; border:1px solid #e5e7eb;">Expected</td><td style="padding:8px; border:1px solid #e5e7eb;">Days Overdue</td><td style="padding:8px; border:1px solid #e5e7eb;">Action</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47821</td><td style="padding:8px; border:1px solid #f0f0f0;">Sysco Foods</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 2</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>2 days</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Call Supplier</u></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">ORD-47856</td><td style="padding:8px; border:1px solid #f0f0f0;">US Foods</td><td style="padding:8px; border:1px solid #f0f0f0;">Jun 3</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>1 day</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;"><u>Track Order</u></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Sysco Foods contact:</b>1-800-380-6348 &nbsp;|&nbsp; Reference: ORD-47821<br>
+ <b style="color:#f59e0b;">ORD-47821 contains Chicken Breast &amp; Lettuce — items currently at LOW stock.</b><br>
+ <b style="color:#7c3aed;">Recommendation:</b>If delivery is further delayed, place an emergency order with an alternate supplier.
+ </div>`,
+
+ // Tunes New Responses
+ tunes_4: `<b style="color:#3b82f6;">Active Zones — Current Status</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Time: 2:45 PM<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Zone</td><td style="padding:8px; border:1px solid #e5e7eb;">Current Playlist</td><td style="padding:8px; border:1px solid #e5e7eb;">Volume</td><td style="padding:8px; border:1px solid #e5e7eb;">Device Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Dining Area</td><td style="padding:8px; border:1px solid #f0f0f0;">Upbeat Energy</td><td style="padding:8px; border:1px solid #f0f0f0;">65%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bar</td><td style="padding:8px; border:1px solid #f0f0f0;">Peak Hours</td><td style="padding:8px; border:1px solid #f0f0f0;">75%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Patio</td><td style="padding:8px; border:1px solid #f0f0f0;">Chill Vibes</td><td style="padding:8px; border:1px solid #f0f0f0;">55%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Restrooms</td><td style="padding:8px; border:1px solid #f0f0f0;">Background Jazz</td><td style="padding:8px; border:1px solid #f0f0f0;">30%</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Online</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kitchen</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0;">—</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Offline</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">Kitchen zone device is offline.</b>Restart via <b>Zip Tunes → Devices → Kitchen Speaker</b>.<br>
+ All other zones are running normally.
+ </div>`,
+
+ tunes_5: `<b style="color:#3b82f6;">Schedule a Playlist — Step-by-Step Guide</b><br><br>
+ <b>Goal:</b>Set a specific playlist for tonight's dinner rush (5:00 PM – 9:00 PM)<br><br>
+ <div style="font-size:13px; line-height:2.1; margin-bottom:10px;">
+ <b>Step 1:</b>Log in to HubWorks → Open <b>Zip Tunes</b><br>
+ <b>Step 2:</b>Click on <b>Site Settings</b>from the left menu<br>
+ <b>Step 3:</b>Select the <b>Schedule</b>tab at the top<br>
+ <b>Step 4:</b>Click <b>"+ Add Schedule"</b><br>
+ <b>Step 5:</b>Set time window → <b>Start: 5:00 PM</b>| <b>End: 9:00 PM</b><br>
+ <b>Step 6:</b>Choose your playlist → e.g., <b>"Dinner Time"</b>or <b>"Peak Hours"</b><br>
+ <b>Step 7:</b>Select zones to apply (Dining Area, Bar, Patio)<br>
+ <b>Step 8:</b>Click <b>Save</b>— playlist auto-starts at 5:00 PM tonight
+ </div>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Recommended Playlist</td><td style="padding:8px; border:1px solid #e5e7eb;">Mood</td><td style="padding:8px; border:1px solid #e5e7eb;">Songs</td><td style="padding:8px; border:1px solid #e5e7eb;">Best For</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Dinner Time</td><td style="padding:8px; border:1px solid #f0f0f0;">Smooth &amp; Relaxing</td><td style="padding:8px; border:1px solid #f0f0f0;">38 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">Fine dining atmosphere</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Peak Hours</td><td style="padding:8px; border:1px solid #f0f0f0;">Fast &amp; Upbeat</td><td style="padding:8px; border:1px solid #f0f0f0;">52 songs</td><td style="padding:8px; border:1px solid #f0f0f0;">High traffic periods</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:6px; color:#7c3aed;"><b>Tip:</b>Set recurring schedules so the same playlist auto-plays every evening without manual setup.</div>`,
+
+ // Schedule New Responses
+ sch_4: `<b style="color:#3b82f6;">Call-Outs &amp; No-Shows — Today</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Date: Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Scheduled Shift</td><td style="padding:8px; border:1px solid #e5e7eb;">Type</td><td style="padding:8px; border:1px solid #e5e7eb;">Coverage</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM – 2:00 PM (Cook)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>No-Show</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Open</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mark Johnson</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM – 10:00 PM (Cashier)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Called Out</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Partially Covered</b></td></tr>
+ </table><br>
+ <b style="color:#3b82f6; font-size:13px;">Available Employees to Cover:</b>
+ <div style="margin:8px 0; font-size:13px; line-height:2.0;">
+ <b>Rachel Green</b>— Off today, 0 hrs this week | Role: Cook Can cover Lisa's shift<br>
+ <b>Tom Wilson</b>— Scheduled PM, could shift earlier | Role: Cashier Needs confirmation<br>
+ <b>Sarah Mitchell</b>— Already at 36 hrs | Would hit OT if called in
+ </div>
+ <div style="font-size:13px; margin-top:6px; color:#7c3aed;"><b>Tip:</b>Use <b>Zip ShiftBook → Open Shifts</b>to post the open shift and notify available employees immediately.</div>`,
+
+ sch_5: `<b style="color:#3b82f6;">Scheduled Labor vs Sales Forecast — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Forecasted Sales</td><td style="padding:8px; border:1px solid #e5e7eb;">Labor Cost</td><td style="padding:8px; border:1px solid #e5e7eb;">Labor %</td><td style="padding:8px; border:1px solid #e5e7eb;">Target</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,250</td><td style="padding:8px; border:1px solid #f0f0f0;">$960</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">22.6%</td><td style="padding:8px; border:1px solid #f0f0f0;">25%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue</td><td style="padding:8px; border:1px solid #f0f0f0;">$3,890</td><td style="padding:8px; border:1px solid #f0f0f0;">$900</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">23.1%</td><td style="padding:8px; border:1px solid #f0f0f0;">25%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,120</td><td style="padding:8px; border:1px solid #f0f0f0;">$960</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">23.3%</td><td style="padding:8px; border:1px solid #f0f0f0;">25%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu</td><td style="padding:8px; border:1px solid #f0f0f0;">$4,680</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,020</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">21.8%</td><td style="padding:8px; border:1px solid #f0f0f0;">25%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Fri</td><td style="padding:8px; border:1px solid #f0f0f0;">$5,240</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,200</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">22.9%</td><td style="padding:8px; border:1px solid #f0f0f0;">25%</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sat</td><td style="padding:8px; border:1px solid #f0f0f0;">$6,150</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,440</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">23.4%</td><td style="padding:8px; border:1px solid #f0f0f0;">25%</td></tr>
+ <tr style="background:#f0f9ff;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$28,330</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$6,480</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>22.9% </b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>25%</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#22c55e;">Labor is under budget all week</b>— 2.1% below the 25% target.<br>
+ <b>Projected savings vs budget:</b>$596 this week.<br>
+ <b style="color:#7c3aed;"></b>Saturday has the highest labor cost — ensure adequate staffing for the weekend rush.
+ </div>`,
+
+ // Clock New Responses
+ clk_4: `<b style="color:#3b82f6;">Punches Awaiting Your Approval</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| As of: Jun 4, 2026 — 2:47 PM<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Issue Type</td><td style="padding:8px; border:1px solid #e5e7eb;">Shift Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Awaiting</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lisa Brown</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Missed Punch-Out</b></td><td style="padding:8px; border:1px solid #f0f0f0;">6:00 AM – 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">4 hrs 47 min</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mark Johnson</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Early Clock-Out</b></td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM – 3:45 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">2 hrs 12 min</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tom Wilson</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Break Violation</b></td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM – 10:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">1 hr 5 min</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kevin Lee</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Missed Punch-In</b></td><td style="padding:8px; border:1px solid #f0f0f0;">12:00 PM shift</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">45 min</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">4 punch exceptions need approval</b>— unresolved punches may affect payroll accuracy.<br>
+ Go to <b>Zip Clock → Punch Management</b>to review and approve or correct each punch.
+ </div>`,
+
+ clk_5: `<b style="color:#3b82f6;">Pay Period Summary — Current Period</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Period: May 26 – Jun 8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Regular Hrs</td><td style="padding:8px; border:1px solid #e5e7eb;">OT Hrs</td><td style="padding:8px; border:1px solid #e5e7eb;">Total Hrs</td><td style="padding:8px; border:1px solid #e5e7eb;">Est. Pay</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">72.0</td><td style="padding:8px; border:1px solid #f0f0f0;">0.0</td><td style="padding:8px; border:1px solid #f0f0f0;">72.0</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,080.00</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">68.5</td><td style="padding:8px; border:1px solid #f0f0f0;">0.0</td><td style="padding:8px; border:1px solid #f0f0f0;">68.5</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,027.50</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Kevin Lee</td><td style="padding:8px; border:1px solid #f0f0f0;">80.0</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">3.0</td><td style="padding:8px; border:1px solid #f0f0f0;">83.0</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">$1,267.50</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Maria Gonzalez</td><td style="padding:8px; border:1px solid #f0f0f0;">78.0</td><td style="padding:8px; border:1px solid #f0f0f0;">0.0</td><td style="padding:8px; border:1px solid #f0f0f0;">78.0</td><td style="padding:8px; border:1px solid #f0f0f0;">$1,170.00</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0; color:#666;"><i>+ 18 more employees</i></td><td colspan="4" style="padding:8px; border:1px solid #f0f0f0; color:#666;">—</td></tr>
+ <tr style="background:#f0f9ff;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Period Total</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>854.0</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>3.0</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>857.0</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>$12,850</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#f59e0b;">Pending Punch Exceptions: 4</b>— resolve before payroll processing.<br>
+ <b style="color:#dc2626;">OT Alert:</b>Kevin Lee has 3.0 OT hours this period — premium pay: $67.50.<br>
+ Go to <b>Zip Clock → Pay Period</b>to review full report and submit for payroll.
+ </div>`,
+
+ // Checklist New Responses
+ chk_4: `<b style="color:#3b82f6;">Escalated &amp; Overdue Checklists</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Date: Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Checklist</td><td style="padding:8px; border:1px solid #e5e7eb;">Assignee</td><td style="padding:8px; border:1px solid #e5e7eb;">Due Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Overdue By</td><td style="padding:8px; border:1px solid #e5e7eb;">Escalation Level</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Health &amp; Safety Inspection</td><td style="padding:8px; border:1px solid #f0f0f0;">Sarah Mitchell</td><td style="padding:8px; border:1px solid #f0f0f0;">10:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>4 hrs 47 min</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>Manager (You)</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Inventory Count</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0;">12:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>2 hrs 47 min</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>Supervisor</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Opening Cleaning</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0;">8:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>6 hrs 47 min</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Crew Level</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">Health &amp; Safety Inspection has escalated to you</b>— this is a compliance-critical task.<br>
+ <b>Recommended action:</b>Follow up with Sarah Mitchell immediately or reassign to available crew.<br>
+ Go to <b>Zip Checklist → Escalation Report</b>to manage all escalations.
+ </div>`,
+
+ chk_5: `<b style="color:#3b82f6;">Checklist Completion Rate — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Day</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned</td><td style="padding:8px; border:1px solid #e5e7eb;">Completed</td><td style="padding:8px; border:1px solid #e5e7eb;">Completion Rate</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Mon</td><td style="padding:8px; border:1px solid #f0f0f0;">18</td><td style="padding:8px; border:1px solid #f0f0f0;">18</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>100% </b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Tue</td><td style="padding:8px; border:1px solid #f0f0f0;">18</td><td style="padding:8px; border:1px solid #f0f0f0;">16</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>88.9% </b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Wed</td><td style="padding:8px; border:1px solid #f0f0f0;">18</td><td style="padding:8px; border:1px solid #f0f0f0;">15</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>83.3% </b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Thu (Today)</td><td style="padding:8px; border:1px solid #f0f0f0;">18</td><td style="padding:8px; border:1px solid #f0f0f0;">10</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>55.6% In Progress</b></td></tr>
+ <tr style="background:#f0f9ff;"><td style="padding:8px; border:1px solid #f0f0f0;"><b>Week Avg (Mon–Wed)</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>54</b></td><td style="padding:8px; border:1px solid #f0f0f0;"><b>49</b></td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;"><b>90.7% </b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Target Completion Rate:</b>95% &nbsp;|&nbsp; <b>Current Week:</b>90.7%<br>
+ <b style="color:#f59e0b;">Completion dipped on Tue &amp; Wed</b>— top missed tasks: Inventory Count, Safety Audit.<br>
+ <b>Lowest completion rate:</b>Rachel Green (78%) — follow up recommended.
+ </div>`,
+
+ // Prep & Pull New Responses
+ prep_4: `<b style="color:#3b82f6;">Prep Schedule by Shift — Today</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Date: Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Shift</td><td style="padding:8px; border:1px solid #e5e7eb;">Time</td><td style="padding:8px; border:1px solid #e5e7eb;">Prep Task</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;" rowspan="3"><b>Opening</b></td><td style="padding:8px; border:1px solid #f0f0f0;" rowspan="3">6:00 AM – 10:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Chicken breast (24 portions)</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Done</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Lettuce &amp; tomatoes</td><td style="padding:8px; border:1px solid #f0f0f0;">David Chen</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Done</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bread rolls &amp; condiments</td><td style="padding:8px; border:1px solid #f0f0f0;">Rachel Green</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">Done</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;" rowspan="2"><b>Midday</b></td><td style="padding:8px; border:1px solid #f0f0f0;" rowspan="2">10:00 AM – 2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0;">Ground beef (30 lbs)</td><td style="padding:8px; border:1px solid #f0f0f0;">Marcus Lee</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">In Progress</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bell peppers &amp; garlic</td><td style="padding:8px; border:1px solid #f0f0f0;">Pending</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;">Not Started</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;" rowspan="2"><b>Closing</b></td><td style="padding:8px; border:1px solid #f0f0f0;" rowspan="2">8:00 PM – 12:00 AM</td><td style="padding:8px; border:1px solid #f0f0f0;">Restock sauces &amp; condiments</td><td style="padding:8px; border:1px solid #f0f0f0;">TBD</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;">Upcoming</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Prep for tomorrow's opening</td><td style="padding:8px; border:1px solid #f0f0f0;">TBD</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;">Upcoming</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#7c3aed;"><b>Bell peppers &amp; garlic not started</b>— needed for dinner service at 5:00 PM. Assign to available crew immediately.</div>`,
+
+ prep_5: `<b style="color:#3b82f6;">Behind-Schedule Prep Tasks</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Time: 2:47 PM, Jun 4, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Task</td><td style="padding:8px; border:1px solid #e5e7eb;">Due By</td><td style="padding:8px; border:1px solid #e5e7eb;">Delay</td><td style="padding:8px; border:1px solid #e5e7eb;">Assigned To</td><td style="padding:8px; border:1px solid #e5e7eb;">Priority</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Bell peppers (20 lbs sliced)</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>47 min late</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Unassigned</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Garlic (2 lbs minced)</td><td style="padding:8px; border:1px solid #f0f0f0;">2:00 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>47 min late</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Unassigned</td><td style="padding:8px; border:1px solid #f0f0f0; color:#dc2626;"><b>CRITICAL</b></td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Ground beef (30 lbs)</td><td style="padding:8px; border:1px solid #f0f0f0;">2:30 PM</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>17 min late</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Marcus Lee</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;"><b>HIGH</b></td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b style="color:#dc2626;">Bell peppers &amp; garlic are unassigned and needed for dinner service at 5:00 PM.</b><br>
+ <b style="color:#7c3aed;">Action:</b>Assign an available crew member to bell peppers immediately — est. completion: 25 min.<br>
+ Marcus Lee's ground beef should complete by 3:00 PM — monitor closely.
+ </div>`,
+
+ // ShiftBook New Responses
+ shift_4: `<b style="color:#3b82f6;">Events Scheduled — This Week</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Week: Jun 2–8, 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Date</td><td style="padding:8px; border:1px solid #e5e7eb;">Event Name</td><td style="padding:8px; border:1px solid #e5e7eb;">Frequency</td><td style="padding:8px; border:1px solid #e5e7eb;">Status</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 4 (Today)</td><td style="padding:8px; border:1px solid #f0f0f0;">Weekly Manager Meeting</td><td style="padding:8px; border:1px solid #f0f0f0;">Weekly (Recurring)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#f59e0b;">Upcoming — 4:00 PM</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 5 (Thu)</td><td style="padding:8px; border:1px solid #f0f0f0;">Monthly Health Inspection</td><td style="padding:8px; border:1px solid #f0f0f0;">Monthly (Recurring)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;">Scheduled</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 6 (Fri)</td><td style="padding:8px; border:1px solid #f0f0f0;">New Staff Orientation</td><td style="padding:8px; border:1px solid #f0f0f0;">One-time</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;">Scheduled</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 7 (Sat)</td><td style="padding:8px; border:1px solid #f0f0f0;">Deep Clean Day</td><td style="padding:8px; border:1px solid #f0f0f0;">Weekly (Recurring)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;">Scheduled</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">Jun 8 (Sun)</td><td style="padding:8px; border:1px solid #f0f0f0;">Weekly Inventory Count</td><td style="padding:8px; border:1px solid #f0f0f0;">Weekly (Recurring)</td><td style="padding:8px; border:1px solid #f0f0f0; color:#3b82f6;">Scheduled</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#555;">
+ <b>Total Events This Week: 5</b>&nbsp;|&nbsp; Recurring: 3 &nbsp;|&nbsp; One-time: 2<br>
+ Go to <b>ShiftBook → Events</b>to add, edit, or manage scheduled events.
+ </div>`,
+
+ shift_5: `<b style="color:#3b82f6;">Top Performers — This Period</b><br><br>
+ <b>Store #${store} — ${storeDatabase[store].name}</b>| Period: June 2026<br><br>
+ <table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
+ <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Rank</td><td style="padding:8px; border:1px solid #e5e7eb;">Employee</td><td style="padding:8px; border:1px solid #e5e7eb;">Role</td><td style="padding:8px; border:1px solid #e5e7eb;">Positive Evals</td><td style="padding:8px; border:1px solid #e5e7eb;">Log Mentions</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">1</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>Sarah Mitchell</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Shift Lead</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">3 </td><td style="padding:8px; border:1px solid #f0f0f0;">5</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">2</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>Rachel Green</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">2 </td><td style="padding:8px; border:1px solid #f0f0f0;">4</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">3</td><td style="padding:8px; border:1px solid #f0f0f0;"><b>David Chen</b></td><td style="padding:8px; border:1px solid #f0f0f0;">Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">2 </td><td style="padding:8px; border:1px solid #f0f0f0;">3</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">4</td><td style="padding:8px; border:1px solid #f0f0f0;">Maria Gonzalez</td><td style="padding:8px; border:1px solid #f0f0f0;">Cashier</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">1 </td><td style="padding:8px; border:1px solid #f0f0f0;">2</td></tr>
+ <tr><td style="padding:8px; border:1px solid #f0f0f0;">5</td><td style="padding:8px; border:1px solid #f0f0f0;">Marcus Lee</td><td style="padding:8px; border:1px solid #f0f0f0;">Line Cook</td><td style="padding:8px; border:1px solid #f0f0f0; color:#22c55e;">1 </td><td style="padding:8px; border:1px solid #f0f0f0;">2</td></tr>
+ </table>
+ <div style="font-size:13px; margin-top:8px; color:#7c3aed;">
+ <b>Based on:</b>Positive evaluations (EOEmpEval) + positive shift log mentions (EOLog) this period.<br>
+ Go to <b>ShiftBook → Dashboard</b>for full performance analytics.
+ </div>`
+ };
+ return responses[qId] || `<b>Professional Insight</b><br><br>Thank you for your question about ${currentModule}. Detailed data is being fetched from your store system.`;
         }
 
         // Open chatbox
@@ -4013,6 +4733,14 @@
             chatboxMicBtn.title = 'Speak your question';
             chatboxInput.placeholder = 'Type your message here...';
             try { recognition && recognition.stop(); } catch(e) {}
+        }
+
+        function openSecurityModal() {
+            document.getElementById('secModalOverlay').classList.add('open');
+        }
+
+        function closeSecurityModal() {
+            document.getElementById('secModalOverlay').classList.remove('open');
         }
 
         function clearChat() {
