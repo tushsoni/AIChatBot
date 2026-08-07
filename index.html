@@ -434,48 +434,6 @@
             display: flex;
         }
 
-        .eva-rail-toggle {
-            position: relative;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: none;
-            background: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 6px;
-        }
-
-        .eva-rail-avatar {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            transition: opacity 0.15s;
-        }
-
-        .eva-rail-toggle-icon {
-            font-size: 17px;
-            color: #374151;
-            opacity: 0;
-            transition: opacity 0.15s;
-        }
-
-        .eva-rail-toggle:hover {
-            background: #f0f1f5;
-        }
-
-        .eva-rail-toggle:hover .eva-rail-avatar {
-            opacity: 0;
-        }
-
-        .eva-rail-toggle:hover .eva-rail-toggle-icon {
-            opacity: 1;
-        }
 
         .eva-rail-btn {
             width: 40px;
@@ -511,8 +469,15 @@
             display: none;
         }
 
-        .eva-sidebar-collapse-btn {
+        .eva-sidebar-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
             margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .eva-sidebar-collapse-btn {
             width: 30px;
             height: 30px;
             flex-shrink: 0;
@@ -931,8 +896,7 @@
         }
 
         .chatbox-overlay.dark-mode .eva-rail-btn,
-        .chatbox-overlay.dark-mode .eva-sidebar-collapse-btn,
-        .chatbox-overlay.dark-mode .eva-rail-toggle-icon {
+        .chatbox-overlay.dark-mode .eva-sidebar-collapse-btn {
             color: #d1d5db;
         }
 
@@ -942,7 +906,6 @@
         }
 
         .chatbox-overlay.dark-mode .eva-rail-btn:hover,
-        .chatbox-overlay.dark-mode .eva-rail-toggle:hover,
         .chatbox-overlay.dark-mode .eva-sidebar-collapse-btn:hover {
             background: #303030;
         }
@@ -2252,9 +2215,8 @@
     <div class="chatbox-overlay" id="chatboxOverlay">
         <div class="eva-sidebar collapsed" id="evaSidebar">
             <div class="eva-sidebar-rail">
-                <button class="eva-rail-toggle" id="evaSidebarOpenBtn" title="Open sidebar">
-                    <img src="chatbotgirl.png" alt="Eva" class="eva-rail-avatar">
-                    <i class="bi bi-layout-sidebar eva-rail-toggle-icon"></i>
+                <button class="eva-rail-btn" id="evaSidebarOpenBtn" title="Open sidebar">
+                    <i class="bi bi-layout-sidebar"></i>
                 </button>
                 <button class="eva-rail-btn" id="evaRailNewChat" title="New chat"><i class="bi bi-plus-lg"></i></button>
                 <button class="eva-rail-btn" id="evaRailSearch" title="Search questions"><i class="bi bi-search"></i></button>
@@ -2263,13 +2225,15 @@
             </div>
             <div class="eva-sidebar-expanded">
                 <div class="eva-sidebar-header">
-                    <img src="chatbotgirl.png" alt="Eva">
+                    <img src="finalchatbotpic.png" alt="Eva">
                     <div>
                         <div class="eva-sidebar-header-text">Eva</div>
-                        <div class="eva-sidebar-header-sub">Altametrics Intelligence</div>
+                        <div class="eva-sidebar-header-sub">AI Assistant</div>
                     </div>
-                    <button class="eva-sidebar-collapse-btn eva-fav-btn" id="evaHeaderFavourites" title="Favourite questions" style="position:relative;" onclick="showFavouritesInSidebar()"><i class="bi bi-star"></i></button>
-                    <button class="eva-sidebar-collapse-btn" id="evaSidebarCollapseBtn" title="Close sidebar"><i class="bi bi-layout-sidebar"></i></button>
+                    <div class="eva-sidebar-header-actions">
+                        <button class="eva-sidebar-collapse-btn eva-fav-btn" id="evaHeaderFavourites" title="Favourite questions" style="position:relative;" onclick="showFavouritesInSidebar()"><i class="bi bi-star"></i></button>
+                        <button class="eva-sidebar-collapse-btn" id="evaSidebarCollapseBtn" title="Close sidebar"><i class="bi bi-layout-sidebar"></i></button>
+                    </div>
                 </div>
                 <button class="eva-new-chat-btn" id="evaNewChatBtn" title="Clear the current conversation and start over">
                     <i class="bi bi-plus-lg"></i> New chat
@@ -2300,7 +2264,7 @@
         <div class="chatbox-panel" id="chatboxPanel">
             <div class="chatbox-header">
                 <div class="chatbox-header-avatar">
-                    <img src="chatbotgirl.png" alt="Eva">
+                    <img src="finalchatbotpic.png" alt="Eva">
                 </div>
                 <div class="chatbox-header-text">
                     <div class="chatbox-header-subtitle">Hey there! I'm Eva</div>
@@ -2317,7 +2281,7 @@
                 <!-- Welcome message -->
                 <div class="chat-msg" id="welcome-msg">
                     <div class="chat-msg-avatar">
-                        <img src="hoverchatbotgirl.png" alt="Eva">
+                        <img src="finalchatbotpic.png" alt="Eva">
                     </div>
                     <div class="welcome-bubble">
                         <b>Hi Tushar, how can I help you with Workflow?</b>
@@ -3434,7 +3398,7 @@
 
         function welcomeMessageHtml() {
             return `
-                <div class="chat-msg-avatar"><img src="hoverchatbotgirl.png" alt="Eva"></div>
+                <div class="chat-msg-avatar"><img src="finalchatbotpic.png" alt="Eva"></div>
                 <div class="welcome-bubble">
                     <b>Hi Tushar, how can I help you with Workflow?</b>
                 </div>
@@ -3461,7 +3425,7 @@
             const msgDiv = document.createElement('div');
             msgDiv.className = 'chat-msg';
             msgDiv.innerHTML = `
-                <div class="chat-msg-avatar"><img src="hoverchatbotgirl.png" alt="Eva"></div>
+                <div class="chat-msg-avatar"><img src="finalchatbotpic.png" alt="Eva"></div>
                 <div class="chat-msg-content">
                     <button class="back-btn" title="Go back"><i class="bi bi-arrow-left" style="margin-right:4px;"></i>Back</button>
                     <div style="margin-bottom: 8px; font-weight: 500;">Top questions for <b>${module.name}</b>:</div>
@@ -3514,7 +3478,7 @@
             const div = document.createElement('div');
             div.className = 'chat-msg';
             div.innerHTML = `
-                <div class="chat-msg-avatar"><img src="hoverchatbotgirl.png" alt="Eva"></div>
+                <div class="chat-msg-avatar"><img src="finalchatbotpic.png" alt="Eva"></div>
                 <div class="chat-msg-content">
                     <div class="ai-typing"><span></span><span></span><span></span></div>
                 </div>`;
@@ -3528,7 +3492,7 @@
             div.className = 'chat-msg';
 
             div.innerHTML = `
-                <div class="chat-msg-avatar"><img src="hoverchatbotgirl.png" alt="Eva"></div>
+                <div class="chat-msg-avatar"><img src="finalchatbotpic.png" alt="Eva"></div>
                 <div class="chat-msg-content">
                     <div class="ai-response-bubble">${html}</div>
                     <div class="chat-feedback">
