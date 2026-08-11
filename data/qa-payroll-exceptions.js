@@ -172,20 +172,6 @@
             body: `<b>Kevin Lee</b> — +1.5 hrs overtime adjustment this week ($20.25).`
         },
         {
-            id: 'pe_errors_by_store',
-            section: 'Payroll & Exceptions',
-            order: 99,
-            question: 'Show payroll errors by store.',
-            icon: '📋',
-            keywords: ['payroll errors by store'],
-            body: `<table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                    <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Store</td><td style="padding:8px; border:1px solid #e5e7eb;">Errors</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">#99999 Downtown Toronto</td><td style="padding:8px; border:1px solid #f0f0f0;">3</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">#10001 Westfield Mall</td><td style="padding:8px; border:1px solid #f0f0f0;">1</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">#10002 Mississauga Center</td><td style="padding:8px; border:1px solid #f0f0f0;">2</td></tr>
-                </table>`
-        },
-        {
             id: 'pe_immediate_action',
             section: 'Payroll & Exceptions',
             order: 100,

@@ -149,15 +149,6 @@
             body: `<b style="color:#f59e0b; font-size:16px;">4.0%</b> of total hours this week were overtime (12.5 of 312.5 hrs).`
         },
         {
-            id: 'ot_highest_store',
-            section: 'Overtime Management',
-            order: 56,
-            question: 'Which store has the highest overtime?',
-            icon: '🏆',
-            keywords: ['store has the highest overtime'],
-            body: `<b>Store #10002 – Mississauga Center</b> has the highest overtime this week at <b>18.0 hrs</b>.`
-        },
-        {
             id: 'ot_by_position',
             section: 'Overtime Management',
             order: 57,

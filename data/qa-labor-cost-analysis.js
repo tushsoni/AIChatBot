@@ -169,15 +169,6 @@
             body: `<b style="color:#22c55e; font-size:16px;">87 / 100</b> — sales-per-labor-hour is trending above target this week.`
         },
         {
-            id: 'lc_best_utilization',
-            section: 'Labor Cost Analysis',
-            order: 78,
-            question: 'Which store has the best labor utilization?',
-            icon: '🏆',
-            keywords: ['best labor utilization'],
-            body: `<b>Store #10001 – Westfield Mall</b> — 94% labor utilization this week.`
-        },
-        {
             id: 'lc_by_location',
             section: 'Labor Cost Analysis',
             order: 79,

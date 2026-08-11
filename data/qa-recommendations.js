@@ -113,15 +113,6 @@
             body: `<b>Tom Wilson's</b> 6-hr shift with no logged break is the top compliance risk today.`
         },
         {
-            id: 'rec_stores_need_attention',
-            section: 'Recommendation Questions',
-            order: 143,
-            question: 'Which stores need management attention?',
-            icon: '⚠️',
-            keywords: ['stores need management attention'],
-            body: `<b>Store #10002 – Mississauga Center</b> — highest overtime and lowest attendance this week.`
-        },
-        {
             id: 'rec_staffing_tomorrow',
             section: 'Recommendation Questions',
             order: 144,
@@ -183,15 +174,6 @@
                     <b>Overtime:</b> 1 employee in OT<br>
                     <b>Coverage Gap:</b> Dinner rush short 1 staff
                 </div>`
-        },
-        {
-            id: 'rec_before_closing',
-            section: 'Recommendation Questions',
-            order: 150,
-            question: 'What should I focus on before closing the store?',
-            icon: '✅',
-            keywords: ['focus on before closing the store', 'before closing'],
-            body: `Confirm Tom Wilson's break is logged, approve the pending clock-out corrections, and review tomorrow's open shifts.`
         }
     );
 })();

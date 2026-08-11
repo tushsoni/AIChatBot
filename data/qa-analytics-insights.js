@@ -32,15 +32,6 @@
             body: `<b>Lisa Brown</b> (8 late, 3 no-shows) and <b>Mark Johnson</b> (5 late) need a conversation this month.`
         },
         {
-            id: 'ai_best_attendance_store',
-            section: 'Analytics & Insights',
-            order: 104,
-            question: 'Which store has the best attendance?',
-            icon: '🏆',
-            keywords: ['store has the best attendance'],
-            body: `<b>Store #10001 – Westfield Mall</b> — 97.5% attendance this month.`
-        },
-        {
             id: 'ai_attendance_trends',
             section: 'Analytics & Insights',
             order: 105,
@@ -77,20 +68,6 @@
             body: `<b>Angela Reyes</b> approved 5 of this week's 7 exceptions.`
         },
         {
-            id: 'ai_productivity_across_stores',
-            section: 'Analytics & Insights',
-            order: 109,
-            question: 'Compare labor productivity across stores.',
-            icon: '📊',
-            keywords: ['labor productivity across stores'],
-            body: `<table style="width:100%; font-size:13px; border-collapse:collapse; margin:8px 0;">
-                    <tr style="background:#f0f4ff; font-weight:600;"><td style="padding:8px; border:1px solid #e5e7eb;">Store</td><td style="padding:8px; border:1px solid #e5e7eb;">Sales / Labor Hr</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">#10001 Westfield Mall</td><td style="padding:8px; border:1px solid #f0f0f0;">$58.20</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">#99999 Downtown Toronto</td><td style="padding:8px; border:1px solid #f0f0f0;">$54.10</td></tr>
-                    <tr><td style="padding:8px; border:1px solid #f0f0f0;">#10002 Mississauga Center</td><td style="padding:8px; border:1px solid #f0f0f0;">$47.80</td></tr>
-                </table>`
-        },
-        {
             id: 'ai_most_efficient_depts',
             section: 'Analytics & Insights',
             order: 110,
@@ -116,15 +93,6 @@
             icon: '❓',
             keywords: ['often miss punches'],
             body: `<b>Lisa Brown</b> — 3 missed punches this month, the most of any employee.`
-        },
-        {
-            id: 'ai_best_schedule_compliance',
-            section: 'Analytics & Insights',
-            order: 113,
-            question: 'Which store has the best schedule compliance?',
-            icon: '🏆',
-            keywords: ['best schedule compliance'],
-            body: `<b>Store #10001 – Westfield Mall</b> — 96% schedule adherence.`
         },
         {
             id: 'ai_productivity_by_hour',
@@ -186,15 +154,6 @@
             body: `Labor cost has risen gradually over the last 90 days (+6.8%), tracking closely with a similar rise in sales (+7.1%).`
         },
         {
-            id: 'ai_need_optimization',
-            section: 'Analytics & Insights',
-            order: 120,
-            question: 'Which stores need labor optimization?',
-            icon: '⚠️',
-            keywords: ['need labor optimization'],
-            body: `<b>Store #10002 – Mississauga Center</b> — highest overtime and lowest labor efficiency score of the group.`
-        },
-        {
             id: 'ai_perfect_attendance',
             section: 'Analytics & Insights',
             order: 121,
@@ -202,15 +161,6 @@
             icon: '⭐',
             keywords: ['perfect attendance'],
             body: `<b>Sarah Mitchell</b> and <b>David Chen</b> — zero late arrivals or no-shows this month.`
-        },
-        {
-            id: 'ai_highest_absenteeism',
-            section: 'Analytics & Insights',
-            order: 122,
-            question: 'Which stores have the highest absenteeism?',
-            icon: '⚠️',
-            keywords: ['highest absenteeism'],
-            body: `<b>Store #10004 – Brampton Station</b> — 3 no-shows this month, the highest of any store.`
         },
         {
             id: 'ai_kpis_month',

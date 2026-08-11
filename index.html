@@ -1121,8 +1121,8 @@
         .chatbox-header {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            gap: 12px;
+            padding: 12px 14px;
+            gap: 10px;
             flex-shrink: 0;
             background: linear-gradient(135deg, rgba(59,130,246,0.92) 0%, rgba(99,60,220,0.88) 100%);
             backdrop-filter: blur(16px);
@@ -1131,8 +1131,8 @@
         }
 
         .chatbox-header-avatar {
-            width: 40px;
-            height: 40px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             overflow: hidden;
             flex-shrink: 0;
@@ -1151,6 +1151,7 @@
             flex-direction: column;
             gap: 1px;
             flex-grow: 1;
+            min-width: 0;
         }
 
         .chatbox-header-subtitle {
@@ -1158,13 +1159,19 @@
             font-weight: 400;
             color: rgba(255,255,255,0.85);
             text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .chatbox-header-title {
-            font-size: 17px;
+            font-size: 13px;
             font-weight: 700;
             color: #fff;
             text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .chatbox-header-badge {
@@ -1181,21 +1188,22 @@
         .chatbox-header-controls {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            flex-shrink: 0;
         }
 
         .chatbox-ctrl-btn {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border: none;
             background: rgba(255,255,255,0.12);
-            border-radius: 9px;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             color: rgba(255,255,255,0.85);
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.2s;
             border: 1px solid rgba(255,255,255,0.18);
         }
@@ -2268,7 +2276,7 @@
                 </div>
                 <div class="chatbox-header-text">
                     <div class="chatbox-header-subtitle">Hey there! I'm Eva</div>
-                    <div class="chatbox-header-title">How can I help?</div>
+                    <div class="chatbox-header-title">Ask me anything about this screen</div>
                 </div>
                 <div class="chatbox-header-controls">
                     <button class="chatbox-ctrl-btn" id="chatboxFavourites" title="Saved Favourites" style="position:relative;" onclick="showFavouritesPanel()"><i class="bi bi-star"></i></button>
@@ -3063,17 +3071,14 @@
             });
         })();
 
-        // Open chatbox — opens straight into fullscreen
+        // Open chatbox — opens as the small widget
         chatbotContainer.addEventListener('click', function() {
             if (evaBubbleJustDragged) {
                 evaBubbleJustDragged = false;
                 return;
             }
-            chatboxOverlay.classList.add('open', 'maximized');
+            chatboxOverlay.classList.add('open');
             chatbotWidget.style.display = 'none';
-            const maximizeIcon = chatboxMaximize.querySelector('i');
-            maximizeIcon.className = 'bi bi-arrows-angle-contract';
-            chatboxMaximize.title = 'Restore';
             chatboxInput.focus();
         });
 
