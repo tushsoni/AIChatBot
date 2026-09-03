@@ -293,11 +293,6 @@
             box-shadow: none;
         }
 
-        .chatbox-overlay.maximized .chatbox-header {
-            display: none;
-        }
-
-
         .chatbox-overlay.maximized .chatbox-body {
             flex-grow: 1;
             overflow-y: auto;
@@ -1089,27 +1084,6 @@
             background: #f0f1f5;
         }
 
-        .eva-fullscreen-close {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: none;
-            background: #fef2f2;
-            color: #ef4444;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: background 0.15s, color 0.15s;
-        }
-
-        .eva-fullscreen-close:hover {
-            background: #ef4444;
-            color: #ffffff;
-        }
-
         /* Dark mode (fullscreen only) */
         .chatbox-overlay.dark-mode .eva-sidebar {
             background: #171717;
@@ -1165,16 +1139,6 @@
 
         .chatbox-overlay.dark-mode .eva-fsh-user-popover-item:hover {
             background: #303030;
-        }
-
-        .chatbox-overlay.dark-mode .eva-fullscreen-close {
-            background: #3a1515;
-            color: #f87171;
-        }
-
-        .chatbox-overlay.dark-mode .eva-fullscreen-close:hover {
-            background: #dc2626;
-            color: #ffffff;
         }
 
         .chatbox-overlay.dark-mode .eva-sidebar-header-text {
@@ -1480,6 +1444,11 @@
             align-items: center;
             gap: 3px;
             flex-shrink: 0;
+        }
+
+        .chatbox-overlay.maximized .chatbox-header-controls #chatboxFavourites,
+        .chatbox-overlay.maximized .chatbox-header-controls #chatboxClearChat {
+            display: none;
         }
 
         .chatbox-ctrl-btn {
@@ -2618,7 +2587,6 @@
                             </button>
                         </div>
                     </div>
-                    <button class="eva-fullscreen-close" id="evaFullscreenClose" title="Close"><i class="bi bi-x-lg"></i></button>
                 </div>
             </div>
             <div class="chatbox-body" id="chatboxBody">
@@ -3427,7 +3395,6 @@
             chatboxMaximize.title = 'Maximize';
         }
         chatboxClose.addEventListener('click', closeChatbox);
-        document.getElementById('evaFullscreenClose').addEventListener('click', closeChatbox);
 
         // Maximize / Restore toggle
         chatboxMaximize.addEventListener('click', function() {
@@ -3436,7 +3403,7 @@
             const icon = this.querySelector('i');
             if (chatboxOverlay.classList.contains('maximized')) {
                 icon.className = 'bi bi-arrows-angle-contract';
-                this.title = 'Restore';
+                this.title = 'Minimize';
                 panel.style.animation = 'none';
                 panel.offsetHeight;
                 panel.style.animation = 'chatboxExpand 0.5s cubic-bezier(0.16, 1, 0.3, 1) both';
