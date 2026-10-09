@@ -311,10 +311,41 @@
             padding-top: 40px;
         }
 
+        /* Landing (no messages yet): greeting + input sit together in the middle of the screen.
+           Body pushes the greeting down, footer takes the lower half with the input at its top. */
+        .chatbox-overlay.maximized .chatbox-panel:not(.has-messages) .chatbox-body {
+            flex: 1 1 0;
+            justify-content: flex-end;
+            padding-bottom: 8px;
+        }
+
+        .chatbox-overlay.maximized .chatbox-panel:not(.has-messages) .chatbox-footer {
+            flex: 1 1 0;
+            justify-content: flex-start;
+            padding-top: 20px;
+        }
+
+        /* Once the conversation starts the greeting goes away and the input docks at the bottom */
+        .chatbox-overlay.maximized .chatbox-panel.has-messages #welcome-msg {
+            display: none;
+        }
+
+        /* Responses get a wider centred column than the input (860px) when maximized */
         .chatbox-overlay.maximized .chatbox-body > .chat-msg,
         .chatbox-overlay.maximized .chatbox-body > div {
             width: 100%;
-            max-width: 860px;
+            max-width: 1320px;
+        }
+
+        .chatbox-overlay.maximized .chat-msg-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Keep wide content (e.g. nowrap tables) from stretching the panel past the viewport */
+        .chatbox-overlay.maximized .chatbox-panel,
+        .chatbox-overlay.maximized .chatbox-body {
+            min-width: 0;
         }
 
         .chatbox-overlay.maximized #welcome-msg {
@@ -326,8 +357,7 @@
         }
 
         .chatbox-overlay.maximized #welcome-msg .chat-msg-avatar {
-            width: 88px;
-            height: 88px;
+            display: none;
         }
 
         .chatbox-overlay.maximized #welcome-msg .welcome-bubble {
@@ -370,6 +400,282 @@
         .chatbox-overlay.maximized .chatbox-disclaimer {
             max-width: 860px;
         }
+
+        /* ===== Formatted AI responses (.eva-md) — ChatGPT/Claude-style typography =====
+           formatResponseHtml() turns every reply into headings, paragraphs, lists,
+           callouts and clean tables; these rules style that structure. */
+        .eva-md {
+            font-size: 14px;
+            line-height: 1.65;
+            color: #374151;
+            overflow-wrap: anywhere;
+        }
+
+        .eva-md > :first-child { margin-top: 0; }
+        .eva-md > :last-child { margin-bottom: 0; }
+
+        .eva-md h3 {
+            font-size: 15.5px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #111827;
+            margin: 0 0 4px;
+        }
+
+        .eva-md h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin: 18px 0 6px;
+        }
+
+        .eva-md .eva-meta {
+            font-size: 12.5px;
+            color: #6b7280;
+            margin: 0 0 12px;
+        }
+
+        .eva-md p {
+            margin: 0 0 10px;
+        }
+
+        .eva-md ul,
+        .eva-md ol {
+            margin: 4px 0 12px;
+            padding-left: 22px;
+        }
+
+        .eva-md li {
+            margin: 5px 0;
+            padding-left: 2px;
+        }
+
+        .eva-md ul li::marker { color: #6366f1; }
+        .eva-md ol li::marker { color: #6366f1; font-weight: 600; }
+
+        .eva-md b,
+        .eva-md strong {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .eva-md .tone-pos,
+        .eva-md tbody tr td.tone-pos { color: #059669; }
+        .eva-md .tone-neg,
+        .eva-md tbody tr td.tone-neg { color: #dc2626; }
+        .eva-md .tone-warn,
+        .eva-md tbody tr td.tone-warn { color: #d97706; }
+        .eva-md [class*="tone-"] b,
+        .eva-md [class*="tone-"] strong { color: inherit; }
+
+        /* Callouts: tips, warnings, success notes */
+        .eva-md .eva-callout {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 12px 0;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #dbe6fe;
+            background: #f3f7ff;
+            color: #1f2937;
+            font-size: 13.5px;
+        }
+
+        .eva-md .eva-callout > i {
+            flex-shrink: 0;
+            font-size: 15px;
+            line-height: 1.45;
+            color: #3b82f6;
+        }
+
+        .eva-md .eva-callout.warn { background: #fffaeb; border-color: #fde68a; }
+        .eva-md .eva-callout.warn > i { color: #d97706; }
+        .eva-md .eva-callout.success { background: #effcf5; border-color: #bbf0d3; }
+        .eva-md .eva-callout.success > i { color: #059669; }
+
+        /* Follow-up hint ("Want data for another store? ...") */
+        .eva-md .eva-followup {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 14px 0 0;
+            padding-top: 10px;
+            border-top: 1px dashed #e5e7eb;
+            font-size: 12.5px;
+            color: #6b7280;
+        }
+
+        .eva-md .eva-followup b,
+        .eva-md .eva-followup strong { color: #4b5563; }
+        .eva-md .eva-followup > i { color: #8b5cf6; }
+
+        /* Tables */
+        .eva-table-wrap {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            contain: inline-size;
+            margin: 10px 0 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .eva-table-wrap.eva-table-flash {
+            animation: evaTableFlash 1.6s ease;
+        }
+
+        @keyframes evaTableFlash {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0); }
+            25%      { box-shadow: 0 0 0 3px rgba(59,130,246,0.35); }
+        }
+
+        .eva-md table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .eva-md th,
+        .eva-md td {
+            padding: 8px 12px;
+            text-align: left;
+            white-space: nowrap;
+            border-top: 1px solid #eef0f4;
+        }
+
+        .eva-md thead th {
+            border-top: none;
+            background: #f8fafc;
+            color: #4b5563;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .eva-md tbody tr:hover td { background: #f8faff; }
+        .eva-md th.num,
+        .eva-md td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .eva-md tr.total-row td { font-weight: 600; color: #111827; background: #f8fafc; }
+        .eva-md tr.highlight-row td { background: #fffbeb; }
+
+        .chatbox-overlay:not(.maximized) .eva-wide-table tr > :nth-child(n+3) {
+            display: none;
+        }
+
+        /* Narrow panel: let the visible columns wrap instead of scrolling sideways */
+        .chatbox-overlay:not(.maximized) .eva-md th,
+        .chatbox-overlay:not(.maximized) .eva-md td {
+            white-space: normal;
+        }
+
+        .eva-view-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: -2px 0 12px;
+            padding: 5px 12px;
+            border-radius: 14px;
+            border: 1px solid #c7d7fe;
+            background: #eef3ff;
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .eva-view-more-btn:hover {
+            background: #dfe9ff;
+            border-color: #93b4fd;
+        }
+
+        .eva-view-more-btn .eva-view-more-count {
+            font-weight: 400;
+            color: #6b7280;
+        }
+
+        .chatbox-overlay.maximized .eva-view-more-btn {
+            display: none;
+        }
+
+        /* Related / suggested question chips under a reply */
+        .eva-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .eva-suggestions-label {
+            width: 100%;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #9ca3af;
+        }
+
+        .eva-suggest-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            max-width: 100%;
+            padding: 6px 12px;
+            border-radius: 16px;
+            border: 1px solid #e0e7ff;
+            background: #f5f7ff;
+            color: #3f4fd1;
+            font-size: 12.5px;
+            font-family: 'Roboto', sans-serif;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+        }
+
+        .eva-suggest-chip i { font-size: 11px; opacity: 0.7; }
+        .eva-suggest-chip:hover { background: #e9eeff; border-color: #c7d2fe; transform: translateY(-1px); }
+
+        .chatbox-overlay.dark-mode .eva-suggest-chip { background: #1e2340; border-color: #2e3766; color: #c7d2fe; }
+        .chatbox-overlay.dark-mode .eva-suggest-chip:hover { background: #262d52; }
+        .chatbox-overlay.dark-mode .eva-suggestions-label { color: #6b7280; }
+
+        /* Maximized: slightly larger reading size */
+        .chatbox-overlay.maximized .eva-md { font-size: 15px; line-height: 1.7; }
+        .chatbox-overlay.maximized .eva-md h3 { font-size: 18px; }
+        .chatbox-overlay.maximized .eva-md h4 { font-size: 15.5px; }
+        .chatbox-overlay.maximized .eva-md table { font-size: 14px; }
+        .chatbox-overlay.maximized .eva-md th,
+        .chatbox-overlay.maximized .eva-md td { padding: 10px 16px; }
+
+        /* Dark mode */
+        .chatbox-overlay.dark-mode .eva-md { color: #d1d5db; }
+        .chatbox-overlay.dark-mode .eva-md h3,
+        .chatbox-overlay.dark-mode .eva-md h4,
+        .chatbox-overlay.dark-mode .eva-md b,
+        .chatbox-overlay.dark-mode .eva-md strong { color: #f3f4f6; }
+        .chatbox-overlay.dark-mode .eva-md .eva-meta,
+        .chatbox-overlay.dark-mode .eva-md .eva-followup { color: #9ca3af; border-color: #3a3a3a; }
+        .chatbox-overlay.dark-mode .eva-md .tone-pos,
+        .chatbox-overlay.dark-mode .eva-md tbody tr td.tone-pos { color: #34d399; }
+        .chatbox-overlay.dark-mode .eva-md .tone-neg,
+        .chatbox-overlay.dark-mode .eva-md tbody tr td.tone-neg { color: #f87171; }
+        .chatbox-overlay.dark-mode .eva-md .tone-warn,
+        .chatbox-overlay.dark-mode .eva-md tbody tr td.tone-warn { color: #fbbf24; }
+        .chatbox-overlay.dark-mode .eva-md [class*="tone-"] b,
+        .chatbox-overlay.dark-mode .eva-md [class*="tone-"] strong { color: inherit; }
+        .chatbox-overlay.dark-mode .eva-md .eva-callout { background: #1e2a44; border-color: #2c3d63; color: #e5e7eb; }
+        .chatbox-overlay.dark-mode .eva-md .eva-callout.warn { background: #3a2f12; border-color: #5c4a1a; }
+        .chatbox-overlay.dark-mode .eva-md .eva-callout.success { background: #12332a; border-color: #1d5242; }
+        .chatbox-overlay.dark-mode .eva-table-wrap { border-color: #3a3a3a; }
+        .chatbox-overlay.dark-mode .eva-md th,
+        .chatbox-overlay.dark-mode .eva-md td { border-top-color: #333333; }
+        .chatbox-overlay.dark-mode .eva-md thead th,
+        .chatbox-overlay.dark-mode .eva-md tr.total-row td { background: #2a2a2a; color: #e5e7eb; }
+        .chatbox-overlay.dark-mode .eva-md tr.highlight-row td { background: #3a2f12; }
+        .chatbox-overlay.dark-mode .eva-md tbody tr:hover td { background: #2d2d2d; }
 
 
         /* Fullscreen question sidebar */
@@ -2837,6 +3143,95 @@
             '10005': { name: 'Oakville Downtown', city: 'Oakville, ON' }
         };
 
+        // Tabular versions of the 6 main topics, served when the user asks for a table
+        const tabularResponses = {
+            1: {
+                icon: '📅', title: 'Weekly Schedule by Employee',
+                intro: "Here's how hours are distributed across your team this week.",
+                takeaways: ["<b>Kevin Lee</b> is scheduled for <b class=\"tone-neg\">41.5 hrs</b> — 1.5 hrs into overtime.","<b>James Parker</b> and <b>Maria Gonzalez</b> are within 1.5 hrs of the 40-hr limit.","Sunday is the thinnest day, with only 2 of 6 employees scheduled."],
+                headers: ['Employee', 'Role', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Total Hrs'],
+                numFrom: 2,
+                rows: [
+                    ['Sarah Mitchell', 'Shift Lead', '8', '8', '8', '—', '8', '6', '—', '38.0'],
+                    ['David Chen', 'Cook', '8', '—', '8', '8', '8', '8', '—', '40.0'],
+                    ['James Parker', 'Cashier', '6.5', '8', '—', '8', '8', '—', '8', '38.5'],
+                    ['Maria Gonzalez', 'Cook', '—', '8', '8', '7', '8', '8', '—', '39.0'],
+                    ['Kevin Lee', 'Cashier', '8', '8', '8', '9.5', '—', '8', '—', '41.5'],
+                    ['Rachel Green', 'Server', '6', '—', '6', '6', '6', '8', '6', '38.0']
+                ]
+            },
+            2: {
+                icon: '📍', title: 'Unassigned Shifts',
+                intro: "There are <b>5 open shifts</b> (40 hrs) this week. Each has a suggested employee with available hours.",
+                takeaways: ["<b>Cashier</b> and <b>Cook</b> roles account for 4 of the 5 open shifts.","Assigning all suggestions keeps every employee under 40 hrs.","Use <b>Auto-Fill Shifts</b> to assign them in one step."],
+                headers: ['Day', 'Time', 'Role', 'Hours', 'Suggested Employee'],
+                numFrom: 3, numTo: 3,
+                rows: [
+                    ['Mon, May 5', '2:00 PM – 10:00 PM', 'Cashier', '8', 'Rachel Green'],
+                    ['Tue, May 6', '6:00 AM – 2:00 PM', 'Cook', '8', 'David Chen'],
+                    ['Wed, May 7', '10:00 AM – 6:00 PM', 'Shift Lead', '8', 'Sarah Mitchell'],
+                    ['Thu, May 8', '4:00 PM – 12:00 AM', 'Cashier', '8', 'James Parker'],
+                    ['Sat, May 10', '8:00 AM – 4:00 PM', 'Cook', '8', 'Maria Gonzalez']
+                ]
+            },
+            3: {
+                icon: '⚠️', title: 'Overtime & Compliance',
+                intro: "Overtime exposure and compliance flags for this week's schedule.",
+                takeaways: ["<b>Kevin Lee</b> is the only employee currently in overtime.","<b>2 compliance issues</b> need review before the schedule is posted.","Trimming Kevin's Thursday shift by 1.5 hrs removes all overtime."],
+                headers: ['Employee', 'Scheduled Hrs', 'Limit', 'Status', 'Alert'],
+                numFrom: 1, numTo: 2,
+                rows: [
+                    ['James Parker', '38.5', '40', 'Approaching', '—'],
+                    ['Maria Gonzalez', '39.0', '40', 'Approaching', '—'],
+                    ['Kevin Lee', '41.5', '40', 'Overtime', 'Reduce Thursday shift'],
+                    ['Alex Turner', '24.0', '28', 'OK', 'Minor scheduled past 9:00 PM'],
+                    ['Priya Shah', '32.0', '40', 'OK', 'Missing rest period']
+                ]
+            },
+            4: {
+                icon: '⭐', title: 'Employee Performance',
+                intro: "Performance metrics for your most active employees over the last 90 days.",
+                takeaways: ["<b>Sarah Mitchell</b> leads with a 4.9 rating and zero no-shows.","<b>James Parker</b> has the most late clock-ins (7) — worth a check-in.","Average rating across the team is <b>4.5 / 5</b>."],
+                headers: ['Employee', 'Rating', 'Shifts Completed', 'No-Shows', 'Late Clock-Ins'],
+                numFrom: 1,
+                rows: [
+                    ['Sarah Mitchell', '4.9', '156', '0', '1'],
+                    ['David Chen', '4.8', '142', '1', '2'],
+                    ['Rachel Green', '4.7', '138', '0', '0'],
+                    ['Kevin Lee', '4.1', '120', '2', '5'],
+                    ['James Parker', '3.9', '98', '3', '7']
+                ]
+            },
+            5: {
+                icon: '💰', title: 'Payroll Summary',
+                intro: "Labor cost by role for the current pay period.",
+                takeaways: ["Total labor cost is <b>$12,505</b> across 22 employees and 700.5 hrs.","<b>Cooks</b> are the largest cost centre at 33% of payroll.","Blended average rate is <b>$17.85/hr</b>."],
+                headers: ['Role', 'Employees', 'Hours', 'Avg Rate', 'Labor Cost'],
+                numFrom: 1,
+                rows: [
+                    ['Shift Lead', '3', '112.0', '$22.50', '$2,520'],
+                    ['Cook', '6', '218.5', '$18.75', '$4,097'],
+                    ['Cashier', '7', '196.0', '$16.50', '$3,234'],
+                    ['Server', '6', '174.0', '$15.25', '$2,654']
+                ]
+            },
+            6: {
+                icon: '👥', title: 'Shift Coverage by Hour',
+                intro: "Required vs scheduled staff for each time block today.",
+                takeaways: ["<b>6 PM – 10 PM</b> is short by 2 staff (75% coverage).","<b>10 AM – 2 PM</b> is short by 1 during the lunch rush.","All other blocks are fully covered."],
+                headers: ['Time Block', 'Required Staff', 'Scheduled Staff', 'Gap', 'Coverage'],
+                numFrom: 1,
+                rows: [
+                    ['6 AM – 10 AM', '5', '5', '0', '100%'],
+                    ['10 AM – 2 PM', '9', '8', '-1', '89%'],
+                    ['2 PM – 6 PM', '7', '7', '0', '100%'],
+                    ['6 PM – 10 PM', '8', '6', '-2', '75%'],
+                    ['10 PM – 12 AM', '3', '3', '0', '100%']
+                ]
+            }
+        };
+
+        let lastTopicId = null; // Last of the 6 main topics answered, so "show this as a table" has context
         let currentStore = '99999'; // Default store
         let currentModule = null; // Track current module
         let lastUserMessage = ''; // Track last user question for favourites
@@ -3524,10 +3919,7 @@
         ];
 
         function askQaEntry(id) {
-            const entry = (window.qaDatabase || []).find(e => e.id === id);
-            if (!entry) return;
-            appendUserMsg(entry.question);
-            showTypingThenCustom(renderQaResponse(entry));
+            askKnowledgeEntry('qa:' + id);
         }
 
         function buildEvaSidebar() {
@@ -3809,30 +4201,50 @@
                 }
             }
 
-            // Check the growing Q&A database (data/qa-*.js files) for a specific match first
-            const qaMatch = findBestQaMatch(text);
-            if (qaMatch) {
-                showTypingThenCustom(renderQaResponse(qaMatch));
+            // "Show ... in a table / tabular format": answer with a table for the named topic,
+            // else the last topic discussed, else the weekly schedule
+            if (/\b(table|tables|tabular|tabulate|grid|spreadsheet)\b/i.test(text)) {
+                const lowerText = text.toLowerCase();
+                let topicId = null;
+                for (const [keyword, id] of Object.entries(keywordResponses)) {
+                    if (lowerText.includes(keyword)) { topicId = id; break; }
+                }
+                topicId = topicId || lastTopicId || 1;
+                lastTopicId = topicId;
+                showTypingThenCustom(renderTabularResponse(topicId));
                 return;
             }
 
-            // Check for keyword matches
-            const lower = text.toLowerCase();
-            let responseId = null;
+            const lower = text.toLowerCase().trim();
 
-            // Advanced keyword matching
-            for (const [keyword, id] of Object.entries(keywordResponses)) {
-                if (lower.includes(keyword)) {
-                    responseId = id;
-                    break;
-                }
+            // "Show me sample / big / detailed formatted data" → a long demo report that uses every
+            // format (headings, paragraphs, bullets, steps, callouts; plus a table unless they asked for text)
+            if (/\b(sample|demo|example|dummy|big|long|large|formatted|formatting)\b/.test(lower) &&
+                /\b(data|text|response|answer|report|summary|content|output|format(ted|ting)?)\b/.test(lower)) {
+                const textOnly = /\btext\b/.test(lower) && !/\b(table|tabular|mixed|both)\b/.test(lower);
+                showTypingThenCustom(renderSampleReport(textOnly));
+                return;
             }
 
-            if (responseId) {
-                showTypingThenRespond(responseId);
-            } else if (lower === 'change' || lower.includes('switch') || lower.includes('different store')) {
+            if (lower === 'change' || lower.includes('switch store') || lower.includes('different store') || lower.includes('change store')) {
                 showTypingThenCustom("Sure! Please let me know which store number you'd like to switch to. Available stores: 99999, 10001, 10002, 10003, 10004, 10005");
-            } else if (lower.includes('help') || lower === '?') {
+                return;
+            }
+
+            // Search every answer Eva knows (Q&A files, module answers, main topics);
+            // answers each part of a multi-part question and suggests related questions
+            const result = searchKnowledge(text);
+            if (result.answers.length) {
+                respondWithEntries(result.answers, result.related);
+                return;
+            }
+
+            if (/^(hi|hello|hey|hiya|good (morning|afternoon|evening))( there| eva)?[\s!.,]*$/.test(lower)) {
+                showTypingThenCustom(`Hi Tushar! 👋 I can answer questions about attendance, shifts, overtime, labor cost, payroll, sales and more for <b>Store #${currentStore}</b>. What would you like to know?`);
+                return;
+            }
+
+            if (/^(help|\?|menu|options|what can you do\??)$/.test(lower)) {
                 showTypingThenCustom(`<b>I can help you with:</b><br><br>
                     1. 📅 <b>Scheduled Hours</b> — View hours for current week<br>
                     2. 📍 <b>Unassigned Shifts</b> — See open shifts that need coverage<br>
@@ -3841,21 +4253,248 @@
                     5. 💰 <b>Payroll Summary</b> — Labor costs breakdown<br>
                     6. 👥 <b>Shift Coverage</b> — Coverage analysis by hour<br><br>
                     <b>Try asking:</b> "What's my schedule for this week?" or "Show me unassigned shifts"`);
+            } else if (result.related.length) {
+                // Not confident enough to answer — offer the closest questions instead
+                showTypingThenCustom(`I couldn't find an exact answer for <b>"${escapeHtml(text)}"</b>, but these are the closest questions I can answer. Pick one, or try rephrasing.`,
+                    { suggestions: result.related, suggestionsLabel: 'Did you mean' });
             } else {
-                showTypingThenCustom(`I'm here to help with scheduling and staffing! Try asking about:<br><br>
-                    • Your schedule for the week<br>
-                    • Unassigned or open shifts<br>
-                    • Overtime and compliance alerts<br>
-                    • Employee performance<br>
-                    • Payroll and labor costs<br>
-                    • Staff coverage analysis<br><br>
+                showTypingThenCustom(`I'm here to help with scheduling, attendance, overtime, labor cost, payroll and more. Try asking about:<br><br>
+                    • Who hasn't clocked in yet today<br>
+                    • Overtime risk for this week<br>
+                    • Labor cost vs sales<br>
+                    • Open or unassigned shifts<br>
+                    • Payroll exceptions<br><br>
                     <b>Or type "help" for more options!</b>`);
             }
         }
 
+        // ================= Knowledge search =================
+        // One index over every answer Eva has: data/qa-*.js entries, module answers
+        // (getDetailedResponse) and the 6 main topics. Queries are matched on question text,
+        // trigger phrases and section, with synonyms, light stemming and IDF weighting.
+
+        const KB_STOPWORDS = new Set(('a an the is are was were be been am i me my mine we our us you your it its this that these those ' +
+            'what whats which who whom whose how when where why do does did done can could would should will shall may might ' +
+            'show tell give list see view get find display let please pls want need know like to of for in on at by with from ' +
+            'and or but if so as about any some all there here have has had just also too very really info information details ' +
+            'detail data report me thanks thank hi hello hey eva today\'s s').split(/\s+/));
+
+        const KB_SYNONYMS = {
+            ot: 'overtime', 'over-time': 'overtime', labour: 'labor', staff: 'employee', staffs: 'employee', worker: 'employee',
+            workers: 'employee', crew: 'employee', team: 'employee', people: 'employee', associate: 'employee', associates: 'employee',
+            emp: 'employee', employees: 'employee', hrs: 'hour', hr: 'hour', wage: 'pay', wages: 'pay', salary: 'pay', salaries: 'pay',
+            punch: 'clock', punched: 'clock', punches: 'clock', clocked: 'clock', clocking: 'clock', clockin: 'clock', clockout: 'clock',
+            tardy: 'late', tardiness: 'late', lateness: 'late', absent: 'absence', absences: 'absence', noshow: 'no-show', noshows: 'no-show',
+            revenue: 'sales', sale: 'sales', projection: 'forecast', projected: 'forecast', predict: 'forecast', prediction: 'forecast',
+            predictions: 'forecast', expenses: 'cost', expense: 'cost', spend: 'cost', spending: 'cost', costs: 'cost',
+            understaffed: 'understaff', 'under-staffed': 'understaff', short: 'understaff', shortage: 'understaff',
+            overstaffed: 'overstaff', 'over-staffed': 'overstaff', sched: 'schedule', roster: 'schedule', rota: 'schedule',
+            vacant: 'open', unfilled: 'open', unassigned: 'open', uncovered: 'open', stock: 'inventory', reorder: 'order',
+            break: 'break', breaks: 'break', meal: 'break', lunch: 'break', rating: 'performance', ratings: 'performance',
+            best: 'top', performer: 'top', performers: 'top', star: 'top', stars: 'top', weekly: 'week', daily: 'day', monthly: 'month',
+            missed: 'miss', missing: 'miss', misses: 'miss', forgot: 'miss', forgotten: 'miss', skipped: 'miss', skip: 'miss',
+            yesterday: 'yesterday', tonight: 'today', now: 'today', currently: 'today', current: 'today'
+        };
+
+        function kbTokens(text) {
+            return text.toLowerCase()
+                .replace(/<[^>]+>/g, ' ')
+                .replace(/no[\s-]?shows?/g, ' no-show ')
+                .replace(/clock(ed|ing)?[\s-]?(in|out)/g, ' clock ')
+                .replace(/\b(at risk of|at risk for|close to|closest to|approaching|nearly|near to|about to hit)\b/g, ' near ')
+                .replace(/\bclosest\b/g, ' near ')
+                .replace(/[^a-z0-9\-\s]/g, ' ')
+                .split(/\s+/)
+                .map(w => w.replace(/^-+|-+$/g, ''))
+                .filter(Boolean)
+                .map(w => KB_SYNONYMS[w] || w)
+                .map(w => (KB_SYNONYMS[w] ? KB_SYNONYMS[w] : w))
+                .map(w => w.length > 4 && /ies$/.test(w) ? w.slice(0, -3) + 'y' : w)
+                .map(w => w.length > 3 && /[^s]s$/.test(w) ? w.slice(0, -1) : w)
+                .filter(w => !KB_STOPWORDS.has(w) && w.length > 1);
+        }
+
+        // Token similarity: exact = 1, shared stem (prefix of 4+ chars, ≤3 chars apart) = 0.8
+        function kbTokenSim(a, b) {
+            if (a === b) return 1;
+            const [s, l] = a.length <= b.length ? [a, b] : [b, a];
+            return s.length >= 4 && l.startsWith(s) && l.length - s.length <= 3 ? 0.8 : 0;
+        }
+
+        function topicForSection(section) {
+            if (/overtime/i.test(section)) return 3;
+            if (/labor cost|payroll/i.test(section)) return 5;
+            if (/shift monitoring|coverage/i.test(section)) return 6;
+            if (/employee|performance/i.test(section)) return 4;
+            if (/attendance|schedul/i.test(section)) return 1;
+            return null;
+        }
+
+        let kbIndex = null;
+        function buildKnowledgeIndex() {
+            const entries = [];
+            (window.qaDatabase || []).forEach(e => entries.push({
+                id: 'qa:' + e.id, question: e.question, section: e.section, phrases: e.keywords || [],
+                render: () => renderQaResponse(e), topic: topicForSection(e.section)
+            }));
+            Object.values(moduleQuestions).forEach(m => m.questions.forEach(q => {
+                if (!getDetailedResponse(q.id)) return;
+                entries.push({
+                    id: 'mod:' + q.id, question: q.text, section: m.name, phrases: [],
+                    render: () => getDetailedResponse(q.id), topic: topicForSection(m.name)
+                });
+            }));
+            const topicPhrases = {};
+            Object.entries(keywordResponses).forEach(([k, id]) => (topicPhrases[id] = topicPhrases[id] || []).push(k));
+            const topicQuestions = {
+                1: 'How many hours are scheduled this week?', 2: 'Which shifts are unassigned this week?',
+                3: 'Show overtime alerts and labor compliance', 4: 'How is employee performance?',
+                5: 'Show the payroll summary and labor costs', 6: 'How is staff coverage by hour?'
+            };
+            Object.keys(aiResponses).forEach(id => entries.push({
+                id: 'topic:' + id, question: topicQuestions[id] || aiResponses[id].title, section: aiResponses[id].title,
+                phrases: [], extraTokens: topicPhrases[id] || [], topic: Number(id),
+                render: () => aiResponses[id].content.replace(/{STORE}/g, currentStore)
+            }));
+
+            entries.forEach(e => {
+                e.qTokens = [...new Set([...kbTokens(e.question), ...e.phrases.flatMap(kbTokens), ...(e.extraTokens || []).flatMap(kbTokens)])];
+                e.sTokens = [...new Set(kbTokens(e.section))];
+                e.phraseNorm = e.phrases.map(p => p.toLowerCase());
+            });
+            const df = {};
+            entries.forEach(e => new Set([...e.qTokens, ...e.sTokens]).forEach(t => (df[t] = (df[t] || 0) + 1)));
+            kbIndex = { entries, df, n: entries.length };
+            return kbIndex;
+        }
+
+        function kbIdf(token) {
+            const { df, n } = kbIndex;
+            // Words no answer contains get the highest weight, so a question about something
+            // Eva doesn't know (e.g. "weather") isn't answered just because of a common word
+            let best = 0;
+            for (const t in df) { if (kbTokenSim(token, t)) best = Math.max(best, df[t]); }
+            return Math.log(1 + n / (best || 1));
+        }
+
+        function scoreEntry(entry, qTokens, weights, rawLower) {
+            let score = 0, covered = 0;
+            qTokens.forEach((qt, i) => {
+                let m = 0;
+                entry.qTokens.forEach(t => { m = Math.max(m, kbTokenSim(qt, t)); });
+                entry.sTokens.forEach(t => { m = Math.max(m, 0.45 * kbTokenSim(qt, t)); });
+                score += weights[i] * m;
+                covered += weights[i] * m;
+            });
+            let phraseHit = false;
+            entry.phraseNorm.forEach(p => { if (p && rawLower.includes(p)) { phraseHit = true; score += 2 + p.split(/\s+/).length; } });
+            if (rawLower.replace(/[?.!]/g, '').trim() === entry.question.toLowerCase().replace(/[?.!]/g, '').trim()) score += 10;
+            const total = weights.reduce((a, b) => a + b, 0) || 1;
+            // Penalise entries whose own question is much longer than what was asked
+            const specificity = Math.min(1, (qTokens.length + 2) / (entry.qTokens.length + 2));
+            return { entry, score: score * (0.75 + 0.25 * specificity), coverage: covered / total, phraseHit };
+        }
+
+        function rankEntries(text) {
+            if (!kbIndex) buildKnowledgeIndex();
+            const qTokens = [...new Set(kbTokens(text))];
+            if (!qTokens.length) return [];
+            const weights = qTokens.map(kbIdf);
+            const rawLower = text.toLowerCase();
+            return kbIndex.entries.map(e => scoreEntry(e, qTokens, weights, rawLower))
+                .filter(r => r.score > 0)
+                .sort((a, b) => b.score - a.score);
+        }
+
+        const isConfident = r => r && (r.phraseHit || r.coverage >= 0.6);
+
+        // Splits "who is late and what's our overtime?" into separate questions. The strict split
+        // only breaks before a new question word; the loose one also breaks on every comma / "and"
+        function splitQuestions(text, loose) {
+            const strict = /\?|;|\n|\b(?:and also|also|as well as|plus)\b|,\s*(?=(?:and\s+)?(?:what|who|which|how|show|list|give|tell|when|where|are|is|do)\b)|\band\s+(?=(?:what|who|which|how|show|list|give|tell|when|where)\b)/i;
+            const wide = /\?|;|\n|,|&|\band\b|\balso\b|\bplus\b|\bas well as\b/i;
+            return text.split(loose ? wide : strict)
+                .map(s => (s || '').trim())
+                .filter(s => kbTokens(s).length >= 1);
+        }
+
+        const isConfidentPart = r => r && (r.phraseHit || r.coverage >= 0.5);
+
+        function bestPerPart(parts) {
+            const picked = [];
+            parts.forEach(p => {
+                const best = rankEntries(p)[0];
+                if (isConfidentPart(best) && !picked.some(x => x.entry.id === best.entry.id)) picked.push(best);
+            });
+            return picked;
+        }
+
+        function searchKnowledge(text) {
+            const answers = [];
+            const seen = new Set();
+            const addAnswer = r => { if (r && !seen.has(r.entry.id) && answers.length < 4) { seen.add(r.entry.id); answers.push(r.entry); } };
+
+            const whole = rankEntries(text);
+            const strictParts = splitQuestions(text, false);
+            const looseParts = splitQuestions(text, true);
+            let multi = strictParts.length > 1 ? bestPerPart(strictParts) : [];
+            if (multi.length < 2 && looseParts.length > 1) {
+                const loose = bestPerPart(looseParts);
+                // Only trust the loose split when every piece found an answer
+                if (loose.length >= 2 && loose.length === looseParts.length) multi = loose;
+            }
+            if (multi.length >= 2) multi.forEach(addAnswer);
+            if (!answers.length && isConfident(whole[0])) {
+                addAnswer(whole[0]);
+                // Other answers that fit the question just as well (e.g. "overtime" → several OT answers)
+                whole.slice(1).forEach(r => {
+                    if (answers.length < 3 && isConfident(r) && r.score >= whole[0].score * 0.85) addAnswer(r);
+                });
+            }
+            const related = whole.filter(r => !seen.has(r.entry.id) && r.coverage >= 0.25).slice(0, answers.length ? 4 : 5).map(r => r.entry);
+            return { answers, related };
+        }
+
+        function escapeHtml(s) {
+            return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // Shows each answer as its own reply (typing indicator between them)
+        function respondWithEntries(entries, related) {
+            const step = i => {
+                const typingDiv = appendTyping();
+                setTimeout(() => {
+                    typingDiv.remove();
+                    const e = entries[i];
+                    if (e.topic) lastTopicId = e.topic;
+                    const last = i === entries.length - 1;
+                    const opts = {};
+                    if (entries.length > 1 && i === 0) opts.intro = `Your question covers <b>${entries.length} topics</b>, so here's an answer for each.`;
+                    appendAIResponse(e.render(), opts);
+                    if (!last) step(i + 1);
+                }, i === 0 ? 900 : 700);
+            };
+            step(0);
+        }
+
+        function askKnowledgeEntry(id) {
+            if (!kbIndex) buildKnowledgeIndex();
+            const entry = kbIndex.entries.find(e => e.id === id);
+            if (!entry) return;
+            appendUserMsg(entry.question);
+            const related = rankEntries(entry.question).filter(r => r.entry.id !== id && r.coverage >= 0.25).slice(0, 4).map(r => r.entry);
+            respondWithEntries([entry], related);
+        }
+
+        document.addEventListener('click', function (e) {
+            const chip = e.target.closest('.eva-suggest-chip');
+            if (chip) askKnowledgeEntry(chip.getAttribute('data-kb-id'));
+        });
+
         function handleQuestion(qNum, label) {
             appendUserMsg(label);
             const qNumber = parseInt(qNum);
+            lastTopicId = qNumber;
             const typingDiv = appendTyping();
             setTimeout(() => {
                 typingDiv.remove();
@@ -3926,7 +4565,402 @@
             scrollToBottom();
         }
 
+        function renderTabularResponse(topicId) {
+            const t = tabularResponses[topicId];
+            const isNum = i => i >= (t.numFrom ?? Infinity) && i <= (t.numTo ?? Infinity);
+            const cell = (tag, v, i) => `<${tag}${isNum(i) ? ' class="num"' : ''}>${v}</${tag}>`;
+            const store = storeDatabase[currentStore];
+            return `<h3>${t.title}</h3>
+                <div class="eva-meta">Store #${currentStore}${store ? ' · ' + store.name : ''} · Week of May 5 – May 11</div>
+                <p>${t.intro}</p>
+                <table>
+                    <thead><tr>${t.headers.map((h, i) => cell('th', h, i)).join('')}</tr></thead>
+                    <tbody>${t.rows.map(r => `<tr>${r.map((v, i) => cell('td', v, i)).join('')}</tr>`).join('')}</tbody>
+                </table>
+                <h4>Key takeaways</h4>
+                <ul>${t.takeaways.map(k => `<li>${k}</li>`).join('')}</ul>`;
+        }
+
+        // Long sample report showing every response format; textOnly drops the table
+        function renderSampleReport(textOnly) {
+            const store = storeDatabase[currentStore];
+            const table = textOnly ? '' : `
+                <h4>Department snapshot</h4>
+                <table>
+                    <thead><tr><th>Department</th><th>Scheduled Hrs</th><th>Actual Hrs</th><th>Variance</th><th>Labor Cost</th><th>OT Hrs</th></tr></thead>
+                    <tbody>
+                        <tr><td>Kitchen</td><td>124.0</td><td>129.5</td><td class="tone-neg">+5.5</td><td>$2,410</td><td class="tone-neg">7.5</td></tr>
+                        <tr><td>Front Counter</td><td>98.5</td><td>96.0</td><td class="tone-pos">-2.5</td><td>$1,620</td><td>3.0</td></tr>
+                        <tr><td>Drive-Thru</td><td>62.0</td><td>63.5</td><td class="tone-neg">+1.5</td><td>$1,045</td><td>2.0</td></tr>
+                        <tr><td>Management</td><td>28.0</td><td>28.0</td><td>0.0</td><td>$730</td><td>0.0</td></tr>
+                        <tr class="total-row"><td>Total</td><td>312.5</td><td>317.0</td><td class="tone-neg">+4.5</td><td>$5,805</td><td>12.5</td></tr>
+                    </tbody>
+                </table>`;
+            return `<h3>Weekly Operations Summary</h3>
+                <div class="eva-meta">Store #${currentStore}${store ? ' · ' + store.name : ''} · Week of May 5 – May 11 · Generated today at 10:25 AM</div>
+
+                <p>Here's a complete overview of how <b>${store ? store.name : 'your store'}</b> is performing this week. Overall the week is
+                <b>on track</b>: sales are ahead of last week, attendance is stable, and labor is close to plan. The main watch-outs are
+                <b class="tone-neg">overtime in the Kitchen</b> and <b>two compliance items</b> that should be cleared before the schedule is posted.</p>
+
+                <h4>Highlights</h4>
+                <ul>
+                    <li><b>Sales are up 12.3%</b> week over week ($28,450 vs $25,320), led by beverages (+15.8%).</li>
+                    <li><b>Attendance is solid</b> — 96% of shifts started on time; only 1 no-show so far.</li>
+                    <li><b>Schedule coverage is 98%</b>, with 5 open shifts still to fill (40 hrs in total).</li>
+                    <li><b>Customer traffic</b> is running 1.3% above forecast, mostly in the dinner rush.</li>
+                </ul>
+
+                <h4>Key numbers</h4>
+                <ul>
+                    <li><b>Scheduled hours:</b> 312.5 hrs (forecast 320 hrs)</li>
+                    <li><b>Overtime:</b> <span class="tone-neg">12.5 hrs</span> accumulated, ≈ $468.75</li>
+                    <li><b>Labor cost so far:</b> $5,805 across 22 employees</li>
+                    <li><b>Average transaction:</b> $18.12 (+2.1%)</li>
+                    <li><b>Late clock-ins:</b> 4 this week (down from 7)</li>
+                </ul>
+                ${table}
+                <h4>What's going well</h4>
+                <p>The <b>Front Counter</b> team finished 2.5 hrs under plan while handling more transactions than last week, which suggests
+                the new opening checklist is working. <b>Sarah Mitchell</b> and <b>David Chen</b> continue to lead on reliability, with zero
+                late arrivals and the highest ratings on the team.</p>
+                <p>Beverage sales grew the fastest of any category, and the lunch rush (12:00 – 1:30 PM) was fully staffed every day this week.</p>
+
+                <h4>What needs attention</h4>
+                <ul>
+                    <li><b>Kevin Lee</b> is at <span class="tone-neg">41.5 hrs</span> — already 1.5 hrs into overtime with one shift left.</li>
+                    <li><b>Kitchen</b> generates 60% of this week's overtime (7.5 of 12.5 hrs).</li>
+                    <li><b>6 PM – 10 PM</b> is short by 2 staff on Thursday and Friday (75% coverage).</li>
+                    <li><b>2 minors</b> are scheduled past 9:00 PM — this breaks the state labor rule for minors.</li>
+                </ul>
+
+                <div class="eva-callout warn"><i class="bi bi-exclamation-triangle"></i><div><b>Compliance:</b> fix the two late shifts for minors
+                and the missing rest period for Priya Shah before Friday's schedule is published.</div></div>
+
+                <h4>Recommended next steps</h4>
+                <ol>
+                    <li><b>Move Kevin Lee's Thursday close</b> (1.5 hrs) to David Chen, who is under 30 hrs this week.</li>
+                    <li><b>Fill the 5 open shifts</b> using Auto-Fill — the suggested employees all stay under 40 hrs.</li>
+                    <li><b>Add one closer</b> to the Thursday and Friday 6 – 10 PM block to cover the dinner rush.</li>
+                    <li><b>Reassign the two minors</b> to shifts ending by 9:00 PM.</li>
+                    <li><b>Review Kitchen prep times</b> with the kitchen lead to cut recurring overtime.</li>
+                </ol>
+
+                <div class="eva-callout"><i class="bi bi-lightbulb"></i><div><b>Tip:</b> doing steps 1 and 3 together removes all projected
+                overtime and lifts evening coverage to 100%, for an estimated saving of <b>$210</b> this week.</div></div>
+
+                <div class="eva-callout success"><i class="bi bi-check-circle"></i><div>Once these changes are made, the week is projected to
+                finish <b>within budget</b> and fully compliant.</div></div>`;
+        }
+
+        // ---- Response formatter ----
+        // Replies are authored as loose HTML (inline colours, "•" lines joined by <br>, emoji
+        // headings). This rebuilds them as clean structure — h3/h4 headings, paragraphs, real
+        // lists, callouts and header/body tables — styled by the .eva-md rules.
+        const EMOJI_LEAD_RE = /^[\s\p{Extended_Pictographic}️‍⃣]+/u;
+        const BULLET_RE = /^\s*(?:[•·▪◦]|[-–*](?=\s))\s*/;
+        const NUMBERED_RE = /^\s*\d+[.)]\s+/;
+
+        function toneOf(el) {
+            const c = (el.style && el.style.color || '').replace(/\s/g, '').toLowerCase();
+            if (!c) return '';
+            if (/#22c55e|#10b981|#16a34a|#059669|rgb\((34,197,94|16,185,129)/.test(c)) return 'pos';
+            if (/#dc2626|#ef4444|#f87171|rgb\((220,38,38|239,68,68)/.test(c)) return 'neg';
+            if (/#f59e0b|#d97706|rgb\(245,158,11/.test(c)) return 'warn';
+            if (/#7c3aed|#8b5cf6|rgb\(124,58,237/.test(c)) return 'followup';
+            if (/#2563eb|#3b82f6|rgb\((37,99,235|59,130,246)/.test(c)) return 'info';
+            return '';
+        }
+
+        // Removes a leading emoji / bullet / number from the first text inside a set of nodes
+        function stripLead(nodes, re) {
+            for (const n of nodes) {
+                let t = null;
+                if (n.nodeType === 3) {
+                    if (n.nodeValue.trim()) t = n;
+                } else {
+                    const walker = document.createTreeWalker(n, NodeFilter.SHOW_TEXT);
+                    let x;
+                    while ((x = walker.nextNode())) { if (x.nodeValue.trim()) { t = x; break; } }
+                }
+                if (t) { t.nodeValue = t.nodeValue.replace(re, ''); return; }
+            }
+        }
+
+        function linePlainText(nodes) {
+            return nodes.map(n => n.textContent).join('').replace(/\s+/g, ' ').trim();
+        }
+
+        // Splits loose HTML into blocks (tables, lists, headings…) and <br>-separated lines;
+        // consecutive <br>s and legacy wrapper <div>s become paragraph gaps
+        function tokenize(root) {
+            const tokens = [];
+            let line = [];
+            const endLine = () => {
+                if (line.length && linePlainText(line)) tokens.push({ line });
+                line = [];
+            };
+            const gap = () => { endLine(); if (tokens.length && !tokens[tokens.length - 1].gap) tokens.push({ gap: true }); };
+            const walk = parent => {
+                Array.from(parent.childNodes).forEach(n => {
+                    if (n.nodeType === 3) {
+                        const v = n.nodeValue.replace(/\s+/g, ' ');
+                        if (v.trim() || line.length) line.push(document.createTextNode(v));
+                        return;
+                    }
+                    if (n.nodeType !== 1) return;
+                    const tag = n.tagName;
+                    if (tag === 'BR') {
+                        if (line.length && linePlainText(line)) endLine(); else gap();
+                        return;
+                    }
+                    const isSemanticBlock = /^(TABLE|UL|OL|H[1-6]|P)$/.test(tag) || (tag === 'DIV' && /\beva-/.test(n.className));
+                    if (isSemanticBlock) { gap(); tokens.push({ block: n }); gap(); return; }
+                    if (tag === 'DIV') { gap(); walk(n); gap(); return; }
+                    line.push(n);
+                });
+            };
+            walk(root);
+            endLine();
+            return tokens;
+        }
+
+        function classifyLine(nodes, isFirst) {
+            const text = linePlainText(nodes);
+            const elems = nodes.filter(n => n.nodeType === 1);
+            const nonEmpty = nodes.filter(n => n.nodeType === 1 || n.nodeValue.trim());
+            const textNoEmoji = text.replace(EMOJI_LEAD_RE, '');
+            const leadEmoji = (text.match(EMOJI_LEAD_RE) || [''])[0].trim();
+
+            // Whole line is one styled span/b → maybe a callout or follow-up hint
+            const single = nonEmpty.length === 1 && nonEmpty[0].nodeType === 1 ? nonEmpty[0] : null;
+            const tone = single ? toneOf(single) : '';
+            if (/^💡/.test(text) || (single && single.tagName === 'SPAN' && tone)) {
+                if (tone === 'followup' || /another store|store number/i.test(text)) return { kind: 'followup' };
+                if (/^⚠|^❗|^🔴/.test(text) || tone === 'neg' || tone === 'warn') return { kind: 'callout', variant: 'warn' };
+                if (/^✅|^✔/.test(text) || tone === 'pos') return { kind: 'callout', variant: 'success' };
+                return { kind: 'callout', variant: 'tip' };
+            }
+
+            if (BULLET_RE.test(text)) return { kind: 'li', list: 'ul', strip: BULLET_RE };
+            if (NUMBERED_RE.test(text)) return { kind: 'li', list: 'ol', strip: NUMBERED_RE };
+
+            // Entire line is bold (optionally emoji-led) → heading / meta line
+            const boldEls = elems.filter(e => /^(B|STRONG)$/.test(e.tagName));
+            const allBold = boldEls.length === 1 && linePlainText(boldEls).replace(EMOJI_LEAD_RE, '') === textNoEmoji;
+            if (allBold) {
+                if (/^Store #/i.test(textNoEmoji)) return { kind: 'meta' };
+                if (isFirst) return { kind: 'h3' };
+                if (/:$/.test(textNoEmoji) || (leadEmoji && textNoEmoji.length <= 60)) return { kind: 'h4' };
+            }
+
+            // "<b>Label:</b> value" / "<b>Label</b> — value" → list item with a bold label
+            const first = nonEmpty[0];
+            const firstIsBold = first && first.nodeType === 1 && /^(B|STRONG)$/.test(first.tagName);
+            if (firstIsBold && /^Store #/i.test(first.textContent.trim())) return { kind: 'meta' };
+            if (firstIsBold && nonEmpty.length > 1 &&
+                (/:\s*$/.test(first.textContent) || /^\s*[—–]/.test(linePlainText(nonEmpty.slice(1))))) {
+                return { kind: 'li', list: 'ul', group: 'kv' };
+            }
+
+            // Emoji-led lines ("🌟 Sarah — 4.9/5 …") read as list items when they come in a run
+            if (leadEmoji) return { kind: 'li', list: 'ul', group: 'emoji', strip: EMOJI_LEAD_RE };
+
+            return { kind: 'p' };
+        }
+
+        // Turns legacy table markup into thead/tbody with tone classes, total rows and numeric alignment
+        function formatTable(table) {
+            const rows = Array.from(table.rows);
+            if (!rows.length) return table;
+            rows.forEach(tr => {
+                const bg = (tr.style.background || tr.style.backgroundColor || '').toLowerCase();
+                const firstText = (tr.cells[0] && tr.cells[0].textContent || '').trim();
+                if (tr !== rows[0] && /^(total|daily total|grand total|growth|net)\b/i.test(firstText)) tr.classList.add('total-row');
+                else if (tr !== rows[0] && bg && !/#fff\b|#ffffff|white|rgb\(255, ?255, ?255\)/.test(bg)) tr.classList.add('highlight-row');
+            });
+            const out = document.createElement('table');
+            if (table.classList.contains('eva-wide-table')) out.classList.add('eva-wide-table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+            rows.forEach((tr, ri) => {
+                const row = document.createElement('tr');
+                row.className = tr.className;
+                Array.from(tr.cells).forEach(c => {
+                    const cell = document.createElement(ri === 0 ? 'th' : 'td');
+                    cell.innerHTML = c.innerHTML;
+                    if (c.colSpan > 1) cell.colSpan = c.colSpan;
+                    const tone = toneOf(c);
+                    if (tone === 'pos' || tone === 'neg' || tone === 'warn') cell.classList.add('tone-' + tone);
+                    ['num', 'tone-pos', 'tone-neg', 'tone-warn'].forEach(k => { if (c.classList.contains(k)) cell.classList.add(k); });
+                    stripLead([cell], EMOJI_LEAD_RE);
+                    row.appendChild(cell);
+                });
+                (ri === 0 ? thead : tbody).appendChild(row);
+            });
+            out.append(thead, tbody);
+            // Right-align columns that are mostly numbers / money / percentages
+            const numRe = /^[+\-−~]?\s?\$?\d[\d,.]*\s*(%|hrs?|h|x|\/\d+|customers)?(\s*\(.*\))?$/i;
+            const colCount = thead.rows[0] ? thead.rows[0].cells.length : 0;
+            for (let ci = 0; ci < colCount; ci++) {
+                const vals = Array.from(tbody.rows).map(r => r.cells[ci]).filter(Boolean)
+                    .map(c => c.textContent.trim()).filter(v => v && !/^[—–-]$/.test(v));
+                if (vals.length && vals.filter(v => numRe.test(v)).length / vals.length >= 0.6) {
+                    thead.rows[0].cells[ci].classList.add('num');
+                    Array.from(tbody.rows).forEach(r => r.cells[ci] && r.cells[ci].classList.add('num'));
+                }
+            }
+            return out;
+        }
+
+        // Inline cleanup: inline colours → tone classes, then drop inline styles
+        function cleanInline(root) {
+            root.querySelectorAll('[style]').forEach(el => {
+                const tone = toneOf(el);
+                if ((tone === 'pos' || tone === 'neg' || tone === 'warn') && /^(B|STRONG|SPAN)$/.test(el.tagName)) el.classList.add('tone-' + tone);
+                el.removeAttribute('style');
+            });
+        }
+
+        function formatResponseHtml(html) {
+            const src = document.createElement('div');
+            src.innerHTML = html;
+            const tokens = tokenize(src);
+            const out = document.createElement('div');
+            out.className = 'eva-md';
+
+            let para = null;     // current <p>
+            let list = null;     // { el, type, items: [{ li, group }] }
+            let firstContent = true;
+
+            const flushPara = () => { para = null; };
+            const flushList = () => {
+                if (!list) return;
+                // A lone "Label: value" or emoji line isn't really a list — show it as a paragraph
+                if (list.items.length === 1 && list.items[0].group) {
+                    const p = document.createElement('p');
+                    p.append(...list.items[0].li.childNodes);
+                    list.el.replaceWith(p);
+                }
+                list = null;
+            };
+            const append = node => { out.appendChild(node); firstContent = false; };
+
+            tokens.forEach(tok => {
+                if (tok.gap) { flushPara(); flushList(); return; }
+
+                if (tok.block) {
+                    flushPara(); flushList();
+                    const b = tok.block;
+                    append(b.tagName === 'TABLE' ? formatTable(b) : b);
+                    return;
+                }
+
+                const nodes = tok.line;
+                const c = classifyLine(nodes, firstContent);
+
+                if (c.kind === 'li') {
+                    flushPara();
+                    if (c.strip) stripLead(nodes, c.strip);
+                    stripLead(nodes, EMOJI_LEAD_RE);
+                    if (!list || list.type !== c.list) {
+                        flushList();
+                        const el = document.createElement(c.list);
+                        list = { el, type: c.list, items: [] };
+                        append(el);
+                    }
+                    const li = document.createElement('li');
+                    li.append(...nodes);
+                    list.el.appendChild(li);
+                    list.items.push({ li, group: c.group });
+                    return;
+                }
+
+                flushList();
+                if (c.kind === 'p') {
+                    if (para) para.appendChild(document.createElement('br'));
+                    else { para = document.createElement('p'); append(para); }
+                    para.append(...nodes);
+                    return;
+                }
+
+                flushPara();
+                stripLead(nodes, EMOJI_LEAD_RE);
+                let el;
+                if (c.kind === 'h3' || c.kind === 'h4') {
+                    el = document.createElement(c.kind);
+                    el.textContent = linePlainText(nodes).replace(/:$/, '');
+                } else if (c.kind === 'meta') {
+                    el = document.createElement('div');
+                    el.className = 'eva-meta';
+                    el.textContent = linePlainText(nodes);
+                } else if (c.kind === 'callout') {
+                    el = document.createElement('div');
+                    el.className = 'eva-callout' + (c.variant === 'tip' ? '' : ' ' + c.variant);
+                    const icon = { tip: 'bi-lightbulb', warn: 'bi-exclamation-triangle', success: 'bi-check-circle' }[c.variant];
+                    const body = document.createElement('div');
+                    body.append(...nodes);
+                    el.innerHTML = `<i class="bi ${icon}"></i>`;
+                    el.appendChild(body);
+                } else {
+                    el = document.createElement('div');
+                    el.className = 'eva-followup';
+                    el.innerHTML = '<i class="bi bi-arrow-return-right"></i>';
+                    const body = document.createElement('div');
+                    body.append(...nodes);
+                    el.appendChild(body);
+                }
+                append(el);
+            });
+            flushList();
+
+            // Callout/follow-up bodies were one styled span — unwrap it so its colour doesn't leak
+            out.querySelectorAll('.eva-callout > div > span:only-child, .eva-followup > div > span:only-child').forEach(s => s.replaceWith(...s.childNodes));
+            cleanInline(out);
+            return out.outerHTML;
+        }
+
+        // Wraps every table in a response; tables with more than two columns get a
+        // "View more" button (extra columns are hidden by CSS while minimized)
+        function enhanceResponseTables(container) {
+            container.querySelectorAll('table').forEach(table => {
+                const firstRow = table.rows[0];
+                if (!firstRow) return;
+                const cols = firstRow.cells.length;
+                const wrap = document.createElement('div');
+                wrap.className = 'eva-table-wrap';
+                table.parentNode.insertBefore(wrap, table);
+                wrap.appendChild(table);
+                if (cols <= 2) return;
+                table.classList.add('eva-wide-table');
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'eva-view-more-btn';
+                btn.innerHTML = `View more <span class="eva-view-more-count">(+${cols - 2} columns)</span><i class="bi bi-arrows-angle-expand"></i>`;
+                btn.addEventListener('click', () => openTableInExpandedView(wrap));
+                wrap.after(btn);
+            });
+        }
+
+        function openTableInExpandedView(wrap) {
+            if (!chatboxOverlay.classList.contains('maximized')) chatboxMaximize.click();
+            setTimeout(() => {
+                wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                wrap.classList.remove('eva-table-flash');
+                wrap.offsetHeight;
+                wrap.classList.add('eva-table-flash');
+            }, 450);
+        }
+
+        // Response HTML without UI-only controls, for copy / export
+        function cleanResponseClone(responseBubble) {
+            const clone = responseBubble.cloneNode(true);
+            clone.querySelectorAll('.eva-view-more-btn').forEach(b => b.remove());
+            return clone;
+        }
+
         function showTypingThenRespond(qNum) {
+            lastTopicId = qNum;
             const typingDiv = appendTyping();
             setTimeout(() => {
                 typingDiv.remove();
@@ -3936,11 +4970,11 @@
             }, 1200);
         }
 
-        function showTypingThenCustom(html) {
+        function showTypingThenCustom(html, opts) {
             const typingDiv = appendTyping();
             setTimeout(() => {
                 typingDiv.remove();
-                appendAIResponse(html);
+                appendAIResponse(html, opts);
             }, 1000);
         }
 
@@ -3957,14 +4991,18 @@
             return div;
         }
 
-        function appendAIResponse(html) {
+        function appendAIResponse(html, opts = {}) {
             const div = document.createElement('div');
             div.className = 'chat-msg';
 
             div.innerHTML = `
                 <div class="chat-msg-avatar"><img src="finalchatbotpic.png" alt="Eva"></div>
                 <div class="chat-msg-content">
-                    <div class="ai-response-bubble">${html}</div>
+                    <div class="ai-response-bubble">${formatResponseHtml(html)}</div>
+                    ${opts.suggestions && opts.suggestions.length ? `<div class="eva-suggestions">
+                        <div class="eva-suggestions-label">${opts.suggestionsLabel || 'Related questions'}</div>
+                        ${opts.suggestions.map(s => `<button type="button" class="eva-suggest-chip" data-kb-id="${s.id}"><i class="bi bi-arrow-return-right"></i>${escapeHtml(s.question)}</button>`).join('')}
+                    </div>` : ''}
                     <div class="chat-feedback">
                         <button class="thumbs-up" title="Helpful" onclick="toggleFeedback(this)"><i class="bi bi-hand-thumbs-up"></i></button>
                         <button class="thumbs-down" title="Not helpful" onclick="handleThumbsDown(this)"><i class="bi bi-hand-thumbs-down"></i></button>
@@ -3978,6 +5016,13 @@
                         </div>
                     </div>
                 </div>`;
+            enhanceResponseTables(div.querySelector('.ai-response-bubble'));
+            if (opts.intro) {
+                const p = document.createElement('p');
+                p.innerHTML = opts.intro;
+                const md = div.querySelector('.eva-md');
+                md.insertBefore(p, md.firstChild);
+            }
             chatboxBody.appendChild(div);
             scrollToBottom();
         }
@@ -3995,7 +5040,7 @@
             if (!responseBubble) return;
 
             const element = document.createElement('div');
-            element.innerHTML = responseBubble.innerHTML;
+            element.innerHTML = cleanResponseClone(responseBubble).innerHTML;
             element.style.padding = '20px';
             element.style.fontFamily = 'Arial, sans-serif';
             element.style.fontSize = '12px';
@@ -4047,7 +5092,7 @@
                 box-sizing: border-box;
             `;
 
-            wrapper.innerHTML = responseBubble.innerHTML;
+            wrapper.innerHTML = cleanResponseClone(responseBubble).innerHTML;
 
             // Force all text to dark, all backgrounds to white
             wrapper.querySelectorAll('*').forEach(el => {
@@ -4104,7 +5149,7 @@
 
             if (!responseBubble) return;
 
-            navigator.clipboard.writeText(responseBubble.textContent.trim()).then(() => {
+            navigator.clipboard.writeText(cleanResponseClone(responseBubble).textContent.trim()).then(() => {
                 const originalIcon = button.innerHTML;
                 button.innerHTML = '<i class="bi bi-check-lg"></i>';
                 button.style.color = '#10b981';
