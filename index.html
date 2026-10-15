@@ -2758,6 +2758,299 @@
         }
 
         .fav-item-remove:hover { color: #fff; background: #ef4444; border-color: #ef4444; transform: translateY(-50%) scale(1.1); }
+
+        /* ===== Voice: dictation, "Hey Eva" wake word, mic permission popup ===== */
+        .chatbox-mic-btn.listening {
+            background: #fee2e2;
+            color: #dc2626;
+            animation: evaMicPulse 1.4s ease-out infinite;
+        }
+        .chatbox-overlay.dark-mode .chatbox-mic-btn.listening { background: #4c1d1d; color: #fca5a5; }
+        @keyframes evaMicPulse {
+            0%   { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.45); }
+            70%  { box-shadow: 0 0 0 9px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+        .chatbox-send-btn.go-mode {
+            width: auto;
+            padding: 0 16px;
+            border-radius: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            gap: 6px;
+        }
+        .chatbox-send-btn.go-mode:hover { transform: scale(1.05); }
+        .eva-voice-hint {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: #6b7280;
+            padding: 6px 4px 0 18px;
+        }
+        .eva-voice-hint.show { display: flex; }
+        .eva-voice-hint .eva-voice-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+        .eva-voice-hint .eva-voice-bars span {
+            width: 3px; border-radius: 2px; background: #6366f1;
+            animation: evaVoiceBar 0.9s ease-in-out infinite;
+        }
+        .eva-voice-hint .eva-voice-bars span:nth-child(2) { animation-delay: 0.15s; }
+        .eva-voice-hint .eva-voice-bars span:nth-child(3) { animation-delay: 0.3s; }
+        .eva-voice-hint.paused .eva-voice-bars span { animation-play-state: paused; opacity: 0.4; }
+        @keyframes evaVoiceBar { 0%, 100% { height: 3px; } 50% { height: 12px; } }
+        .eva-voice-hint .eva-voice-countdown { margin-left: auto; font-variant-numeric: tabular-nums; color: #9ca3af; }
+        .chatbox-overlay.dark-mode .eva-voice-hint { color: #9ca3af; }
+
+        /* Small "ear" badge on the floating bubble while Eva listens for her name */
+        .chatbot-wake-badge {
+            display: none;
+            position: absolute;
+            left: -2px;
+            bottom: -2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #10b981;
+            color: #fff;
+            font-size: 10px;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+            pointer-events: none;
+        }
+        .chatbot-container.wake-on .chatbot-wake-badge { display: flex; }
+
+        .eva-mic-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 2100;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .eva-mic-modal-overlay.show { display: flex; }
+        .eva-mic-modal {
+            width: 400px;
+            max-width: 100%;
+            background: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+            animation: favPanelIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+        }
+        .eva-mic-modal-hero {
+            padding: 26px 24px 18px;
+            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+        }
+        .eva-mic-modal-hero img { width: 64px; height: 64px; border-radius: 50%; background: #fff; box-shadow: 0 6px 18px rgba(99,102,241,0.25); }
+        .eva-mic-modal-hero .eva-mic-modal-icon {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #6336dc); color: #fff;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 13px; margin-left: -18px; vertical-align: bottom; border: 2px solid #fff;
+        }
+        .eva-mic-modal-title { font-size: 17px; font-weight: 600; color: #111827; margin-top: 12px; }
+        .eva-mic-modal-body { padding: 16px 24px 4px; font-size: 13.5px; line-height: 1.6; color: #4b5563; }
+        .eva-mic-modal-body .eva-mic-example {
+            margin: 12px 0 4px; padding: 10px 12px; border-radius: 10px;
+            background: #f8fafc; border: 1px dashed #c7d2fe; color: #4338ca; font-style: italic;
+        }
+        .eva-mic-modal-note { font-size: 11.5px; color: #9ca3af; padding: 8px 24px 0; }
+        .eva-mic-modal-note.blocked {
+            margin: 10px 24px 0; padding: 10px 12px; border-radius: 10px; text-align: left;
+            background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; font-size: 12.5px; line-height: 1.5;
+        }
+        .eva-mic-modal-note.nudge { animation: favShake 0.4s ease; }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-modal-note.blocked { background: #2b1d14; border-color: #7c2d12; color: #fed7aa; }
+        .eva-mic-modal-actions { display: flex; gap: 10px; padding: 18px 24px 22px; }
+        .eva-mic-modal-actions button {
+            flex: 1; height: 40px; border-radius: 10px; font-size: 14px; font-weight: 500;
+            cursor: pointer; border: none; font-family: inherit;
+        }
+        .eva-mic-later-btn { background: #f1f3f6; color: #374151; }
+        .eva-mic-later-btn:hover { background: #e5e7eb; }
+        .eva-mic-allow-btn { background: linear-gradient(135deg, #3b82f6, #6336dc); color: #fff; box-shadow: 0 3px 10px rgba(59,130,246,0.35); }
+        .eva-mic-allow-btn:hover { box-shadow: 0 6px 18px rgba(59,130,246,0.45); }
+        .eva-mic-allow-btn:disabled { opacity: 0.7; cursor: default; }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-modal { background: #1f1f1f; }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-modal-hero { background: linear-gradient(135deg, #1e2340, #26214a); }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-modal-title { color: #f3f4f6; }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-modal-body { color: #d1d5db; }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-example { background: #262626; border-color: #3730a3; color: #c7d2fe; }
+        .eva-mic-modal-overlay.dark-mode .eva-mic-later-btn { background: #303030; color: #e5e7eb; }
+
+        /* ===== "Hey Eva" listening overlay (Siri-style orb, bottom centre) ===== */
+        .eva-siri { --lvl: 0; }
+        .eva-siri-glow {
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            height: 220px;
+            pointer-events: none;
+            z-index: 2040;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            background:
+                radial-gradient(60% 120% at 30% 100%, rgba(59,130,246,0.30), transparent 70%),
+                radial-gradient(50% 120% at 70% 100%, rgba(168,85,247,0.30), transparent 70%),
+                radial-gradient(40% 90% at 50% 100%, rgba(236,72,153,0.22), transparent 70%);
+        }
+        .eva-siri.show .eva-siri-glow { opacity: calc(0.65 + var(--lvl) * 0.35); }
+        .eva-siri-panel {
+            position: fixed;
+            left: 50%;
+            bottom: 28px;
+            z-index: 2050;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: min(560px, calc(100vw - 32px));
+            transform: translate(-50%, 24px) scale(0.96);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .eva-siri.show .eva-siri-panel { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }
+        .eva-siri-text {
+            max-width: 100%;
+            padding: 12px 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 10px 34px rgba(76, 29, 149, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            color: #111827;
+            font-size: 17px;
+            font-weight: 500;
+            line-height: 1.45;
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+        }
+        .eva-siri-text.empty { color: #6b7280; font-weight: 400; }
+        .eva-siri-orb {
+            position: relative;
+            width: 78px;
+            height: 78px;
+            border: none;
+            padding: 0;
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            transform: scale(calc(1 + var(--lvl) * 0.28));
+            transition: transform 0.08s linear;
+        }
+        .eva-siri-orb::before {
+            content: '';
+            position: absolute;
+            inset: -14px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139,92,246,0.45), transparent 68%);
+            opacity: calc(0.35 + var(--lvl) * 0.65);
+            filter: blur(6px);
+        }
+        .eva-siri-blob {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            filter: blur(5px);
+        }
+        .eva-siri-blob.b1 { background: conic-gradient(from 0deg, #3b82f6, #22d3ee, transparent 55%, #3b82f6); animation: evaSiriSpin 3.2s linear infinite; }
+        .eva-siri-blob.b2 { background: conic-gradient(from 120deg, #a855f7, #ec4899, transparent 60%, #a855f7); animation: evaSiriSpin 4.6s linear infinite reverse; inset: 4px; }
+        .eva-siri-blob.b3 { background: conic-gradient(from 240deg, #6366f1, #f472b6, transparent 50%, #6366f1); animation: evaSiriSpin 2.4s linear infinite; inset: 8px; }
+        .eva-siri-core {
+            position: absolute;
+            inset: 14px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #ffffff, #eef2ff 60%, #e0e7ff);
+            box-shadow: inset 0 0 12px rgba(99,102,241,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .eva-siri-core img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes evaSiriSpin { to { transform: rotate(360deg); } }
+        .eva-siri-hint {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #4b5563;
+            padding: 4px 6px 4px 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .eva-siri-cancel {
+            width: 22px; height: 22px; border-radius: 50%; border: none; cursor: pointer;
+            background: rgba(17, 24, 39, 0.08); color: #374151; font-size: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .eva-siri-cancel:hover { background: rgba(17, 24, 39, 0.16); }
+        .eva-siri.dark-mode .eva-siri-text { background: rgba(31, 31, 31, 0.82); border-color: rgba(255,255,255,0.08); color: #f3f4f6; }
+        .eva-siri.dark-mode .eva-siri-text.empty { color: #9ca3af; }
+        .eva-siri.dark-mode .eva-siri-hint { background: rgba(31, 31, 31, 0.7); color: #d1d5db; }
+        .eva-siri.dark-mode .eva-siri-cancel { background: rgba(255,255,255,0.12); color: #e5e7eb; }
+        @media (prefers-reduced-motion: reduce) {
+            .eva-siri-blob { animation-duration: 12s; }
+        }
+
+        /* Shown inside the chatbot when the browser has the mic blocked for this site */
+        .eva-mic-blocked {
+            display: none;
+            gap: 10px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            padding: 10px 10px 10px 12px;
+            border-radius: 12px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            font-size: 12.5px;
+            line-height: 1.5;
+            color: #7c2d12;
+            animation: fadeInMsg 0.25s ease;
+        }
+        .eva-mic-blocked.show { display: flex; }
+        .eva-mic-blocked.nudge { animation: favShake 0.4s ease; }
+        .eva-mic-blocked-icon {
+            width: 28px; height: 28px; min-width: 28px; border-radius: 50%;
+            background: #ffedd5; color: #ea580c;
+            display: flex; align-items: center; justify-content: center; font-size: 13px;
+        }
+        .eva-mic-blocked-text { flex: 1; }
+        .eva-mic-blocked-text > b:first-child { display: block; color: #9a3412; font-size: 13px; }
+        .eva-mic-blocked-text i { font-size: 11px; }
+        .eva-mic-blocked-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+        .eva-mic-blocked-retry {
+            border: none; border-radius: 8px; padding: 5px 10px; white-space: nowrap;
+            background: #ea580c; color: #fff; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit;
+        }
+        .eva-mic-blocked-retry:hover { background: #c2410c; }
+        .eva-mic-blocked-close {
+            border: none; background: transparent; color: #c2410c; cursor: pointer; font-size: 12px; padding: 2px 4px; order: -1;
+        }
+        .eva-mic-blocked.ask { background: #eef2ff; border-color: #c7d2fe; color: #3730a3; }
+        .eva-mic-blocked.ask .eva-mic-blocked-text > b:first-child { color: #312e81; }
+        .eva-mic-blocked.ask .eva-mic-blocked-icon { background: #e0e7ff; color: #4f46e5; }
+        .eva-mic-blocked.ask .eva-mic-blocked-retry { background: linear-gradient(135deg, #3b82f6, #6336dc); }
+        .eva-mic-blocked.ask .eva-mic-blocked-close { color: #4f46e5; }
+        .chatbox-overlay.dark-mode .eva-mic-blocked.ask { background: #1e2340; border-color: #3730a3; color: #c7d2fe; }
+        .chatbox-overlay.dark-mode .eva-mic-blocked.ask .eva-mic-blocked-text > b:first-child { color: #e0e7ff; }
+        .chatbox-overlay.dark-mode .eva-mic-blocked.ask .eva-mic-blocked-icon { background: #262d52; color: #a5b4fc; }
+        .chatbox-mic-btn.blocked { color: #ea580c; background: #fff7ed; }
+        .chatbox-overlay.dark-mode .eva-mic-blocked { background: #2b1d14; border-color: #7c2d12; color: #fed7aa; }
+        .chatbox-overlay.dark-mode .eva-mic-blocked-text > b:first-child { color: #fdba74; }
+        .chatbox-overlay.dark-mode .eva-mic-blocked-icon { background: #431407; color: #fb923c; }
+        .chatbox-overlay.dark-mode .chatbox-mic-btn.blocked { background: #2b1d14; color: #fb923c; }
     </style>
 </head>
 <body>
@@ -2811,6 +3104,7 @@
             <svg class="chatbot-sparkle-badge" viewBox="0 0 24 24" fill="#FFC940">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5Z"/>
             </svg>
+            <span class="chatbot-wake-badge" title="Listening for &quot;Hey Eva&quot;"><i class="bi bi-ear-fill"></i></span>
         </div>
     </div>
 
@@ -2850,6 +3144,9 @@
                     <div class="eva-user-menu" id="evaUserMenu">
                         <button class="eva-user-menu-item eva-dark-mode-toggle" id="evaDarkModeToggle">
                             <i class="bi bi-moon-stars"></i> <span class="eva-dark-mode-label" id="evaDarkModeLabel">Dark mode</span>
+                        </button>
+                        <button class="eva-user-menu-item eva-wake-toggle">
+                            <i class="bi bi-ear"></i> <span class="eva-wake-label">"Hey Eva" is off</span>
                         </button>
                     </div>
                     <button class="eva-user-row" id="evaUserRow">
@@ -2919,6 +3216,9 @@
                             <button class="eva-fsh-user-popover-item eva-dark-mode-toggle" id="evaFshDarkModeToggle">
                                 <i class="bi bi-moon-stars"></i> <span class="eva-dark-mode-label">Dark mode</span>
                             </button>
+                            <button class="eva-fsh-user-popover-item eva-wake-toggle">
+                                <i class="bi bi-ear"></i> <span class="eva-wake-label">"Hey Eva" is off</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2935,10 +3235,26 @@
                 </div>
             </div>
             <div class="chatbox-footer">
+                <div class="eva-mic-blocked" id="evaMicBlocked" role="status">
+                    <div class="eva-mic-blocked-icon"><i class="bi bi-mic-mute-fill"></i></div>
+                    <div class="eva-mic-blocked-text">
+                        <b id="evaMicNoticeTitle">Turn on your microphone</b>
+                        <span id="evaMicNoticeBody"></span>
+                    </div>
+                    <div class="eva-mic-blocked-actions">
+                        <button class="eva-mic-blocked-retry" id="evaMicBlockedRetry"><i class="bi bi-mic-fill"></i> Allow</button>
+                        <button class="eva-mic-blocked-close" id="evaMicBlockedClose" title="Dismiss"><i class="bi bi-x-lg"></i></button>
+                    </div>
+                </div>
                 <div class="chatbox-input-wrap">
                     <input type="text" class="chatbox-input" id="chatboxInput" placeholder="Type your message here...">
                     <button class="chatbox-mic-btn" id="chatboxMicBtn" title="Voice input"><i class="bi bi-mic-fill"></i></button>
-                    <button class="chatbox-send-btn" id="chatboxSendBtn"><i class="bi bi-send-fill"></i></button>
+                    <button class="chatbox-send-btn" id="chatboxSendBtn" title="Send"><i class="bi bi-send-fill"></i></button>
+                </div>
+                <div class="eva-voice-hint" id="evaVoiceHint">
+                    <span class="eva-voice-bars"><span></span><span></span><span></span></span>
+                    <span id="evaVoiceHintText">Listening… take your time, then tap Go</span>
+                    <span class="eva-voice-countdown" id="evaVoiceCountdown"></span>
                 </div>
                 <div class="chatbox-disclaimer">Eva can make mistakes - review information carefully.</div>
             </div>
@@ -2982,6 +3298,44 @@
             </div>
             <div class="eva-feedback-modal-footer">
                 <button class="eva-feedback-send-btn" id="evaFeedbackActionBtn">Send Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- "Hey Eva" listening overlay: shown while the chatbot is closed, sends the question when the user stops talking -->
+    <div class="eva-siri" id="evaSiri" aria-live="polite">
+        <div class="eva-siri-glow"></div>
+        <div class="eva-siri-panel">
+            <div class="eva-siri-text empty" id="evaSiriText">Listening…</div>
+            <button class="eva-siri-orb" id="evaSiriOrb" title="Send now">
+                <span class="eva-siri-blob b1"></span>
+                <span class="eva-siri-blob b2"></span>
+                <span class="eva-siri-blob b3"></span>
+                <span class="eva-siri-core"><img src="finalchatbotpic.png" alt="Eva"></span>
+            </button>
+            <div class="eva-siri-hint">
+                <span>Eva is listening · tap the orb to send</span>
+                <button class="eva-siri-cancel" id="evaSiriCancel" title="Cancel (Esc)"><i class="bi bi-x-lg"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- One-time microphone permission popup (shown on landing until the user decides) -->
+    <div class="eva-mic-modal-overlay" id="evaMicModalOverlay" role="dialog" aria-modal="true" aria-labelledby="evaMicModalTitle">
+        <div class="eva-mic-modal">
+            <div class="eva-mic-modal-hero">
+                <img src="finalchatbotpic.png" alt="Eva"><span class="eva-mic-modal-icon"><i class="bi bi-mic-fill"></i></span>
+                <div class="eva-mic-modal-title" id="evaMicModalTitle">Talk to Eva hands-free</div>
+            </div>
+            <div class="eva-mic-modal-body">
+                Allow microphone access once and Eva will be ready every time you visit. Just say
+                <b>"Hey Eva"</b> followed by your question, or tap the mic and speak at your own pace.
+                <div class="eva-mic-example">"Hey Eva, who was working on September 13 at 11 AM?"</div>
+            </div>
+            <div class="eva-mic-modal-note" id="evaMicModalNote">When your browser asks, choose <b>"Allow while visiting the site"</b> so you're not asked again.</div>
+            <div class="eva-mic-modal-actions">
+                <button class="eva-mic-later-btn" id="evaMicLaterBtn">Not now</button>
+                <button class="eva-mic-allow-btn" id="evaMicAllowBtn"><i class="bi bi-mic-fill"></i> Allow microphone</button>
             </div>
         </div>
     </div>
@@ -4090,6 +4444,7 @@
         function setDarkMode(isDark) {
             chatboxOverlay.classList.toggle('dark-mode', isDark);
             document.getElementById('evaFeedbackModalOverlay').classList.toggle('dark-mode', isDark);
+            document.getElementById('evaMicModalOverlay').classList.toggle('dark-mode', isDark);
             document.querySelectorAll('.eva-dark-mode-toggle').forEach(function (btn) {
                 btn.querySelector('i').className = isDark ? 'bi bi-sun' : 'bi bi-moon-stars';
                 const label = btn.querySelector('.eva-dark-mode-label');
@@ -4184,6 +4539,7 @@
         buildEvaFaqPopup();
 
         function sendUserMessage() {
+            stopVoiceDictation();
             const text = chatboxInput.value.trim();
             if (!text) return;
             chatboxInput.value = '';
@@ -5474,6 +5830,561 @@
                 btn.style.color = '';
             }, 1200);
         }
+
+        // ===== Voice: patient dictation + "Hey Eva" wake word =====
+        // One SpeechRecognition instance serves both jobs. In 'wake' mode it listens quietly for
+        // "Hey Eva"; once heard, the same session flips to 'dictation' so the words right after the
+        // wake phrase are kept as the question. Chrome ends recognition sessions on its own after a
+        // short pause, so dictation restarts the session transparently and only stops after
+        // VOICE_SILENCE_MS with no new words (or when the user taps Go / the mic).
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const VOICE_SILENCE_MS = 10000;
+        const VOICE_COUNTDOWN_FROM_MS = 5000;
+        // "Hey Eva" overlay: once the user has said something, this much quiet means they're done
+        const SIRI_DONE_AFTER_MS = 2500;
+        // Chrome rarely writes "Hey Eva" literally — real transcripts come back as "hey wa", "hey ava",
+        // "hey ever", "heyva" and so on — so match the sound, not the spelling. Whole-word endings keep
+        // everyday phrases ("hey what", "hey we", "hi everyone") from triggering it.
+        const WAKE_RE = /(?:\b(?:hey|hay|hei|hi|okay|ok)[\s,.!-]*(?:[eia]{0,2}v(?:a|ah|aa|er|e|uh)|[eia]{0,2}w(?:a|ah|aa)|[eia]b(?:a|ah))|\bh(?:ey|ay|e|a)[eia]?va)(?:['’]?s)?\b[\s,.!?-]*/i;
+
+        const chatboxMicBtn = document.getElementById('chatboxMicBtn');
+        const evaVoiceHint = document.getElementById('evaVoiceHint');
+        const evaVoiceHintText = document.getElementById('evaVoiceHintText');
+        const evaVoiceCountdown = document.getElementById('evaVoiceCountdown');
+        const evaMicModalOverlay = document.getElementById('evaMicModalOverlay');
+        const evaMicAllowBtn = document.getElementById('evaMicAllowBtn');
+        const evaMicLaterBtn = document.getElementById('evaMicLaterBtn');
+        const evaMicBlocked = document.getElementById('evaMicBlocked');
+        const evaMicBlockedRetry = document.getElementById('evaMicBlockedRetry');
+        const evaMicBlockedClose = document.getElementById('evaMicBlockedClose');
+        const evaMicNoticeTitle = document.getElementById('evaMicNoticeTitle');
+        const evaMicNoticeBody = document.getElementById('evaMicNoticeBody');
+        const evaMicModalNote = document.getElementById('evaMicModalNote');
+        const evaMicModalNoteHtml = evaMicModalNote.innerHTML;
+        const MIC_BLOCKED_HOWTO = 'Click the <i class="bi bi-lock-fill"></i> / <i class="bi bi-sliders"></i> icon at the left of the '
+            + 'address bar, set <b>Microphone</b> to <b>Allow</b>, then press Allow here.';
+        const chatboxInputPlaceholder = chatboxInput.placeholder;
+        const chatboxSendBtnHtml = chatboxSendBtn.innerHTML;
+
+        const voice = {
+            rec: null,
+            mode: 'off',            // 'off' | 'wake' | 'dictation'
+            running: false,
+            ignoreResults: false,   // true between abort() and the next session start
+            source: 'mic',          // what started dictation: 'mic' | 'wake'
+            committed: '',          // dictated text from earlier sessions of this dictation
+            sessionPart: '',        // dictated text from the current session
+            stripWake: false,       // current session began with "Hey Eva" — drop everything up to it
+            wakeCharEnd: 0,         // fallback cut point if the wake phrase is later re-transcribed
+            lastSpeechAt: 0,
+            silenceTimer: null,
+            tickTimer: null,
+            restartTimer: null,
+            errorStreak: 0,
+            micGranted: false,
+            siri: false,            // "Hey Eva" overlay is up (chatbot was closed when it was heard)
+            silenceMs: 0,           // quiet period that ends the current dictation
+            micBlocked: false,      // browser has the mic blocked for this site
+            blockedDismissed: false // user closed the mic notice; shown again on next mic tap
+        };
+
+        function evaStoreGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+        function evaStoreSet(key, val) { try { localStorage.setItem(key, val); } catch (e) { /* storage blocked */ } }
+
+        function wakeWordEnabled() { return evaStoreGet('evaWakeWord') !== 'off'; }
+
+        function idleVoiceMode() {
+            return voice.micGranted && wakeWordEnabled() ? 'wake' : 'off';
+        }
+
+        function tidySpeech(text) {
+            return text.replace(/\s+/g, ' ').trim();
+        }
+
+        function capitaliseFirst(text) {
+            return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+        }
+
+        function createRecognizer() {
+            const rec = new SpeechRec();
+            rec.continuous = true;
+            rec.interimResults = true;
+            rec.lang = navigator.language || 'en-US';
+
+            rec.onstart = function () {
+                voice.running = true;
+                voice.ignoreResults = false;
+                updateVoiceUI();
+            };
+
+            rec.onresult = function (e) {
+                if (voice.ignoreResults) return;
+                voice.errorStreak = 0;
+                let text = '';
+                for (let i = 0; i < e.results.length; i++) text += ' ' + e.results[i][0].transcript;
+                text = tidySpeech(text);
+
+                if (voice.mode === 'wake') {
+                    // DevTools console → "Verbose" level shows what the speech engine actually heard
+                    console.debug('[Eva voice] heard:', text);
+                    const m = text.match(WAKE_RE);
+                    if (!m) return;
+                    voice.wakeCharEnd = m.index + m[0].length;
+                    beginDictation('wake');
+                }
+                if (voice.mode !== 'dictation') return;
+
+                let part = text;
+                if (voice.stripWake) {
+                    const m = text.match(WAKE_RE);
+                    part = m ? text.slice(m.index + m[0].length) : text.slice(voice.wakeCharEnd);
+                }
+                part = tidySpeech(part);
+                if (part !== voice.sessionPart) {
+                    voice.sessionPart = part;
+                    voice.lastSpeechAt = Date.now();
+                    siriMeter.pulse = 0.9;
+                    armSilenceTimer();
+                }
+                chatboxInput.value = capitaliseFirst(tidySpeech(voice.committed + ' ' + voice.sessionPart));
+                chatboxInput.scrollLeft = chatboxInput.scrollWidth;
+                if (voice.siri) {
+                    evaSiriText.textContent = chatboxInput.value || 'Listening…';
+                    evaSiriText.classList.toggle('empty', !chatboxInput.value);
+                }
+            };
+
+            rec.onerror = function (e) {
+                if (e.error !== 'no-speech' && e.error !== 'aborted') {
+                    // 'network' here usually means this browser has no speech service (e.g. VS Code's
+                    // preview / Electron) — open the page in Chrome or Edge instead
+                    console.warn('[Eva voice] speech recognition error:', e.error);
+                }
+                if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+                    voice.micGranted = false;
+                    voice.mode = 'off';
+                    clearVoiceTimers();
+                    setMicBlocked(true);
+                    return;
+                }
+                if (e.error !== 'no-speech' && e.error !== 'aborted') voice.errorStreak++;
+            };
+
+            rec.onend = function () {
+                voice.running = false;
+                if (voice.mode === 'dictation') {
+                    // Chrome closed the session during a pause — keep what we have and carry on
+                    voice.committed = tidySpeech(voice.committed + ' ' + voice.sessionPart);
+                    voice.sessionPart = '';
+                    voice.stripWake = false;
+                }
+                if (voice.mode !== 'off') {
+                    const delay = voice.errorStreak ? Math.min(500 * Math.pow(2, voice.errorStreak), 15000) : 150;
+                    clearTimeout(voice.restartTimer);
+                    voice.restartTimer = setTimeout(startRecognizer, delay);
+                }
+                updateVoiceUI();
+            };
+            return rec;
+        }
+
+        function startRecognizer() {
+            if (!voice.rec || voice.running || voice.mode === 'off') return;
+            if (document.hidden && voice.mode === 'wake') return; // resumed on visibilitychange
+            try {
+                voice.rec.start();
+                voice.running = true;
+            } catch (err) {
+                // InvalidStateError: already started — onend will sort it out
+            }
+        }
+
+        // Ends the current recognition session without keeping its results; onend restarts it in
+        // whatever mode is set at that point.
+        function restartRecognizerFresh() {
+            if (voice.running) {
+                voice.ignoreResults = true;
+                try { voice.rec.abort(); } catch (err) { /* not running */ }
+            } else {
+                startRecognizer();
+            }
+        }
+
+        function openChatboxForVoice() {
+            if (!chatboxOverlay.classList.contains('open')) {
+                chatboxOverlay.classList.add('open');
+                chatbotWidget.style.display = 'none';
+            }
+        }
+
+        function beginDictation(source) {
+            voice.source = source;
+            voice.mode = 'dictation';
+            voice.committed = source === 'mic' ? tidySpeech(chatboxInput.value) : '';
+            voice.sessionPart = '';
+            voice.stripWake = source === 'wake';
+            voice.lastSpeechAt = Date.now();
+            if (source === 'wake') {
+                chatboxInput.value = '';
+                // Chatbot closed: listen in the overlay and open it only once the question is done
+                if (chatboxOverlay.classList.contains('open')) openChatboxForVoice();
+                else showSiri();
+            } else {
+                // Drop anything the wake listener heard before the click
+                restartRecognizerFresh();
+            }
+            armSilenceTimer();
+            updateVoiceUI();
+        }
+
+        // Stops dictation and goes back to listening for "Hey Eva" (if enabled). Text already in
+        // the input is left alone so the user can edit it or tap Go.
+        function endDictation() {
+            if (voice.mode !== 'dictation') return;
+            clearVoiceTimers();
+            hideSiri();
+            voice.mode = idleVoiceMode();
+            voice.committed = '';
+            voice.sessionPart = '';
+            voice.stripWake = false;
+            if (voice.running) {
+                voice.ignoreResults = true;
+                try { voice.rec.abort(); } catch (err) { /* not running */ }
+            } else {
+                startRecognizer();
+            }
+            updateVoiceUI();
+        }
+
+        // Called from sendUserMessage (Go / Enter) so late speech results can't refill the input
+        function stopVoiceDictation() {
+            if (voice.mode === 'dictation') endDictation();
+        }
+
+        function clearVoiceTimers() {
+            clearTimeout(voice.silenceTimer);
+            clearInterval(voice.tickTimer);
+            voice.silenceTimer = null;
+            voice.tickTimer = null;
+        }
+
+        function armSilenceTimer() {
+            clearTimeout(voice.silenceTimer);
+            // In the overlay, give the user the full window to start, then send soon after they stop
+            voice.silenceMs = voice.siri && chatboxInput.value.trim() ? SIRI_DONE_AFTER_MS : VOICE_SILENCE_MS;
+            voice.silenceTimer = setTimeout(onDictationSilence, voice.silenceMs);
+            if (!voice.tickTimer) voice.tickTimer = setInterval(updateVoiceCountdown, 250);
+            updateVoiceCountdown();
+        }
+
+        function onDictationSilence() {
+            const hasText = !!chatboxInput.value.trim();
+            if (voice.siri) {
+                if (hasText) finishSiri();
+                else endDictation();
+                return;
+            }
+            if (voice.source === 'wake' && hasText) {
+                sendUserMessage(); // calls stopVoiceDictation first
+                return;
+            }
+            endDictation();
+            if (hasText) {
+                chatboxInput.focus();
+                chatboxInput.setSelectionRange(chatboxInput.value.length, chatboxInput.value.length);
+            }
+        }
+
+        function updateVoiceCountdown() {
+            if (voice.mode !== 'dictation') return;
+            const left = (voice.silenceMs || VOICE_SILENCE_MS) - (Date.now() - voice.lastSpeechAt);
+            evaVoiceHint.classList.toggle('paused', Date.now() - voice.lastSpeechAt > 1200);
+            if (left <= VOICE_COUNTDOWN_FROM_MS && left > 0) {
+                const secs = Math.ceil(left / 1000);
+                const willSend = voice.source === 'wake' && chatboxInput.value.trim();
+                evaVoiceCountdown.textContent = (willSend ? 'Sending in ' : 'Stopping in ') + secs + 's';
+            } else {
+                evaVoiceCountdown.textContent = '';
+            }
+        }
+
+        // ----- "Hey Eva" overlay -----
+        const evaSiri = document.getElementById('evaSiri');
+        const evaSiriText = document.getElementById('evaSiriText');
+        const evaSiriOrb = document.getElementById('evaSiriOrb');
+        const evaSiriCancel = document.getElementById('evaSiriCancel');
+        // Animates the orb from the speech recogniser alone: it swells and wobbles while words are
+        // arriving and settles into a slow "breathing" glow in pauses. Deliberately no second
+        // getUserMedia stream for a volume meter — on pages where the browser doesn't keep the mic
+        // permission, that extra request would pop the permission prompt on every "Hey Eva".
+        const siriMeter = { raf: 0, pulse: 0, level: 0 };
+
+        function startSiriMeter() {
+            siriMeter.pulse = 0.6;
+            siriMeter.level = 0;
+            cancelAnimationFrame(siriMeter.raf);
+            siriMeter.raf = requestAnimationFrame(siriMeterFrame);
+        }
+
+        function siriMeterFrame(now) {
+            const speaking = Date.now() - voice.lastSpeechAt < 900;
+            const t = now / 1000;
+            const target = speaking
+                ? 0.45 + 0.3 * Math.abs(Math.sin(t * 7.3) * Math.sin(t * 3.1 + 1))
+                : 0.08 + 0.06 * Math.sin(t * 2.2);
+            siriMeter.pulse *= 0.94;
+            siriMeter.level += (Math.max(target, siriMeter.pulse) - siriMeter.level) * 0.2;
+            evaSiri.style.setProperty('--lvl', siriMeter.level.toFixed(3));
+            siriMeter.raf = requestAnimationFrame(siriMeterFrame);
+        }
+
+        function stopSiriMeter() {
+            cancelAnimationFrame(siriMeter.raf);
+            evaSiri.style.setProperty('--lvl', '0');
+        }
+
+        function showSiri() {
+            voice.siri = true;
+            evaSiri.classList.toggle('dark-mode', chatboxOverlay.classList.contains('dark-mode'));
+            evaSiriText.textContent = 'Listening…';
+            evaSiriText.classList.add('empty');
+            evaSiri.classList.add('show');
+            startSiriMeter();
+        }
+
+        function hideSiri() {
+            if (!voice.siri) return;
+            voice.siri = false;
+            evaSiri.classList.remove('show');
+            stopSiriMeter();
+        }
+
+        // The user has finished: open the chatbot with the question already asked
+        function finishSiri() {
+            if (!chatboxInput.value.trim()) { endDictation(); return; }
+            openChatboxForVoice();
+            sendUserMessage(); // ends dictation (and hides the overlay) before reading the input
+        }
+
+        function cancelSiri() {
+            chatboxInput.value = '';
+            endDictation();
+        }
+
+        evaSiriOrb.addEventListener('click', finishSiri);
+        evaSiriCancel.addEventListener('click', cancelSiri);
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && voice.siri) cancelSiri();
+        });
+        // Opening the chatbot by hand mid-question moves the dictation into the chat input
+        chatbotContainer.addEventListener('click', function () {
+            if (!voice.siri || !chatboxOverlay.classList.contains('open')) return;
+            hideSiri();
+            armSilenceTimer();
+            updateVoiceUI();
+        });
+
+        function updateVoiceUI() {
+            const dictating = voice.mode === 'dictation';
+            chatboxMicBtn.classList.toggle('listening', dictating);
+            chatboxMicBtn.classList.toggle('blocked', voice.micBlocked && !dictating);
+            chatboxMicBtn.querySelector('i').className = voice.micBlocked && !dictating ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill';
+            chatboxMicBtn.title = dictating ? 'Stop listening'
+                : voice.micBlocked ? 'Microphone is blocked for this site'
+                : (SpeechRec ? 'Voice input' : 'Voice input is not supported in this browser');
+            chatboxSendBtn.classList.toggle('go-mode', dictating);
+            chatboxSendBtn.innerHTML = dictating ? 'Go <i class="bi bi-arrow-right"></i>' : chatboxSendBtnHtml;
+            chatboxSendBtn.title = dictating ? 'Send your question now' : 'Send';
+            if (dictating) chatboxInput.placeholder = 'Listening…';
+            else if (chatboxInput.placeholder === 'Listening…') chatboxInput.placeholder = chatboxInputPlaceholder;
+            evaVoiceHint.classList.toggle('show', dictating);
+            evaVoiceHintText.textContent = voice.source === 'wake'
+                ? 'Listening… finish your question, or tap Go'
+                : 'Listening… pause as long as you need, then tap Go';
+            if (!dictating) evaVoiceCountdown.textContent = '';
+
+            chatbotContainer.classList.toggle('wake-on', voice.mode === 'wake');
+            chatbotContainer.title = voice.mode === 'wake' ? 'Ask Eva — or just say "Hey Eva"' : 'Ask Eva';
+            document.querySelectorAll('.eva-wake-toggle').forEach(function (btn) {
+                const on = wakeWordEnabled() && voice.micGranted;
+                btn.querySelector('i').className = on ? 'bi bi-ear-fill' : 'bi bi-ear';
+                btn.querySelector('.eva-wake-label').textContent = on ? '"Hey Eva" is on' : '"Hey Eva" is off';
+                btn.style.display = SpeechRec ? '' : 'none';
+            });
+        }
+
+        // Asks the browser for the mic. Once the user picks "Allow while visiting the site",
+        // Chrome/Edge/Safari remember it for this origin and never ask again.
+        async function requestMicPermission() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(function (t) { t.stop(); });
+            }
+            voice.micGranted = true;
+            evaStoreSet('evaMicConsent', 'granted');
+        }
+
+        async function queryMicPermission() {
+            try {
+                if (navigator.permissions && navigator.permissions.query) {
+                    const status = await navigator.permissions.query({ name: 'microphone' });
+                    status.onchange = function () {
+                        voice.micGranted = status.state === 'granted';
+                        setMicBlocked(status.state === 'denied');
+                        if (!voice.micGranted) {
+                            clearVoiceTimers();
+                            voice.mode = 'off';
+                            if (voice.running) { try { voice.rec.abort(); } catch (err) { /* ignore */ } }
+                        } else if (voice.mode === 'off') {
+                            voice.mode = idleVoiceMode();
+                            startRecognizer();
+                        }
+                        updateVoiceUI();
+                    };
+                    return status.state;
+                }
+            } catch (err) { /* 'microphone' is not a queryable permission in this browser */ }
+            return 'unknown';
+        }
+
+        function nudgeElement(el) {
+            el.classList.remove('nudge');
+            void el.offsetWidth;
+            el.classList.add('nudge');
+        }
+
+        // Keeps the in-chat mic notice and the landing popup in step with the permission state.
+        // While the mic isn't allowed the chatbot shows an Allow button. Once the user blocks it the
+        // browser never shows its own prompt again — only the user can undo that from the site
+        // settings — so both places switch to explaining how.
+        function setMicBlocked(blocked, nudge) {
+            voice.micBlocked = blocked;
+            if (nudge) voice.blockedDismissed = false;
+            const needsMic = !!SpeechRec && !voice.micGranted;
+            evaMicBlocked.classList.toggle('show', needsMic && !voice.blockedDismissed);
+            evaMicBlocked.classList.toggle('ask', !blocked);
+            evaMicBlocked.querySelector('.eva-mic-blocked-icon i').className = blocked ? 'bi bi-mic-mute-fill' : 'bi bi-mic-fill';
+            evaMicNoticeTitle.textContent = blocked ? 'Microphone is blocked' : 'Turn on your microphone';
+            evaMicNoticeBody.innerHTML = blocked
+                ? 'Voice input and "Hey Eva" need mic access. ' + MIC_BLOCKED_HOWTO
+                : 'Allow mic access to speak your questions, or just say <b>"Hey Eva"</b> any time.';
+            evaMicModalNote.classList.toggle('blocked', blocked);
+            evaMicModalNote.innerHTML = blocked ? '<b>Microphone is blocked for this site.</b> ' + MIC_BLOCKED_HOWTO : evaMicModalNoteHtml;
+            if (nudge && needsMic) {
+                nudgeElement(evaMicBlocked);
+                if (blocked) nudgeElement(evaMicModalNote);
+            }
+            updateVoiceUI();
+        }
+
+        async function retryMicPermission(nudgeOnFail) {
+            try {
+                await requestMicPermission();
+            } catch (err) {
+                setMicBlocked(true, nudgeOnFail);
+                return false;
+            }
+            hideMicModal();
+            setMicBlocked(false);
+            return true;
+        }
+
+        evaMicBlockedRetry.addEventListener('click', async function () {
+            if (await retryMicPermission(true)) enterIdleVoice();
+        });
+        evaMicBlockedClose.addEventListener('click', function () {
+            voice.blockedDismissed = true;
+            evaMicBlocked.classList.remove('show');
+        });
+
+        function enterIdleVoice() {
+            if (voice.mode === 'dictation') return;
+            voice.mode = idleVoiceMode();
+            updateVoiceUI();
+            startRecognizer();
+        }
+
+        function showMicModal() {
+            evaMicModalOverlay.classList.add('show');
+            evaMicAllowBtn.focus();
+        }
+
+        function hideMicModal() {
+            evaMicModalOverlay.classList.remove('show');
+        }
+
+        evaMicAllowBtn.addEventListener('click', async function () {
+            evaMicAllowBtn.disabled = true;
+            try {
+                if (await retryMicPermission(true)) enterIdleVoice();
+            } finally {
+                evaMicAllowBtn.disabled = false;
+            }
+        });
+        evaMicLaterBtn.addEventListener('click', hideMicModal);
+        evaMicModalOverlay.addEventListener('click', function (e) {
+            if (e.target === evaMicModalOverlay) hideMicModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && evaMicModalOverlay.classList.contains('show')) hideMicModal();
+        });
+
+        chatboxMicBtn.addEventListener('click', async function () {
+            if (!SpeechRec) {
+                chatboxInput.placeholder = 'Voice input needs Chrome, Edge or Safari';
+                return;
+            }
+            if (voice.mode === 'dictation') {
+                endDictation();
+                chatboxInput.focus();
+                return;
+            }
+            if (!voice.micGranted && !(await retryMicPermission(true))) return;
+            beginDictation('mic');
+        });
+
+        // Typing (anything but Enter, which sends) hands control back to the keyboard
+        chatboxInput.addEventListener('keydown', function (e) {
+            if (voice.mode === 'dictation' && e.key !== 'Enter') endDictation();
+        });
+        chatboxClose.addEventListener('click', stopVoiceDictation);
+
+        document.querySelectorAll('.eva-wake-toggle').forEach(function (btn) {
+            btn.addEventListener('click', async function () {
+                const turnOn = !(wakeWordEnabled() && voice.micGranted);
+                evaStoreSet('evaWakeWord', turnOn ? 'on' : 'off');
+                if (turnOn && !voice.micGranted) {
+                    if (!(await retryMicPermission(true))) return;
+                }
+                if (voice.mode !== 'dictation') {
+                    voice.mode = idleVoiceMode();
+                    if (voice.mode === 'off' && voice.running) {
+                        try { voice.rec.abort(); } catch (err) { /* ignore */ }
+                    } else {
+                        startRecognizer();
+                    }
+                }
+                updateVoiceUI();
+            });
+        });
+
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) startRecognizer();
+        });
+
+        (async function initVoice() {
+            if (!SpeechRec) { updateVoiceUI(); return; }
+            voice.rec = createRecognizer();
+            const state = await queryMicPermission();
+            if (state === 'granted' || (state === 'unknown' && evaStoreGet('evaMicConsent') === 'granted')) {
+                voice.micGranted = true;
+                enterIdleVoice();
+            } else {
+                // Not allowed yet (or blocked): ask on every page load until the mic is on
+                setMicBlocked(state === 'denied');
+                showMicModal();
+            }
+        })();
     </script>
 </body>
 </html>
